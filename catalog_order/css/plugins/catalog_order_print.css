@@ -1,0 +1,221 @@
+@charset "utf-8";
+
+/********* HTML再定義 ***********************************************/
+
+body {
+	line-height: 1.4;
+	margin: 0;
+	padding: 0;
+	background-color: #FFFFFF;
+	color: #000000;
+	font-family: "ヒラギノ明朝 Pro W3", "Hiragino Mincho Pro", "細明朝体", "ＭＳ Ｐ明朝", serif;
+}
+
+h1 {
+	display: none;
+}
+h2 {
+	margin-bottom: 5mm;
+}
+h3 {
+	margin: 10mm 0 5mm 0;
+}
+p {
+	margin: 0;
+}
+
+table tr th {
+	padding: 1mm;
+	border: 1px solid #000000;
+	background-color: #DDDDDD;
+}
+table tr td {
+	padding: 1mm;
+	border: 1px solid #000000;
+}
+
+/********* メニュー *************************************************/
+
+div#menu {
+	z-index: 1;
+	position: fixed;
+	clear: both;
+	top: 10px;
+	right: 10px;
+	font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", sans-serif;
+}
+div#menu h2 {
+	display: none;
+}
+div#menu ul {
+	margin: 0;
+	padding: 0;
+}
+div#menu ul li {
+	list-style: none;
+}
+div#menu ul li a {
+	display: block;
+	padding: 10px;
+	background-color: #000000;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+@media print {
+	div#menu {
+		display: none;
+	}
+}
+
+/********* 宛名カード ***********************************************/
+
+div#address {
+	padding: 10mm 10mm 15mm 10mm;
+	border-bottom: 1px dashed #999999;
+}
+div#address h2 {
+	display: none;
+}
+div#address div.zipcode {
+}
+div#address div.address {
+	margin-bottom: 5mm;
+	text-indent: 4mm;
+}
+div#address div.name {
+	font-size: 20pt;
+	font-weight: bold;
+	text-indent: 4mm;
+}
+
+/********* 納品書 ***************************************************/
+
+div#delivery {
+	padding: 15mm 10mm 5mm 10mm;
+}
+div#delivery div.zipcode {
+}
+div#delivery div.address {
+	margin-bottom: 2mm;
+	text-indent: 4mm;
+}
+div#delivery div.name {
+	margin-bottom: 5mm;
+	text-indent: 4mm;
+}
+div#delivery div.message {
+	margin-bottom: 5mm;
+}
+div#delivery div.amount {
+	margin-bottom: 5mm;
+}
+div#delivery div.amount p {
+	display: inline;
+	border-bottom: 1px solid #000000;
+	padding: 0 1mm 1mm 1mm;
+	font-size: 15pt;
+}
+div#delivery div.amount p em {
+	font-size: 20pt;
+}
+div#delivery div.information dl dt {
+}
+div#delivery div.information dl dd {
+	margin: -1.4em 0 0 5em;
+}
+
+div#delivery div.order table {
+}
+div#delivery div.total table {
+	margin-right: 0;
+	margin-left: auto;
+}
+
+div#delivery div.note {
+}
+
+/********* 用紙サイズ（A4） *****************************************/
+
+div.a4 {
+	width: 210mm;
+	height: 297mm;
+	font-size: 12pt;
+}
+
+div.a4 div#delivery div.order table {
+	width: 190mm;
+}
+div.a4 div#delivery div.order table th.name {
+}
+div.a4 div#delivery div.order table th.price {
+	width: 30mm;
+}
+div.a4 div#delivery div.order table th.count {
+	width: 20mm;
+}
+div.a4 div#delivery div.order table th.subtotal {
+	width: 30mm;
+}
+
+div.a4 div#delivery div.total table {
+}
+div.a4 div#delivery div.total table th.total {
+	width: 52mm;
+}
+div.a4 div#delivery div.total table td.number {
+	width: 30mm;
+}
+
+@media screen {
+	div.a4 {
+		margin: 20px;
+		border: 1px solid #AAAAAA;
+	}
+}
+
+/********* 用紙サイズ（B5） *****************************************/
+
+div.b5 {
+	width: 182mm;
+	height: 257mm;
+	font-size: 10pt;
+}
+
+div.b5 div#delivery div.order table {
+	width: 162mm;
+}
+div.b5 div#delivery div.order table th.name {
+}
+div.b5 div#delivery div.order table th.price {
+	width: 25mm;
+}
+div.b5 div#delivery div.order table th.count {
+	width: 15mm;
+}
+div.b5 div#delivery div.order table th.subtotal {
+	width: 25mm;
+}
+
+div.b5 div#delivery div.total table {
+}
+div.b5 div#delivery div.total table th.total {
+	width: 42mm;
+}
+div.b5 div#delivery div.total table td.number {
+	width: 25mm;
+}
+
+@media screen {
+	div.b5 {
+		margin: 20px;
+		border: 1px solid #AAAAAA;
+	}
+}
+
+/********* Chrome・Safari用設定 *************************************/
+
+@media screen, print and (-webkit-min-device-pixel-ratio:0) {
+	div#delivery div.total table {
+		margin-right: 0.5mm;
+	}
+}

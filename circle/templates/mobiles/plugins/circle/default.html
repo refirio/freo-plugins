@@ -1,0 +1,25 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">サークル一覧</span></div>
+
+<!--{if $smarty.get.category}-->ｶﾃｺﾞﾘｰ「{$plugin_circle_categories[$smarty.get.category].name}」の検索結果は以下のとおりです。<br />
+<!--{elseif $smarty.get.tag}-->ﾀｸﾞ「{$smarty.get.tag}」の検索結果は以下のとおりです。<br />
+<!--{else}-->
+登録されたｻｰｸﾙは以下のとおりです。<br />
+ｻｰｸﾙ名をｸﾘｯｸすると、詳細が表示されます。<br />
+<!--{/if}-->
+
+<br />
+<!--{foreach from=$plugin_circles|smarty:nodefaults item='plugin_circle'}-->
+▼<a href="{$freo.core.http_file}/circle/view/{$plugin_circle.user_id}">{$plugin_circle.name}</a>({$plugin_circle.owner_name})
+<!--{if $plugin_circle.category_id}-->[<a href="{$freo.core.http_file}/circle?category={$plugin_circle.category_id}">{$plugin_circle_categories[$plugin_circle.category_id].name}</a>]<!--{/if}-->
+<!--{foreach from=$plugin_circle_tags[$plugin_circle.user_id]|smarty:nodefaults item='plugin_circle_tag' name='loop'}--><a href="{$freo.core.http_file}/circle?tag={$plugin_circle_tag|smarty:nodefaults|escape:'url'}">{$plugin_circle_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}-->
+<br />
+<!--{/foreach}-->
+
+<br />
+
+{include file='mobiles/footer.html'}

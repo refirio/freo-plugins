@@ -1,0 +1,39 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ページタグ「{$smarty.get.tag}」を編集</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>タグを入力してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/page_tagmanager/admin_form?tag={$smarty.get.tag}" method="post">
+			<fieldset>
+				<legend>タグ登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_page_tagmanager[old]" value="{$smarty.get.tag}" />
+				<dl>
+					<dt>タグ</dt>
+						<dd><input type="text" name="plugin_page_tagmanager[new]" size="50" value="{$smarty.get.tag}" /></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<h2>ページタグ「{$smarty.get.tag}」を削除</h2>
+		<ul>
+			<li>このタグを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/page_tagmanager/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>タグ削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="tag" value="{$smarty.get.tag}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

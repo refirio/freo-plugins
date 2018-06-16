@@ -1,0 +1,15 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">エラー</span></div>
+
+ｴﾗｰが発生しました。入力内容を確認してください。<br />
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+
+{include file='mobiles/footer.html'}

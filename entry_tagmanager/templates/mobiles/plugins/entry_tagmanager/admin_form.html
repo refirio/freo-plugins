@@ -1,0 +1,42 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">エントリータグ「{$smarty.get.tag}」を編集</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾀｸﾞを入力してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/entry_tagmanager/admin_form?tag={$smarty.get.tag}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="plugin_entry_tagmanager[old]" value="{$smarty.get.tag}" />
+ﾀｸﾞ<br />
+<input type="text" name="plugin_entry_tagmanager[new]" size="20" value="{$smarty.get.tag}" /><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ﾀｸﾞ「{$smarty.get.tag}」を削除</span></div>
+
+このﾀｸﾞを削除するには、削除ﾎﾞﾀﾝを押してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/entry_tagmanager/admin_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="tag" value="{$smarty.get.tag}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

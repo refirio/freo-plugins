@@ -1,0 +1,68 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;"><!--{if $freo.query.id}-->ID.{$freo.query.id}のお礼を編集<!--{else}-->新規登録<!--{/if}--></span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+お礼を入力してください。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.http_file}/clap/admin_thank_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<!--{if $freo.query.id}-->
+<input type="hidden" name="plugin_clap_thank[id]" value="{$input.plugin_clap_thank.id}" />
+<!--{/if}-->
+<!--{if !$freo.query.id}-->
+お礼ID<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_clap_thank[id]" size="30" value="{$input.plugin_clap_thank.id}"{if $freo.agent.career == 'docomo'} style="-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;"{else} istyle="3" format="*m" mode="alphabet"{/if} /><br />
+<!--{/if}-->
+本文<span style="color:#FF0000;">*</span><br />
+<textarea name="plugin_clap_thank[text]" cols="50" rows="5" id="tiny_mce">{$input.plugin_clap_thank.text}</textarea><br />
+説明<br />
+<textarea name="plugin_clap_thank[memo]" cols="50" rows="5">{$input.plugin_clap_thank.memo}</textarea><br />
+利用対象<span style="color:#FF0000;">*</span><br />
+<select name="plugin_clap_thank[target]">
+<option value="">▼PCと携帯</option>
+<option value="pc"{if $input.plugin_clap_thank.target == 'pc'} selected="selected"{/if}>▼PC</option>
+<option value="mobile"{if $input.plugin_clap_thank.target == 'mobile'} selected="selected"{/if}>▼携帯</option>
+</select><br />
+状態<span style="color:#FF0000;">*</span><br />
+<select name="plugin_clap_thank[status]">
+<option value="publish"{if $input.plugin_clap_thank.status == 'publish'} selected="selected"{/if}>▼公開</option>
+<option value="private"{if $input.plugin_clap_thank.status == 'private'} selected="selected"{/if}>▼未公開</option>
+</select><br />
+並び順<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_clap_thank[sort]" size="5" value="{$input.plugin_clap_thank.sort}"{if $freo.agent.career == 'docomo'} style="-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;"{else} istyle="4" format="*N" mode="numeric"{/if} /><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+<!--{if $freo.query.id}-->
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ID.{$freo.query.id}のお礼を削除</span></div>
+
+このお礼を削除するには、削除ﾎﾞﾀﾝを押してください。
+
+<br />
+<form action="{$freo.core.http_file}/clap/admin_thank_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="id" value="{$freo.query.id}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

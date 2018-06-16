@@ -1,0 +1,13 @@
+<!--{foreach from=$page_alls|smarty:nodefaults item='page_all'}-->
+	<!--{if $page_all.pid == $pid}-->
+	<!--{php}if (!$flag) :{/php}--><ul><!--{php}endif;{/php}-->
+	<li>
+		<a href="{$freo.core.http_file}/page/{$page_all.id}">{$page_all.title}</a>
+		<!--{assign var="pid" value=$page_all.id}-->
+		{include file='plugins/page_all/default.html'}
+		<!--{assign var="pid" value=$page_all.pid}-->
+	</li>
+	<!--{php}$flag = 1;{/php}-->
+	<!--{/if}-->
+<!--{/foreach}-->
+<!--{php}if ($flag) :{/php}--></ul><!--{php}endif;{/php}-->

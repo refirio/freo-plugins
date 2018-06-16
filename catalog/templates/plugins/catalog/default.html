@@ -1,0 +1,223 @@
+{include file='header.html'}
+	<div id="content">
+		<h2>商品一覧</h2>
+		<!--{if $freo.config.plugin.catalog.closed}-->
+		<ul class="attention">
+			<li>現在、すべての商品の販売を休止しています。</li>
+		</ul>
+		<!--{/if}-->
+
+		<!--{if $smarty.get.word}--><p>キーワード「{$smarty.get.word}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.category_id}--><p>カテゴリー「{$plugin_catalog_categories[$smarty.get.category_id].name}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.tag}--><p>タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 4}--><p>{$smarty.get.date|cat:'0101000000'|date_format:'%Y年'}の商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 6}--><p>{$smarty.get.date|cat:'01000000'|date_format:'%Y年%m月'}の商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 8}--><p>{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option01}--><p>{$freo.config.plugin.catalog.option01_name}「{$smarty.get.option01}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option02}--><p>{$freo.config.plugin.catalog.option02_name}「{$smarty.get.option02}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option03}--><p>{$freo.config.plugin.catalog.option03_name}「{$smarty.get.option03}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option04}--><p>{$freo.config.plugin.catalog.option04_name}「{$smarty.get.option04}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option05}--><p>{$freo.config.plugin.catalog.option05_name}「{$smarty.get.option05}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option06}--><p>{$freo.config.plugin.catalog.option06_name}「{$smarty.get.option06}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option07}--><p>{$freo.config.plugin.catalog.option07_name}「{$smarty.get.option07}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option08}--><p>{$freo.config.plugin.catalog.option08_name}「{$smarty.get.option08}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option09}--><p>{$freo.config.plugin.catalog.option09_name}「{$smarty.get.option09}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.option10}--><p>{$freo.config.plugin.catalog.option10_name}「{$smarty.get.option10}」の検索結果は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.condition == 'prerelease'}--><p>予約商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.condition == 'new'}--><p>新着商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.condition == 'soldout'}--><p>売り切れ商品は以下のとおりです。</p><!--{/if}-->
+		<!--{if $smarty.get.condition == 'end'}--><p>販売終了商品は以下のとおりです。</p><!--{/if}-->
+
+		<form action="{$freo.core.http_file}/catalog" method="get">
+			<fieldset>
+				<legend>絞り込み表示フォーム</legend>
+				<!--{if $smarty.get.category_id}--><input type="hidden" name="category_id" value="{$smarty.get.category_id}" /><!--{/if}-->
+				<!--{if $smarty.get.tag}--><input type="hidden" name="tag" value="{$smarty.get.tag}" /><!--{/if}-->
+				<!--{if $smarty.get.date}--><input type="hidden" name="date" value="{$smarty.get.date}" /><!--{/if}-->
+				<!--{if $smarty.get.option01}--><input type="hidden" name="option01" value="{$smarty.get.option01}" /><!--{/if}-->
+				<!--{if $smarty.get.option02}--><input type="hidden" name="option02" value="{$smarty.get.option02}" /><!--{/if}-->
+				<!--{if $smarty.get.option03}--><input type="hidden" name="option03" value="{$smarty.get.option03}" /><!--{/if}-->
+				<!--{if $smarty.get.option04}--><input type="hidden" name="option04" value="{$smarty.get.option04}" /><!--{/if}-->
+				<!--{if $smarty.get.option05}--><input type="hidden" name="option05" value="{$smarty.get.option05}" /><!--{/if}-->
+				<!--{if $smarty.get.option06}--><input type="hidden" name="option06" value="{$smarty.get.option06}" /><!--{/if}-->
+				<!--{if $smarty.get.option07}--><input type="hidden" name="option07" value="{$smarty.get.option07}" /><!--{/if}-->
+				<!--{if $smarty.get.option08}--><input type="hidden" name="option08" value="{$smarty.get.option08}" /><!--{/if}-->
+				<!--{if $smarty.get.option09}--><input type="hidden" name="option09" value="{$smarty.get.option09}" /><!--{/if}-->
+				<!--{if $smarty.get.option10}--><input type="hidden" name="option10" value="{$smarty.get.option10}" /><!--{/if}-->
+				<!--{if $smarty.get.condition}--><input type="hidden" name="condition" value="{$smarty.get.condition}" /><!--{/if}-->
+				<dl>
+					<dt>キーワード</dt>
+						<dd><input type="text" name="word" size="50" value="{$smarty.get.word}" /></dd>
+					<dt>表示順</dt>
+						<dd>
+							<select name="sort">
+								<option value="">指定なし</option>
+								<option value="price"{if $smarty.get.sort == 'price'} selected="selected"{/if}>価格の安い順</option>
+								<option value="price_desc"{if $smarty.get.sort == 'price_desc'} selected="selected"{/if}>価格の高い順</option>
+								<option value="datetime"{if $smarty.get.sort == 'datetime'} selected="selected"{/if}>発行日の早い順</option>
+								<option value="datetime_desc"{if $smarty.get.sort == 'datetime_desc'} selected="selected"{/if}>発行日の遅い順</option>
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="絞り込む" /></p>
+			</fieldset>
+		</form>
+
+		<!--{if $plugin_catalog_count}-->
+		<p><em>{$plugin_catalog_count}</em>件の商品があります。全<em>{$plugin_catalog_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</p>
+
+		<!--{foreach from=$plugin_catalogs|smarty:nodefaults item='plugin_catalog'}-->
+		<h3><a href="{$freo.core.http_file}/catalog/view/{$plugin_catalog.id}">{$plugin_catalog.name}</a></h3>
+
+		<!--{if $plugin_catalog_files[$plugin_catalog.id].file or $plugin_catalog_files[$plugin_catalog.id].file_thumbnail}-->
+		<p><a href="{$freo.core.http_file}/catalog/view/{$plugin_catalog.id}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files[$plugin_catalog.id].file_thumbnail|default:$plugin_catalog_files[$plugin_catalog.id].file}" alt="商品画像" /></a></p>
+		<!--{/if}-->
+
+		<!--{if $plugin_catalog.text}-->
+		<p>{$plugin_catalog.text|smarty:nodefaults|nl2br}</p>
+		<!--{/if}-->
+
+		<!--{if !$freo.config.plugin.catalog.closed and ($plugin_catalog.close == null or $plugin_catalog.close|date_format:'%Y%m%d%H%M%S' > $smarty.now|date_format:'%Y%m%d%H%M%S') and ($plugin_catalog.stock == null or $plugin_catalog.stock != 0)}-->
+		<form action="{$freo.core.http_file}/catalog/cart_putin" method="post">
+			<fieldset>
+				<legend>商品購入フォーム</legend>
+				<input type="hidden" name="plugin_catalog[id]" value="{$plugin_catalog.id}" />
+				<input type="hidden" name="plugin_catalog[count]" value="1" />
+				<p><input type="submit" value="カートに入れる" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+
+		<table summary="商品情報">
+			<tr>
+				<th>商品ID</th>
+				<td>{$plugin_catalog.id}</td>
+			</tr>
+			<tr>
+				<th>価格（税込）</th>
+				<td><em>{$plugin_catalog.price}</em>円</td>
+			</tr>
+			<!--{if !$freo.config.plugin.catalog.closed}-->
+			<tr>
+				<th>販売状況</th>
+				<td><em><!--{if $plugin_catalog.datetime|date_format:'%Y%m%d' > $smarty.now|date_format:'%Y%m%d'}-->予約<!--{elseif $plugin_catalog.close != null and $plugin_catalog.close|date_format:'%Y%m%d%H%M%S' <= $smarty.now|date_format:'%Y%m%d%H%M%S'}-->販売終了<!--{elseif $plugin_catalog.stock != null and $plugin_catalog.stock == 0}-->売り切れ<!--{elseif $plugin_catalog.stock != null and $plugin_catalog.stock <= $freo.config.plugin.catalog.small_stock}-->残り{$plugin_catalog.stock}{$plugin_catalog.unit}<!--{else}-->販売中<!--{/if}--></em><!--{if $plugin_catalog.size == 'data'}-->（データのみ）<!--{/if}--><!--{if $plugin_catalog.maximum != ''}-->（1人{$plugin_catalog.maximum}{$plugin_catalog.unit}まで）<!--{/if}--></td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.target}-->
+			<tr>
+				<th>対象</th>
+				<td><em>{$plugin_catalog_targets[$plugin_catalog.target].name}</em></td>
+			</tr>
+			<!--{/if}-->
+			<tr>
+				<th>発行日</th>
+				<td>{$plugin_catalog.datetime|date_format:'%Y/%m/%d'}</td>
+			</tr>
+			<!--{if $plugin_catalog.close}-->
+			<tr>
+				<th>販売終了日時</th>
+				<td>{$plugin_catalog.close|date_format:'%Y/%m/%d'}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.category_id}-->
+			<tr>
+				<th>カテゴリー</th>
+				<td><a href="{$freo.core.http_file}/catalog?category_id={$plugin_catalog.category_id}">{$plugin_catalog_categories[$plugin_catalog.category_id].name}</a></td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog_tags[$plugin_catalog.id]}-->
+			<tr>
+				<th>タグ</th>
+				<td><!--{foreach from=$plugin_catalog_tags[$plugin_catalog.id]|smarty:nodefaults item='plugin_catalog_tag' name='loop'}--><a href="{$freo.core.http_file}/catalog?tag={$plugin_catalog_tag|smarty:nodefaults|escape:'url'}">{$plugin_catalog_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.size != 'data'}-->
+			<tr>
+				<th>サイズ</th>
+				<td><!--{if $plugin_catalog.size == 'direct'}-->{$plugin_catalog.size_short}mm×{$plugin_catalog.size_long}mm<!--{else}-->{$plugin_catalog_sizes[$plugin_catalog.size].name}<!--{/if}--></td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option01 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option01_name}</th>
+				<td>{$plugin_catalog.option01|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option02 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option02_name}</th>
+				<td>{$plugin_catalog.option02|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option03 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option03_name}</th>
+				<td>{$plugin_catalog.option03|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option04 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option04_name}</th>
+				<td>{$plugin_catalog.option04|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option05 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option05_name}</th>
+				<td>{$plugin_catalog.option05|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option06 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option06_name}</th>
+				<td>{$plugin_catalog.option06|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option07 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option07_name}</th>
+				<td>{$plugin_catalog.option07|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option08 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option08_name}</th>
+				<td>{$plugin_catalog.option08|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option09 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option09_name}</th>
+				<td>{$plugin_catalog.option09|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+			<!--{if $plugin_catalog.option10 != ''}-->
+			<tr>
+				<th>{$freo.config.plugin.catalog.option10_name}</th>
+				<td>{$plugin_catalog.option10|smarty:nodefaults|nl2br}</td>
+			</tr>
+			<!--{/if}-->
+		</table>
+		<!--{/foreach}-->
+
+		<div id="page">
+			<h2>ページ移動</h2>
+			<ul class="order">
+				<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/catalog?page={$freo.query.page-1}{if $smarty.get.category_id}&amp;category_id={$smarty.get.category_id}{/if}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.option01}&amp;option01={$smarty.get.option01|escape:'url'}{/if}{if $smarty.get.option02}&amp;option02={$smarty.get.option02|escape:'url'}{/if}{if $smarty.get.option03}&amp;option03={$smarty.get.option03|escape:'url'}{/if}{if $smarty.get.option04}&amp;option04={$smarty.get.option04|escape:'url'}{/if}{if $smarty.get.option05}&amp;option05={$smarty.get.option05|escape:'url'}{/if}{if $smarty.get.option06}&amp;option06={$smarty.get.option06|escape:'url'}{/if}{if $smarty.get.option07}&amp;option07={$smarty.get.option07|escape:'url'}{/if}{if $smarty.get.option08}&amp;option08={$smarty.get.option08|escape:'url'}{/if}{if $smarty.get.option09}&amp;option09={$smarty.get.option09|escape:'url'}{/if}{if $smarty.get.option10}&amp;option10={$smarty.get.option10|escape:'url'}{/if}{if $smarty.get.condition}&amp;condition={$smarty.get.condition}{/if}{if $smarty.get.sort}&amp;sort={$smarty.get.sort}{/if}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+				<li><!--{if $plugin_catalog_page > $freo.query.page}--><a href="{$freo.core.http_file}/catalog?page={$freo.query.page+1}{if $smarty.get.category_id}&amp;category_id={$smarty.get.category_id}{/if}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.option01}&amp;option01={$smarty.get.option01|escape:'url'}{/if}{if $smarty.get.option02}&amp;option02={$smarty.get.option02|escape:'url'}{/if}{if $smarty.get.option03}&amp;option03={$smarty.get.option03|escape:'url'}{/if}{if $smarty.get.option04}&amp;option04={$smarty.get.option04|escape:'url'}{/if}{if $smarty.get.option05}&amp;option05={$smarty.get.option05|escape:'url'}{/if}{if $smarty.get.option06}&amp;option06={$smarty.get.option06|escape:'url'}{/if}{if $smarty.get.option07}&amp;option07={$smarty.get.option07|escape:'url'}{/if}{if $smarty.get.option08}&amp;option08={$smarty.get.option08|escape:'url'}{/if}{if $smarty.get.option09}&amp;option09={$smarty.get.option09|escape:'url'}{/if}{if $smarty.get.option10}&amp;option10={$smarty.get.option10|escape:'url'}{/if}{if $smarty.get.condition}&amp;condition={$smarty.get.condition}{/if}{if $smarty.get.sort}&amp;sort={$smarty.get.sort}{/if}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+			</ul>
+			<!--{if $smarty.get.word or $smarty.get.category_id or $smarty.get.tag or $smarty.get.date or $smarty.get.option01 or $smarty.get.option02 or $smarty.get.option03 or $smarty.get.option04 or $smarty.get.option05 or $smarty.get.option06 or $smarty.get.option07 or $smarty.get.option08 or $smarty.get.option09 or $smarty.get.option10 or $smarty.get.condition}-->
+			<ul class="direct">
+				<li>ページ</li>
+				<!--{section name='loop' loop=$plugin_catalog_page}-->
+				<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/catalog?page={$smarty.section.loop.iteration}{if $smarty.get.category_id}&amp;category_id={$smarty.get.category_id}{/if}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.option01}&amp;option01={$smarty.get.option01|escape:'url'}{/if}{if $smarty.get.option02}&amp;option02={$smarty.get.option02|escape:'url'}{/if}{if $smarty.get.option03}&amp;option03={$smarty.get.option03|escape:'url'}{/if}{if $smarty.get.option04}&amp;option04={$smarty.get.option04|escape:'url'}{/if}{if $smarty.get.option05}&amp;option05={$smarty.get.option05|escape:'url'}{/if}{if $smarty.get.option06}&amp;option06={$smarty.get.option06|escape:'url'}{/if}{if $smarty.get.option07}&amp;option07={$smarty.get.option07|escape:'url'}{/if}{if $smarty.get.option08}&amp;option08={$smarty.get.option08|escape:'url'}{/if}{if $smarty.get.option09}&amp;option09={$smarty.get.option09|escape:'url'}{/if}{if $smarty.get.option10}&amp;option10={$smarty.get.option10|escape:'url'}{/if}{if $smarty.get.condition}&amp;condition={$smarty.get.condition}{/if}{if $smarty.get.sort}&amp;sort={$smarty.get.sort}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+				<!--{/section}-->
+			</ul>
+			<!--{/if}-->
+		</div>
+		<!--{else}-->
+		<p><strong>条件に一致する商品はありません。</strong></p>
+		<!--{/if}-->
+	</div>
+{include file='plugins/catalog/utility.html'}
+{include file='footer.html'}

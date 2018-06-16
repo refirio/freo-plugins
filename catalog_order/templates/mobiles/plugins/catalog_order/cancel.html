@@ -1,0 +1,25 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog_order/order">ご注文履歴に戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文をキャンセル</span></div>
+
+ｷｬﾝｾﾙ依頼のﾒｰﾙを送信します。<br />
+ｷｬﾝｾﾙしても、ご注文履歴には直ちに反映されません。<br />
+注文内容を変更する場合や一部をｷｬﾝｾﾙする場合、以下に詳細をご記入ください。<br />
+
+<br />
+<form action="{$freo.core.https_file}/catalog_order/cancel{if $freo.query.id}?id={$freo.query.id}{/if}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_catalog_order_cencel[id]" value="{$freo.query.id}" />
+連絡事項など<br />
+<textarea name="plugin_catalog_order_cencel[text]" cols="20" rows="5">{$input.plugin_catalog_order_cencel.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="ｷｬﾝｾﾙする" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

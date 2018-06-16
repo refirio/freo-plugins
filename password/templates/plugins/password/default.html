@@ -1,0 +1,26 @@
+{include file='header.html'}
+	<h2>パスワード認証</h2>
+	<!--{if $errors}-->
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error}</li>
+		<!--{/foreach}-->
+	</ul>
+	<!--{/if}-->
+	<ul>
+		<li>コンテンツを閲覧するためには、パスワードを入力してください。</li>
+	</ul>
+	<form action="{$freo.core.http_file}/password" method="post">
+		<fieldset>
+			<legend>認証フォーム</legend>
+			<dl>
+				<dt>パスワード</dt>
+					<dd><input type="password" name="plugin[password][password]" size="30" value="{$smarty.post.plugin.password.password}" /></dd>
+			</dl>
+			<ul>
+				<li><input type="checkbox" name="plugin[password][session]" id="label_session" value="keep" /> <label for="label_session">ログイン状態を記憶する</label></li>
+			</ul>
+			<p><input type="submit" value="認証する" /></p>
+		</fieldset>
+	</form>
+{include file='footer.html'}

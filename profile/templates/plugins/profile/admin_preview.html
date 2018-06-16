@@ -1,0 +1,135 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ID.{$freo.query.id}のプロフィールを編集</h2>
+		<ul>
+			<li>以下の内容で登録します。</li>
+		</ul>
+		<dl>
+			<dt>名前</dt>
+				<dd>{$user.name}</dd>
+			<dt>フリガナ</dt>
+				<dd>{$plugin_profile.kana}</dd>
+			<dt>メールアドレス</dt>
+				<dd>{$user.mail}</dd>
+			<!--{if $user.url}-->
+			<dt>URL</dt>
+				<dd>{$user.url}</dd>
+			<!--{/if}-->
+			<!--{if $user.text}-->
+			<dt>紹介文</dt>
+				<dd>{$user.text|nl2p}</dd>
+			<!--{/if}-->
+			<!--{if $plugin_profile.file}-->
+			<dt>イメージ</dt>
+				<dd>{$plugin_profile.file}</dd>
+			<!--{/if}-->
+			<!--{if $plugin_profile.tag}-->
+			<dt>タグ</dt>
+				<dd>{$plugin_profile.tag}</dd>
+			<!--{/if}-->
+			<!--{if $plugin_profile.category_id}-->
+			<dt>カテゴリー</dt>
+				<dd>{$plugin_profile.category_id}</dd>
+			<!--{/if}-->
+			<dt>並び順</dt>
+				<dd>{$plugin_profile.sort}</dd>
+			<!--{if $freo.config.plugin.profile.file01_name}-->
+			<dt>{$freo.config.plugin.profile.file01_name}</dt>
+				<dd><!--{if !$plugin_profile.file01_remove}-->{$plugin_profile.file01}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file02_name}-->
+			<dt>{$freo.config.plugin.profile.file02_name}</dt>
+				<dd><!--{if !$plugin_profile.file02_remove}-->{$plugin_profile.file02}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file03_name}-->
+			<dt>{$freo.config.plugin.profile.file03_name}</dt>
+				<dd><!--{if !$plugin_profile.file03_remove}-->{$plugin_profile.file03}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file04_name}-->
+			<dt>{$freo.config.plugin.profile.file04_name}</dt>
+				<dd><!--{if !$plugin_profile.file04_remove}-->{$plugin_profile.file04}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file05_name}-->
+			<dt>{$freo.config.plugin.profile.file05_name}</dt>
+				<dd><!--{if !$plugin_profile.file05_remove}-->{$plugin_profile.file05}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file06_name}-->
+			<dt>{$freo.config.plugin.profile.file06_name}</dt>
+				<dd><!--{if !$plugin_profile.file06_remove}-->{$plugin_profile.file06}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file07_name}-->
+			<dt>{$freo.config.plugin.profile.file07_name}</dt>
+				<dd><!--{if !$plugin_profile.file07_remove}-->{$plugin_profile.file07}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file08_name}-->
+			<dt>{$freo.config.plugin.profile.file08_name}</dt>
+				<dd><!--{if !$plugin_profile.file08_remove}-->{$plugin_profile.file08}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file09_name}-->
+			<dt>{$freo.config.plugin.profile.file09_name}</dt>
+				<dd><!--{if !$plugin_profile.file09_remove}-->{$plugin_profile.file09}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.file10_name}-->
+			<dt>{$freo.config.plugin.profile.file10_name}</dt>
+				<dd><!--{if !$plugin_profile.file10_remove}-->{$plugin_profile.file10}<!--{/if}--></dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option01_name}-->
+			<dt>{$freo.config.plugin.profile.option01_name}</dt>
+				<dd>{$plugin_profile.option01}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option02_name}-->
+			<dt>{$freo.config.plugin.profile.option02_name}</dt>
+				<dd>{$plugin_profile.option02}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option03_name}-->
+			<dt>{$freo.config.plugin.profile.option03_name}</dt>
+				<dd>{$plugin_profile.option03}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option04_name}-->
+			<dt>{$freo.config.plugin.profile.option04_name}</dt>
+				<dd>{$plugin_profile.option04}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option05_name}-->
+			<dt>{$freo.config.plugin.profile.option05_name}</dt>
+				<dd>{$plugin_profile.option05}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option06_name}-->
+			<dt>{$freo.config.plugin.profile.option06_name}</dt>
+				<dd>{$plugin_profile.option06}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option07_name}-->
+			<dt>{$freo.config.plugin.profile.option07_name}</dt>
+				<dd>{$plugin_profile.option07}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option08_name}-->
+			<dt>{$freo.config.plugin.profile.option08_name}</dt>
+				<dd>{$plugin_profile.option08}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option09_name}-->
+			<dt>{$freo.config.plugin.profile.option09_name}</dt>
+				<dd>{$plugin_profile.option09}</dd>
+			<!--{/if}-->
+			<!--{if $freo.config.plugin.profile.option10_name}-->
+			<dt>{$freo.config.plugin.profile.option10_name}</dt>
+				<dd>{$plugin_profile.option10}</dd>
+			<!--{/if}-->
+		</dl>
+		<div id="action">
+			<form action="{$freo.core.https_file}/profile/admin_form" method="get">
+				<fieldset>
+					<legend>ユーザー編集フォーム</legend>
+					<input type="hidden" name="session" value="1" />
+					<!--{if $freo.query.id}--><input type="hidden" name="id" value="{$freo.query.id}" /><!--{/if}-->
+					<p><input type="submit" value="戻る" /></p>
+				</fieldset>
+			</form>
+			<form action="{$freo.core.https_file}/profile/admin_preview{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+				<fieldset>
+					<legend>ユーザー登録フォーム</legend>
+					<input type="hidden" name="freo[token]" value="{$token}" />
+					<p><input type="submit" value="登録する" /></p>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{include file='internals/admin/footer.html'}

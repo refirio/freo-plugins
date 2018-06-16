@@ -1,0 +1,72 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog_order/order">ご注文履歴に戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文</span></div>
+
+注文内容は以下のとおりです。<br />
+
+<br />
+対応状況:{$plugin_catalog_order_status[$plugin_catalog_order.status].name}<br />
+注文日時:{$plugin_catalog_order.datetime|date_format:'%Y/%m/%d %H:%M:%S'}<br />
+<!--{if $plugin_catalog_order.user_text}-->
+連絡事項:{$plugin_catalog_order.user_text|nl2br}<br />
+<!--{/if}-->
+
+<br />
+■注文内容<br />
+<br />
+<!--{foreach from=$plugin_catalogs|smarty:nodefaults item='catalog'}-->
+[{$catalog.id}]{$catalog.name}<br />
+{$plugin_catalog_order_sets[$catalog.id].price}円×{$plugin_catalog_order_sets[$catalog.id].count}{$catalog.unit}＝{$plugin_catalog_price_subtotals[$catalog.id]}円<br />
+<br />
+<!--{/foreach}-->
+商品合計(税込):{$plugin_catalog_price_total}円<br />
+送料(税込):{$plugin_catalog_order.carriage}円<br />
+手数料(税込):{$plugin_catalog_order.charge}円<br />
+<!--{if $plugin_catalog_order.discount}-->
+値引き(税込):-{$plugin_catalog_order.discount}円<br />
+<!--{/if}-->
+お支払い額合計(税込):{$plugin_catalog_price_total+$plugin_catalog_order.carriage+$plugin_catalog_order.charge-$plugin_catalog_order.discount}円<br />
+
+<br />
+■配送方法・お支払い方法<br />
+<br />
+配送方法:{$plugin_catalog_deliveries[$plugin_catalog_order.delivery_id].name}<br />
+<!--{if $plugin_catalog_order.preferred_week}-->
+希望する配送曜日:{$plugin_catalog_order.preferred_week}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog_order.preferred_week}-->
+希望する配送時間:{$plugin_catalog_order.preferred_time}<br />
+<!--{/if}-->
+お支払い方法:{$plugin_catalog_payments[$plugin_catalog_order.payment_id].name}<br />
+
+<br />
+■ご注文者<br />
+<br />
+ﾕｰｻﾞｰID:{$plugin_catalog_order.user_id}<br />
+名前:{$plugin_catalog_order.name}<br />
+名前(ﾌﾘｶﾞﾅ):{$plugin_catalog_order.kana}<br />
+Eﾒｰﾙ:{$plugin_catalog_order.mail}<br />
+<!--{if $plugin_catalog_order.tel}-->
+電話番号:{$plugin_catalog_order.tel}<br />
+<!--{/if}-->
+
+<!--{if $plugin_catalog_order.zipcode and $plugin_catalog_order.prefecture and $plugin_catalog_order.address}-->
+<br />
+■配送先住所<br />
+<br />
+郵便番号:{$plugin_catalog_order.zipcode}<br />
+都道府県:{$plugin_catalog_prefectures[$plugin_catalog_order.prefecture].name}<br />
+住所:{$plugin_catalog_order.address}<br />
+<!--{/if}-->
+
+<!--{if $plugin_catalog_order.text}-->
+<br />
+■連絡事項<br />
+<br />
+連絡事項など:{$plugin_catalog_order.text|nl2br}<br />
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

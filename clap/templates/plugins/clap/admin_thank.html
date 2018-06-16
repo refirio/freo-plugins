@@ -1,0 +1,68 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>お礼管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>お礼を新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}のお礼を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}のお礼を削除しました。</li>
+			<!--{elseif $freo.query.exec == 'sort'}-->
+			<li>お礼を並び替えました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたお礼は以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/clap/admin_text">メッセージを管理する</a>。</li>
+			<li><a href="{$freo.core.http_file}/clap/admin_thank_form">お礼を登録する</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/clap/admin_thank_update" method="post">
+			<fieldset>
+				<legend>カテゴリー並び替えフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<table summary="お礼">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>説明</th>
+							<th>利用対象</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>説明</th>
+							<th>利用対象</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!--{foreach from=$plugin_clap_thanks|smarty:nodefaults item='plugin_clap_thank'}-->
+						<tr>
+							<td>{$plugin_clap_thank.id}</td>
+							<td>{$plugin_clap_thank.memo|mb_truncate:20:'...'}</td>
+							<td><!--{if $plugin_clap_thank.target == 'pc'}-->PC<!--{elseif $plugin_clap_thank.target == 'mobile'}-->携帯<!--{else}-->PCと携帯<!--{/if}--></td>
+							<td class="number"><input type="text" name="sort[{$plugin_clap_thank.id}]" size="3" value="{$plugin_clap_thank.sort}" /></td>
+							<td>
+								<a href="{$freo.core.http_file}/clap/admin_thank_form?id={$plugin_clap_thank.id}">編集</a>
+								<a href="{$freo.core.http_file}/clap/admin_thank_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_clap_thank.id}" class="delete">削除</a>
+							</td>
+						</tr>
+						<!--{/foreach}-->
+					</tbody>
+				</table>
+				<p><input type="submit" value="並び順を編集する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

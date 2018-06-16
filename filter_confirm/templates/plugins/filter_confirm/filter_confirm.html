@@ -1,0 +1,10 @@
+<!--{if ($entry_filters[$entry.id] and $entry_associates[$entry.id].filter.r18) or ($page_filters[$page.id] and $page_associates[$page.id].filter.r18) or ($entry_filter and $entry_associate.filter.r18) or ($page_filter and $page_associate.filter.r18) or $media_associate.filter.r18}-->
+<div class="filter_confirm">
+	<h4>年齢確認</h4>
+	<p>この記事には年齢制限が設けられています。あなたは18歳以上ですか？</p>
+	<ul>
+		<li><a href="{$freo.core.http_file}/filter_confirm?freo%5Btoken%5D={$token}&amp;media_path={$smarty.get.path}&amp;entry_id={$entry.id}&amp;page_id={$page.id}&amp;filter_id=r18">はい</a></li>
+		<li><a href="{$freo.core.http_file}">いいえ</a></li>
+	</ul>
+</div>
+<!--{/if}-->

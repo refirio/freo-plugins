@@ -1,0 +1,34 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>イラスト投稿</h2>
+		<ul>
+			<li>投稿するイラストの<em>使用ツール</em>と<em>キャンバスサイズ</em>を指定してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/paint/admin_canvas" method="post">
+			<fieldset>
+				<legend>イラスト設定フォーム</legend>
+				<dl>
+					<dt>使用ツール</dt>
+						<dd>
+							<select name="tool">
+								<!--{if $plugin_paint_tools.paintbbs}-->
+								<option value="paintbbs"{if $freo.config.plugin.paint.default_tool == 'paintbbs'} selected="selected"{/if}>PaintBBS</option>
+								<!--{/if}-->
+								<!--{if $plugin_paint_tools.spainter}-->
+								<option value="shipainter"{if $freo.config.plugin.paint.default_tool == 'shipainter'} selected="selected"{/if}>しぃペインター</option>
+								<option value="shipainterpro"{if $freo.config.plugin.paint.default_tool == 'shipainterpro'} selected="selected"{/if}>しぃペインタープロ</option>
+								<!--{/if}-->
+							</select>
+						</dd>
+					<dt>キャンパスサイズ</dt>
+						<dd>
+							<input type="text" name="width" size="4" value="{$freo.config.plugin.paint.default_width}" />
+							×
+							<input type="text" name="height" size="4" value="{$freo.config.plugin.paint.default_height}" />
+						</dd>
+				</dl>
+				<p><input type="submit" value="イラストを描く" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

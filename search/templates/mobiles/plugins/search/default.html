@@ -1,0 +1,121 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">検索</span></div>
+
+<!--{if $smarty.get.search}-->
+<!--{if $smarty.get.word}-->ｷｰﾜｰﾄﾞ「{$smarty.get.word}」の検索結果は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.user}-->ﾕｰｻﾞｰ「{$smarty.get.user}」の検索結果は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.tag}-->ﾀｸﾞ「{$smarty.get.tag}」の検索結果は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 4}-->{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}の記事は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 6}-->{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}の記事は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 8}-->{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の記事は以下のとおりです。<br /><!--{/if}-->
+<!--{if $smarty.get.page_name}-->検索対象は「{$smarty.get.page_name}」です。<br />
+<!--{elseif $smarty.get.target}-->検索対象は「<!--{if $smarty.get.target == 'entry'}-->ｴﾝﾄﾘｰ<!--{elseif $smarty.get.target == 'page'}-->ﾍﾟｰｼﾞ<!--{/if}-->」です。<br /><!--{/if}-->
+<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+<!--{if $option.type == 'text' and $option.validate == 'numeric'}-->
+<!--{if $smarty.get.option[$option.id].from != '' or $smarty.get.option[$option.id].to != ''}-->
+ｵﾌﾟｼｮﾝ項目「{$option.name}」から「{$smarty.get.option[$option.id].from}～{$smarty.get.option[$option.id].to}」で絞り込みました。<br />
+<!--{/if}-->
+<!--{elseif $option.type == 'text' or $option.type == 'textarea'}-->
+<!--{if $smarty.get.option[$option.id] != ''}-->
+ｵﾌﾟｼｮﾝ項目「{$option.name}」から「{$smarty.get.option[$option.id]}」で絞り込みました。<br />
+<!--{/if}-->
+<!--{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}-->
+<!--{if $smarty.get.option[$option.id] != ''}-->
+ｵﾌﾟｼｮﾝ項目「{$option.name}」から
+<!--{assign var='option_texts' value=$option.text|explode:"\n"}-->
+<!--{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}-->
+<!--{if $smarty.get.option[$option.id][$option_text] == $option_text}-->「{$option_text}」<!--{/if}-->
+<!--{/foreach}-->
+で絞り込みました。<br />
+<!--{/if}-->
+<!--{/if}-->
+<!--{/foreach}-->
+<br />
+{$article_count}件ﾋｯﾄしました。<br />
+全{$article_page}ﾍﾟｰｼﾞ中{$freo.query.page}ﾍﾟｰｼﾞ目を表示しています。<br />
+
+<br />
+<!--{foreach from=$articles|smarty:nodefaults item='article'}-->
+▼<a href="{$freo.core.http_file}/{if $article.type == 'entry'}view{else}page{/if}/{if $article.code}{$article.code}{else}{$article.id}{/if}">{$article.title}</a><br />
+<!--{/foreach}-->
+
+<br />
+<form action="{$freo.core.http_file}/search" method="get">
+<input type="hidden" name="search" value="1" />
+<input type="hidden" name="word" value="{$smarty.get.word}" />
+<input type="hidden" name="target" value="{$smarty.get.target}" />
+<!--{if $freo.refer.options|smarty:nodefaults}-->
+<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+<!--{if $option.type == 'text' and $option.validate == 'numeric'}-->
+<input type="hidden" name="option[{$option.id}][from]" value="{$smarty.get.option[$option.id].from}" />
+<input type="hidden" name="option[{$option.id}][to]" value="{$smarty.get.option[$option.id].to}" />
+<!--{elseif $option.type == 'text' or $option.type == 'textarea'}-->
+<input type="hidden" name="option[{$option.id}]" value="{$smarty.get.option[$option.id]}" />
+<!--{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}-->
+<!--{assign var='option_texts' value=$option.text|explode:"\n"}-->
+<!--{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}-->
+<!--{if $smarty.get.option[$option.id][$option_text] == $option_text}-->
+<input type="hidden" name="option[{$option.id}][{$option_text|mb_convert_encoding:'UTF-8':'SJIS-WIN'}]" value="{$option_text}" />
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+表示ﾍﾟｰｼﾞ<br />
+<select name="page">
+<!--{section name='loop' loop=$article_page}-->
+<option value="{$smarty.section.loop.iteration}"{if $smarty.section.loop.iteration == $freo.query.page} selected="selected"{/if}>▼{$smarty.section.loop.iteration}ﾍﾟｰｼﾞ</option>
+<!--{/section}-->
+</select><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="移動する" />
+</div>
+</form>
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">もう一度検索</span></div>
+<!--{/if}-->
+
+<br />
+<form action="{$freo.core.http_file}/search" method="get">
+<input type="hidden" name="search" value="1" />
+ｷｰﾜｰﾄﾞ<br />
+<input type="text" name="word" size="20" value="{$smarty.get.word}" /><br />
+<!--{if !$smarty.get.page_name}-->
+検索対象<br />
+<select name="target">
+<option value="">▼すべて</option>
+<option value="entry"{if $smarty.get.target == 'entry'} selected="selected"{/if}>▼ｴﾝﾄﾘｰ</option>
+<option value="page"{if $smarty.get.target == 'page'} selected="selected"{/if}>▼ﾍﾟｰｼﾞ</option>
+</select><br />
+<!--{/if}-->
+<!--{if $freo.refer.options|smarty:nodefaults}-->
+<br />
+ｵﾌﾟｼｮﾝ項目で絞り込み<br />
+<br />
+<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+<!--{if $option.type == 'text' and $option.validate == 'numeric'}-->
+{$option.name}<br />
+<input type="text" name="option[{$option.id}][from]" size="5" value="{$smarty.get.option[$option.id].from}" />以上、<input type="text" name="option[{$option.id}][to]" size="5" value="{$smarty.get.option[$option.id].to}" />以下<br />
+<!--{elseif $option.type == 'text' or $option.type == 'textarea'}-->
+{$option.name}<br />
+<input type="text" name="option[{$option.id}]" size="20" value="{$smarty.get.option[$option.id]}" /><br />
+<!--{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}-->
+{$option.name}<br />
+<!--{assign var='option_texts' value=$option.text|explode:"\n"}-->
+<!--{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}-->
+<input type="checkbox" name="option[{$option.id}][{$option_text|mb_convert_encoding:'UTF-8':'SJIS-WIN'}]" value="{$option_text}"{if $smarty.get.option[$option.id][$option_text] == $option_text} checked="checked"{/if} />{$option_text}<br />
+<!--{/foreach}-->
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+<br />
+<div style="text-align:center;">
+<input type="submit" value="検索する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

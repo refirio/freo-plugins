@@ -1,0 +1,36 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>パラメーター{$input.plugin_popularity.parameter}のデータを編集</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>データを入力してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/popularity/admin_form?parameter={$freo.query.parameter}" method="post">
+			<fieldset>
+				<legend>データ登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_popularity[parameter]" value="{$input.plugin_popularity.parameter}" />
+				<dl>
+					<dt>タイトル</dt>
+						<dd><input type="text" name="plugin_popularity[title]" size="50" value="{$input.plugin_popularity.title}{$smarty.get.title}" /></dd>
+					<dt>アクセス数</dt>
+						<dd><input type="text" name="plugin_popularity[count]" size="5" value="{$input.plugin_popularity.count}" /></dd>
+					<dt>状態</dt>
+						<dd>
+							<select name="plugin_popularity[status]">
+								<option value="publish"{if $input.plugin_popularity.status == 'publish'} selected="selected"{/if}>表示</option>
+								<option value="private"{if $input.plugin_popularity.status == 'private'} selected="selected"{/if}>非表示</option>
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

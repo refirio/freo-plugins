@@ -1,0 +1,22 @@
+<!--{foreach from=$media_alls|smarty:nodefaults item='media_all'}-->
+	<!--{if $media_all.path == $path}-->
+	<!--{php}if (!$flag) :{/php}--><ul><!--{php}endif;{/php}-->
+	<li>
+		<!--{if $media_all.type == 'directory'}-->
+		<span title="{$media_all.id}" class="directory">{$media_all_names[$media_all.id]|default:$media_all.name}</span>
+		<!--{if $media_all.restriction}-->
+		<p class="attention">このディレクトリには、閲覧制限が設定されています。</p>
+		<!--{/if}-->
+		<!--{elseif $media_all.width and $media_all.height}-->
+		<a href="{if $media_all.restriction}{$freo.core.http_file}/file/media/{$media_all.directory}{$media_all.name}{else}{$freo.core.http_url}{$media_all.id}{/if}"{if $media_all.memo} title="{$media_all.memo}"{/if}><img src="{if $media_all.restriction}{$freo.core.http_file}/file/media/{$media_all.directory}{$media_all.name}{if $media_all.thumbnail.id}?type=thumbnail{/if}{else}{$freo.core.http_url}{if $media_all.thumbnail.id}{$media_all.thumbnail.id}{else}{$media_all.id}{/if}{/if}" alt="{$media_all.name}（{$media_all.width}px × {$media_all.height}px）" title="{$media_all.name}（{$media_all.width}px × {$media_all.height}px）" /></a>
+		<!--{else}-->
+		<a href="{if $media_all.restriction}{$freo.core.http_file}/file/media/{$media_all.directory}{$media_all.name}{else}{$freo.core.http_url}{$media_all.id}{/if}"{if $media_all.memo} title="{$media_all.memo}"{/if}>{$media_all.name}</a>
+		<!--{/if}-->
+		<!--{assign var="path" value=$media_all.id}-->
+		{include file='plugins/media_all/media_all.html'}
+		<!--{assign var="path" value=$media_all.path}-->
+	</li>
+	<!--{php}$flag = 1;{/php}-->
+	<!--{/if}-->
+<!--{/foreach}-->
+<!--{php}if ($flag) :{/php}--></ul><!--{php}endif;{/php}-->

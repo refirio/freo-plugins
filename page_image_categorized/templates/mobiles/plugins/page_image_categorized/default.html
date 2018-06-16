@@ -1,0 +1,34 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ギャラリー</span></div>
+
+<!--{if $freo.query.view}-->
+<br />
+■{$category.title}<br />
+<br />
+
+<!--{foreach from=$pages|smarty:nodefaults item='page'}-->
+<a href="{$freo.core.http_file}/page/{$page.id}"><!--{if $page.image}--><img src="{$freo.core.http_file}/file/page/{$page.id}?type=image" alt="{$page.memo|default:$page.title}" title="{$page.memo|default:$page.title}" width="{$page_images[$page.id].width}" height="{$page_images[$page.id].height}" /><!--{else}-->{$page.memo|default:$page.title}<!--{/if}--></a>
+<!--{/foreach}-->
+<br />
+
+<!--{else}-->
+<!--{foreach from=$categories|smarty:nodefaults item='category'}-->
+<!--{if $pages[$category.id]|smarty:nodefaults}-->
+<br />
+■<a href="{$freo.core.http_file}/page_image_categorized/{$category.id}?view=1">{$category.title}</a><br />
+<br />
+
+<!--{foreach from=$pages[$category.id]|smarty:nodefaults item='page'}-->
+<a href="{$freo.core.http_file}/page/{$page.id}"><!--{if $page.image}--><img src="{$freo.core.http_file}/file/page/{$page.id}?type=image" alt="{$page.memo|default:$page.title}" title="{$page.memo|default:$page.title}" width="{$page_images[$category.id][$page.id].width}" height="{$page_images[$category.id][$page.id].height}" /><!--{else}-->{$page.memo|default:$page.title}<!--{/if}--></a>
+<!--{/foreach}-->
+<br />
+
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

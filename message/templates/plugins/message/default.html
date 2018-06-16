@@ -1,0 +1,27 @@
+{include file='header.html'}
+	<h2>メッセージ送信</h2>
+	<!--{if $errors}-->
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error}</li>
+		<!--{/foreach}-->
+	</ul>
+	<!--{/if}-->
+	<ul>
+		<li>匿名で一言メッセージを送信できます。</li>
+	</ul>
+	<form action="{$freo.core.http_file}/message" method="post">
+		<fieldset>
+			<legend>メッセージ送信フォーム</legend>
+			<input type="hidden" name="freo[token]" value="{$token}" />
+			<dl>
+				<dt>本文</dt>
+					<dd><textarea name="plugin_message[text]" cols="50" rows="5">{$input.plugin_message.text}</textarea></dd>
+			</dl>
+			<p>
+				<input type="submit" name="preview" value="確認する" />
+				<input type="submit" value="送信する" />
+			</p>
+		</fieldset>
+	</form>
+{include file='footer.html'}

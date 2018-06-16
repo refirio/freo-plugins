@@ -1,0 +1,49 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;"><!--{if $freo.query.id}-->No.{$freo.query.id}のなぞなぞを編集<!--{else}-->新規登録<!--{/if}--></span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+なぞなぞを入力してください。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.http_file}/riddle/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_riddle[id]" value="{$input.plugin_riddle.id}" />
+問題<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_riddle[question]" size="20" value="{$input.plugin_riddle.question}" /><br />
+回答<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_riddle[answer]" size="20" value="{$input.plugin_riddle.answer}" /><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+<!--{if $freo.query.id}-->
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のなぞなぞを削除</span></div>
+
+このなぞなぞを削除するには、削除ﾎﾞﾀﾝを押してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/riddle/admin_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="id" value="{$freo.query.id}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,5 @@
+<ul>
+	<!--{foreach from=$entries|smarty:nodefaults item='entry'}-->
+	<li>{$entry.datetime|date_format:'%Y/%m/%d %H:%M'} ... <a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a></li>
+	<!--{/foreach}-->
+</ul>

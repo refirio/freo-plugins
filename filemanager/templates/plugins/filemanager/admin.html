@@ -1,0 +1,91 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ファイル管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>ファイルを新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'edit_file'}-->
+			<li>ファイルを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'insert_file'}-->
+			<li>ファイルを新規に作成しました。</li>
+			<!--{elseif $freo.query.exec == 'rename_file'}-->
+			<li>ファイル名を変更しました。</li>
+			<!--{elseif $freo.query.exec == 'move_file'}-->
+			<li>ファイルを移動しました。</li>
+			<!--{elseif $freo.query.exec == 'delete_file'}-->
+			<li>ファイルを削除しました。</li>
+			<!--{elseif $freo.query.exec == 'insert_directory'}-->
+			<li>ディレクトリを新規に作成しました。</li>
+			<!--{elseif $freo.query.exec == 'rename_directory'}-->
+			<li>ディレクトリ名を変更しました。</li>
+			<!--{elseif $freo.query.exec == 'move_directory'}-->
+			<li>ディレクトリを移動しました。</li>
+			<!--{elseif $freo.query.exec == 'delete_directory'}-->
+			<li>ディレクトリを削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> に<!--{/if}-->登録されたファイルは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/filemanager/admin_form{if $smarty.get.path}?path={$smarty.get.path|escape:'url'}{/if}"><!--{if $smarty.get.path}-->この階層に<!--{/if}-->ファイルを登録する</a>。</li>
+			<li><a href="{$freo.core.http_file}/filemanager/admin_form?directory=1{if $smarty.get.path}&amp;path={$smarty.get.path|escape:'url'}{/if}"><!--{if $smarty.get.path}-->この階層に<!--{/if}-->ディレクトリを作成する</a>。</li>
+		</ul>
+		<table summary="ファイル" id="media" class="tablesorter">
+			<thead>
+				<tr>
+					<th>名前</th>
+					<th>更新日時</th>
+					<th>サイズ</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>名前</th>
+					<th>更新日時</th>
+					<th>サイズ</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{if $smarty.get.path}-->
+				<tr>
+					<td><img src="{$freo.core.http_url}images/icons/directory.png" alt="ディレクトリ" width="16" height="16" /> <code>..</code></td>
+					<td></td>
+					<td></td>
+					<td><a href="{$freo.core.http_file}/filemanager/admin?path={$parent|escape:'url'}">上の階層へ</a></td>
+				</tr>
+				<!--{/if}-->
+				<!--{foreach from=$directories|smarty:nodefaults item='directory'}-->
+				<tr>
+					<td><img src="{$freo.core.http_url}images/icons/directory.png" alt="ディレクトリ" width="16" height="16" /> <code>{$directory.name}</code></td>
+					<td></td>
+					<td></td>
+					<td>
+						<a href="{$freo.core.http_file}/filemanager/admin?path={$smarty.get.path|escape:'url'}{$directory.name|escape:'url'}%2F">開く</a>
+						<a href="{$freo.core.http_file}/filemanager/admin_form?directory=1&amp;name={$directory.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}">編集</a>
+						<a href="{$freo.core.http_file}/filemanager/admin_delete?freo%5Btoken%5D={$token}&amp;directory=1&amp;name={$directory.name|escape:'url'}%2F&amp;path={$smarty.get.path|escape:'url'}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+				<!--{foreach from=$files|smarty:nodefaults item='file'}-->
+				<tr>
+					<td><img src="{$freo.core.http_url}images/icons/file.png" alt="ファイル" width="16" height="16" /> <code>{$file.name}</code></td>
+					<td><span title="{$file.datetime|date_format:'%Y/%m/%d %H:%M:%S'}"><!--{if $file.datetime|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$file.datetime|date_format:'%H:%M:%S'}<!--{else}-->{$file.datetime|date_format:'%Y/%m/%d'}<!--{/if}--></span></td>
+					<td class="number"><span title="{$file.size} byte"><!--{if $file.size >= 1024}-->{$file.size/1024|intval}KB<!--{elseif $file.size > 0}-->1KB<!--{else}-->0KB<!--{/if}--></span></td>
+					<td>
+						<a href="{$freo.core.http_url}{$smarty.get.path}{$file.name}">確認</a>
+						<a href="{$freo.core.http_file}/filemanager/admin_form?name={$file.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}">編集</a>
+						<a href="{$freo.core.http_file}/filemanager/admin_delete?freo%5Btoken%5D={$token}&amp;name={$file.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

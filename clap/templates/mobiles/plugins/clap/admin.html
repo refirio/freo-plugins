@@ -1,0 +1,90 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">拍手管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'delete'}-->
+拍手を削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+送信された拍手は以下のとおりです。<br />
+<a href="{$freo.core.http_file}/clap/admin_text">ﾒｯｾｰｼﾞを管理する</a>。<br />
+<a href="{$freo.core.http_file}/clap/admin_thank">お礼を管理する</a>。<br />
+
+<br />
+<form action="{$freo.core.http_file}/clap/admin" method="get">
+表示対象<br />
+<select name="day">
+<option value="">▼選択してください</option>
+<!--{foreach from=$plugin_clap_days|smarty:nodefaults item='plugin_clap_day'}-->
+<option value="{$plugin_clap_day.day|date_format:'%Y%m%d'}"{if $smarty.get.day == $plugin_clap_day.day|date_format:'%Y%m%d'} selected="selected"{/if}>▼{$plugin_clap_day.day|date_format:'%Y/%m/%d'} （{$plugin_clap_day.count}回）</option>
+<!--{/foreach}-->
+</select><br />
+<!--{if $plugin_clap_titles|smarty:nodefaults}-->
+ﾀｲﾄﾙで絞り込み<br />
+<select name="title">
+<option value="">▼すべて表示</option>
+<!--{foreach from=$plugin_clap_titles|smarty:nodefaults item='plugin_clap_title'}-->
+<option value="{$plugin_clap_title.title}"{if $smarty.get.title == $plugin_clap_title.title} selected="selected"{/if}>▼{$plugin_clap_title.title} （{$plugin_clap_title.count}回）</option>
+<!--{/foreach}-->
+</select><br />
+<!--{/if}-->
+<br />
+<div style="text-align:center;">
+<input type="submit" value="表示する" />
+</div>
+</form>
+
+<!--{if $plugin_claps|smarty:nodefaults}-->
+<br />
+■拍手<br />
+<br />
+
+{$smarty.get.hour}時の拍手は{$plugin_claps|smarty:nodefaults|@count}件です。<br />
+
+<br />
+<!--{foreach from=$plugin_claps|smarty:nodefaults item='plugin_clap'}-->
+{$plugin_clap.created|date_format:'%H'}時{$plugin_clap.created|date_format:'%M'}分 ... <a href="{$freo.core.http_file}/clap/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_clap.id}">削除</a><br />
+<!--{if $plugin_clap.text}-->{$plugin_clap.text|nl2br}<br /><!--{/if}-->
+<!--{if $plugin_clap_titles|smarty:nodefaults}-->({$plugin_clap.title})<br /><!--{/if}-->
+<br />
+<!--{/foreach}-->
+
+<!--{else}-->
+<br />
+■拍手数<br />
+<br />
+
+送信回数は{$plugin_clap_counts.count}回、送信人数は{$plugin_clap_counts.session|@count}人です。<br />
+
+<br />
+<!--{foreach from=$plugin_clap_hours|smarty:nodefaults item='plugin_clap_hour'}-->
+<a href="{$freo.core.http_file}/clap/admin?day={$smarty.get.day}&amp;hour={$plugin_clap_hour.hour}{if $smarty.get.title}&amp;title={$smarty.get.title|escape:'url'}{/if}">{$plugin_clap_hour.hour}時</a> ... {$plugin_clap_hour.count}回({$plugin_clap_hour.session|@count}人)<br />
+<!--{/foreach}-->
+
+<!--{if $plugin_clap_texts|smarty:nodefaults}-->
+<br />
+■拍手メッセージ<br />
+<br />
+
+ﾒｯｾｰｼﾞは{$plugin_clap_texts|smarty:nodefaults|@count}件です。<br />
+
+<br />
+<!--{foreach from=$plugin_clap_texts|smarty:nodefaults item='plugin_clap_text'}-->
+{$plugin_clap_text.created|date_format:'%H'}時{$plugin_clap_text.created|date_format:'%M'}分 ... <a href="{$freo.core.http_file}/clap/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_clap_text.id}">削除</a><br />
+{$plugin_clap_text.text|nl2br}<br />
+<!--{if $plugin_clap_titles|smarty:nodefaults}-->({$plugin_clap_text.title})<br /><!--{/if}-->
+<br />
+<!--{/foreach}-->
+
+<!--{/if}-->
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

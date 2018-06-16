@@ -1,0 +1,29 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">拍手の送信に失敗しました</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+
+<br />
+<form action="{$freo.core.http_file}/clap" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_clap[page]" value="{$input.plugin_clap.page}" />
+ﾒｯｾｰｼﾞ<br />
+<textarea name="plugin_clap[text]" cols="50" rows="5">{$smarty.post.plugin_clap.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

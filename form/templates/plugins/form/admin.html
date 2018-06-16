@@ -1,0 +1,66 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>フォーム管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>フォームを新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}のフォームを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}のフォームを削除しました。</li>
+			<!--{elseif $freo.query.exec == 'sort'}-->
+			<li>フォームを並び替えました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたフォームは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/form/admin_form">フォームを登録する</a>。</li>
+		</ul>
+		<table summary="フォーム">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>名前</th>
+					<th>説明</th>
+					<th>状態</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>ID</th>
+					<th>名前</th>
+					<th>説明</th>
+					<th>状態</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_forms|smarty:nodefaults item='plugin_form'}-->
+				<tr>
+					<td>{$plugin_form.id}</td>
+					<td>{$plugin_form.name}</td>
+					<td>{$plugin_form.memo|mb_truncate:20:'...'}</td>
+					<td><!--{if $plugin_form.status == 'publish'}-->公開<!--{elseif $plugin_form.status == 'private'}-->非公開<!--{/if}--></td>
+					<td>
+						<!--{if $plugin_form.record == 'yes'}-->
+						<a href="{$freo.core.http_file}/form/admin_record?form_id={$plugin_form.id}">表示</a>
+						<!--{/if}-->
+						<!--{if $plugin_form.status == 'publish'}-->
+						<a href="{$freo.core.http_file}/form/admin_view?id={$plugin_form.id}">確認</a>
+						<!--{/if}-->
+						<a href="{$freo.core.http_file}/form/admin_form?id={$plugin_form.id}">編集</a>
+						<a href="{$freo.core.http_file}/form/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_form.id}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

@@ -1,0 +1,244 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文を管理<!--{else}-->注文を登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'cart_putin'}-->
+			<li>注文商品を追加しました。</li>
+			<!--{elseif $freo.query.exec == 'cart_delete'}-->
+			<li>注文商品を削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li><!--{if $freo.query.id}-->注文内容は以下のとおりです。<!--{else}-->注文を入力してください。<!--{/if}--></li>
+			<!--{if $freo.query.id}-->
+			<li>注文内容を変更削除した場合、<strong>必要に応じて在庫数・配送方法・お支払い方法を調整してください。</strong>（自動では反映されません。）</li>
+			<li>配送方法やお支払い方法を変更した場合、<strong>必要に応じて送料・手数料を調整してください。</strong>（自動では反映されません。）</li>
+			<!--{/if}-->
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.https_file}/catalog_order/admin_order_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>注文管理フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<!--{if $freo.query.id}-->
+				<input type="hidden" name="plugin_catalog_order[id]" value="{$input.plugin_catalog_order.record_id}" />
+				<!--{/if}-->
+				<dl>
+					<dt>対応状況 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_order[status]">
+								<!--{foreach from=$plugin_catalog_order_status|smarty:nodefaults item='plugin_catalog_order_stat'}-->
+								<option value="{$plugin_catalog_order_stat.id}"{if $plugin_catalog_order_stat.id == $input.plugin_catalog_order.status} selected="selected"{/if}>{$plugin_catalog_order_stat.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>注文日時 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<input type="text" name="plugin_catalog_order[datetime][year]" size="4" value="{$input.plugin_catalog_order.datetime|date_format:'%Y'}" />
+							年
+							<input type="text" name="plugin_catalog_order[datetime][month]" size="2" value="{$input.plugin_catalog_order.datetime|date_format:'%m'}" />
+							月
+							<input type="text" name="plugin_catalog_order[datetime][day]" size="2" value="{$input.plugin_catalog_order.datetime|date_format:'%d'}" />
+							日
+							<input type="text" name="plugin_catalog_order[datetime][hour]" size="2" value="{$input.plugin_catalog_order.datetime|date_format:'%H'}" />
+							時
+							<input type="text" name="plugin_catalog_order[datetime][minute]" size="2" value="{$input.plugin_catalog_order.datetime|date_format:'%M'}" />
+							分
+							<input type="text" name="plugin_catalog_order[datetime][second]" size="2" value="{$input.plugin_catalog_order.datetime|date_format:'%S'}" />
+							秒
+						</dd>
+					<dt>メモ（注文者には公開されません）</dt>
+						<dd><textarea name="plugin_catalog_order[admin_text]" cols="50" rows="5">{$input.plugin_catalog_order.admin_text}</textarea></dd>
+					<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user and $input.plugin_catalog_order.user_id}-->
+					<dt>注文者向け連絡事項（注文者がユーザー用ページで閲覧できます）</dt>
+						<dd><textarea name="plugin_catalog_order[user_text]" cols="50" rows="5">{$input.plugin_catalog_order.user_text}</textarea></dd>
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog_order[user_text]" value="{$input.plugin_catalog_order.user_text}" />
+					<!--{/if}-->
+				</dl>
+				<h3>注文内容</h3>
+				<!--{if $freo.query.id}-->
+				<table summary="注文内容">
+					<thead>
+						<tr>
+							<th>商品</th>
+							<th>価格（税込）</th>
+							<th>数量</th>
+							<th>小計（税込）</th>
+							<th>削除</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>商品</th>
+							<th>価格（税込）</th>
+							<th>数量</th>
+							<th>小計（税込）</th>
+							<th>削除</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!--{foreach from=$plugin_catalogs|smarty:nodefaults item='catalog'}-->
+						<tr>
+							<td>[{$catalog.id}]<br />{$catalog.name}</td>
+							<td class="number"><input type="text" name="plugin_catalog_order[price][{$catalog.id}]" size="5" value="{$input.plugin_catalog_order_sets[$catalog.id].price}" /> 円</td>
+							<td class="number"><input type="text" name="plugin_catalog_order[count][{$catalog.id}]" size="5" value="{$input.plugin_catalog_order_sets[$catalog.id].count}" /></td>
+							<td class="number">{$plugin_catalog_price_subtotals[$catalog.id]}円</td>
+							<td>
+								<a href="{$freo.core.https_file}/catalog_order/admin_order_cart_delete?freo%5Btoken%5D={$token}&amp;id={$freo.query.id}&amp;catalog_id={$catalog.id}" class="delete">削除</a>
+							</td>
+						</tr>
+						<!--{/foreach}-->
+					</tbody>
+				</table>
+				<ul>
+					<li><a href="{$freo.core.https_file}/catalog_order/admin_order_cart_form?id={$freo.query.id}">注文商品を追加する</a>。</li>
+				</ul>
+				<table summary="合計">
+					<tr>
+						<th>商品合計（税込）</th>
+						<td class="number">{$plugin_catalog_price_total}円</td>
+					</tr>
+					<tr>
+						<th>送料（税込）</th>
+						<td class="number"><input type="text" name="plugin_catalog_order[carriage]" size="5" value="{$input.plugin_catalog_order.carriage}" /> 円</td>
+					</tr>
+					<tr>
+						<th>手数料（税込）</th>
+						<td class="number"><input type="text" name="plugin_catalog_order[charge]" size="5" value="{$input.plugin_catalog_order.charge}" /> 円</td>
+					</tr>
+					<tr>
+						<th>値引き（税込）</th>
+						<td class="number">- <input type="text" name="plugin_catalog_order[discount]" size="5" value="{$input.plugin_catalog_order.discount}" /> 円</td>
+					</tr>
+					<tr>
+						<th>お支払い額合計（税込）</th>
+						<td class="number"><em>{$plugin_catalog_price_total+$input.plugin_catalog_order.carriage+$input.plugin_catalog_order.charge-$input.plugin_catalog_order.discount}円</em></td>
+					</tr>
+				</table>
+				<!--{else}-->
+				<input type="hidden" name="plugin_catalog_order[carriage]" value="0" />
+				<input type="hidden" name="plugin_catalog_order[charge]" value="0" />
+				<input type="hidden" name="plugin_catalog_order[discount]" value="0" />
+				<ul>
+					<li>注文商品を追加するには、一旦注文を登録してください。</li>
+				</ul>
+				<!--{/if}-->
+				<h3>配送方法・お支払い方法</h3>
+				<dl>
+					<dt>配送方法 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_order[delivery_id]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+								<option value="{$plugin_catalog_delivery.id}"{if $plugin_catalog_delivery.id == $input.plugin_catalog_order.delivery_id} selected="selected"{/if}>{$plugin_catalog_delivery.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>希望する配送曜日</dt>
+						<dd>
+							<select name="plugin_catalog_order[preferred_week]">
+								<option value="">希望なし</option>
+								<!--{foreach from=$freo.config.plugin.catalog.delivery_week|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_week} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>希望する配送時間</dt>
+						<dd>
+							<select name="plugin_catalog_order[preferred_time]">
+								<option value="">希望なし</option>
+								<!--{foreach from=$freo.config.plugin.catalog.delivery_time|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_time} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>お支払い方法 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_order[payment_id]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_catalog_payments|smarty:nodefaults item='plugin_catalog_payment'}-->
+								<option value="{$plugin_catalog_payment.id}"{if $plugin_catalog_payment.id == $input.plugin_catalog_order.payment_id} selected="selected"{/if}>{$plugin_catalog_payment.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+				</dl>
+				<h3>ご注文者</h3>
+				<dl>
+					<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+					<dt>ユーザーID</dt>
+						<dd><input type="text" name="plugin_catalog_order[user_id]" size="30" value="{$input.plugin_catalog_order.user_id}" /></dd>
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog_order[user_id]" value="{$input.plugin_catalog_order.user_id}" />
+					<!--{/if}-->
+					<dt>名前 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_order[name]" size="30" value="{$input.plugin_catalog_order.name}" /></dd>
+					<dt>名前（フリガナ） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_order[kana]" size="30" value="{$input.plugin_catalog_order.kana}" /></dd>
+					<dt>Ｅメール <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_order[mail]" size="30" value="{$input.plugin_catalog_order.mail}" /></dd>
+					<dt>電話番号</dt>
+						<dd><input type="text" name="plugin_catalog_order[tel]" size="30" value="{$input.plugin_catalog_order.tel}" /></dd>
+				</dl>
+				<h3>配送先住所</h3>
+				<dl>
+					<dt>郵便番号</dt>
+						<dd><input type="text" name="plugin_catalog_order[zipcode]" size="10" value="{$input.plugin_catalog_order.zipcode}" id="catalog_order_zipcode" /></dd>
+					<dt>都道府県</dt>
+						<dd>
+							<select name="plugin_catalog_order[prefecture]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+								<option value="{$plugin_catalog_prefecture.id}"{if $input.plugin_catalog_order.prefecture == $plugin_catalog_prefecture.id} selected="selected"{/if}>{$plugin_catalog_prefecture.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>住所</dt>
+						<dd><input type="text" name="plugin_catalog_order[address]" size="50" value="{$input.plugin_catalog_order.address}" /></dd>
+				</dl>
+				<h3>連絡事項</h3>
+				<dl>
+					<dt>注文者からの連絡事項</dt>
+						<dd><textarea name="plugin_catalog_order[text]" cols="50" rows="5">{$input.plugin_catalog_order.text}</textarea></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文を削除</h2>
+		<ul>
+			<li>この注文を削除するには、<em>削除ボタン</em>を押してください。</li>
+			<li><strong>在庫数は必要に応じて調整してください。</strong>（自動では反映されません。）</li>
+		</ul>
+		<form action="{$freo.core.https_file}/catalog_order/admin_order_delete" method="get" class="delete">
+			<fieldset>
+				<legend>注文削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+	<!--{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}-->
+	<script type="text/javascript" src="https://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3-https.js"></script>
+	<!--{else}-->
+	<script type="text/javascript" src="http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js"></script>
+	<!--{/if}-->
+	<script type="text/javascript">
+	{literal}
+	//郵便番号から住所を検索
+	$('#catalog_order_zipcode').keyup(function() {
+		AjaxZip3.zip2addr(this, '', 'plugin_catalog_order[prefecture]', 'plugin_catalog_order[address]');
+	});
+	{/literal}
+	</script>
+{include file='internals/admin/footer.html'}

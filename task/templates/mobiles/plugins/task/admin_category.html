@@ -1,0 +1,29 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">カテゴリー管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+ｶﾃｺﾞﾘｰを新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+ID.{$freo.query.id}のｶﾃｺﾞﾘｰを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ID.{$freo.query.id}のｶﾃｺﾞﾘｰを削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたｶﾃｺﾞﾘｰは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/task/admin_category_form">ｶﾃｺﾞﾘｰ登録</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_task_categories|smarty:nodefaults item='plugin_task_category'}-->
+▼[{$plugin_task_category.id}]<a href="{$freo.core.http_file}/task/admin_category_form?id={$plugin_task_category.id}">{$plugin_task_category.name}</a><br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

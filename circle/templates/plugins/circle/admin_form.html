@@ -1,0 +1,85 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ID.{$freo.query.id}のサークルを編集</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>サークル情報を入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/circle/admin_form?id={$freo.query.id}" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<legend>サークル登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<dl>
+					<dt>サークル名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_circle[name]" size="50" value="{$input.plugin_circle.name}" /></dd>
+					<dt>サークル名（フリガナ） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_circle[kana]" size="50" value="{$input.plugin_circle.kana}" /></dd>
+					<dt>サークルURL</dt>
+						<dd><input type="text" name="plugin_circle[url]" size="50" value="{$input.plugin_circle.url}" /></dd>
+					<dt>サークルカット</dt>
+						<dd>
+							<input type="file" name="plugin_circle[image]" size="30" />
+							<!--{if $input.plugin_circle.image}-->
+								<input type="checkbox" name="plugin_circle[image_remove]" id="label_image" value="{$input.plugin_circle.image}"{if $input.plugin_circle.image_remove} checked="checked"{/if} /> <label for="label_image">{$input.plugin_circle.image}を削除</label>
+								<input type="hidden" name="plugin_circle[image]" value="{$input.plugin_circle.image}" />
+							<!--{/if}-->
+						</dd>
+					<dt>添付ファイル</dt>
+						<dd>
+							<input type="file" name="plugin_circle[file]" size="30" />
+							<!--{if $input.plugin_circle.file}-->
+								<input type="checkbox" name="plugin_circle[file_remove]" id="label_file" value="{$input.plugin_circle.file}"{if $input.plugin_circle.file_remove} checked="checked"{/if} /> <label for="label_file">{$input.plugin_circle.file}を削除</label>
+								<input type="hidden" name="plugin_circle[file]" value="{$input.plugin_circle.file}" />
+							<!--{/if}-->
+						</dd>
+					<dt>サークルスペース</dt>
+						<dd><input type="text" name="plugin_circle[space]" size="50" value="{$input.plugin_circle.space}" /></dd>
+					<dt>カップリング</dt>
+						<dd><input type="text" name="plugin_circle[coupling]" size="50" value="{$input.plugin_circle.coupling}" /></dd>
+					<dt>タグ</dt>
+						<dd><input type="text" name="plugin_circle[tag]" size="50" value="{$input.plugin_circle.tag}" /></dd>
+					<dt>紹介文</dt>
+						<dd><textarea name="plugin_circle[text]" cols="50" rows="5">{$input.plugin_circle.text}</textarea></dd>
+					<dt>カテゴリー</dt>
+						<dd>
+							<select name="plugin_circle[category_id]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_circle_categories|smarty:nodefaults item='plugin_circle_category'}-->
+								<option value="{$plugin_circle_category.id}"{if $input.plugin_circle.category_id == $plugin_circle_category.id} selected="selected"{/if} >{$plugin_circle_category.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+				</dl>
+				<h3>代表者</h3>
+				<dl>
+					<dt>サークル代表者名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_circle[owner_name]" size="50" value="{$input.plugin_circle.owner_name}" /></dd>
+					<dt>サークル代表者名（フリガナ） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_circle[owner_kana]" size="50" value="{$input.plugin_circle.owner_kana}" /></dd>
+				</dl>
+				<h3>企画</h3>
+				<dl>
+					<dt>企画名</dt>
+						<dd><input type="text" name="plugin_circle[plan_name]" size="50" value="{$input.plugin_circle.plan_name}" /></dd>
+					<dt>企画URL</dt>
+						<dd><input type="text" name="plugin_circle[plan_url]" size="50" value="{$input.plugin_circle.plan_url}" /></dd>
+					<dt>企画詳細</dt>
+						<dd><textarea name="plugin_circle[plan_text]" cols="50" rows="5">{$input.plugin_circle.plan_text}</textarea></dd>
+				</dl>
+				<h3>管理者用</h3>
+				<dl>
+					<dt>メモ</dt>
+						<dd><textarea name="plugin_circle[admin_text]" cols="50" rows="5">{$input.plugin_circle.admin_text}</textarea></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

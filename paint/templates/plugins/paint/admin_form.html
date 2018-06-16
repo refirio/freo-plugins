@@ -1,0 +1,53 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>No.{$freo.query.id}のイラスト情報を編集</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>イラスト情報を入力してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/paint/admin_form?id={$freo.query.id}" method="post">
+			<fieldset>
+				<legend>イラスト情報登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_paint[id]" value="{$input.plugin_paint.id}" />
+				<dl>
+					<dt>タイトル</dt>
+						<dd><input type="text" name="plugin_paint[title]" size="50" value="{$input.plugin_paint.title}{$smarty.get.title}" /></dd>
+					<dt>本文</dt>
+						<dd><textarea name="plugin_paint[text]" cols="50" rows="5">{$input.plugin_paint.text}</textarea></dd>
+					<dt>タグ</dt>
+						<dd><input type="text" name="plugin_paint[tag]" size="50" value="{$input.plugin_paint.tag}" /></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<h2>No.{$freo.query.id}のイラストの続きを描く</h2>
+		<ul>
+			<li>イラストの続きを描く、<em>続きを描くボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/paint/admin_canvas?id={$freo.query.id}" method="post">
+			<fieldset>
+				<legend>イラスト登録フォーム</legend>
+				<p><input type="submit" value="続きを描く" /></p>
+			</fieldset>
+		</form>
+		<h2>No.{$freo.query.id}のイラストを削除</h2>
+		<ul>
+			<li>このイラストを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/paint/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>イラスト削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

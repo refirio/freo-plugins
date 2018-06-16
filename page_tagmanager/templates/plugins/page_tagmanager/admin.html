@@ -1,0 +1,49 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ページタグ管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>タグ「{$smarty.get.tag}」を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>タグ「{$smarty.get.tag}」を削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたタグは以下のとおりです。</li>
+		</ul>
+		<table summary="タグ">
+			<thead>
+				<tr>
+					<th>タグ</th>
+					<th>数</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>タグ</th>
+					<th>数</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$page_tags|smarty:nodefaults item='page_tag'}-->
+				<tr>
+					<td>{$page_tag.tag}</td>
+					<td>{$page_tag.count}</td>
+					<td>
+						<a href="{$freo.core.http_file}/admin/page?tag={$page_tag.tag|smarty:nodefaults|escape:'url'}">検索</a>
+						<a href="{$freo.core.http_file}/page_tagmanager/admin_form?tag={$page_tag.tag}">編集</a>
+						<a href="{$freo.core.http_file}/page_tagmanager/admin_delete?freo%5Btoken%5D={$token}&amp;tag={$page_tag.tag}" class="delete">削除</a>
+					</td>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

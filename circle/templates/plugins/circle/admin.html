@@ -1,0 +1,60 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>サークル管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}のサークルを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}のサークルを削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたサークルは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/circle/admin_form?id={$freo.user.id}">自身のサークル情報を登録・編集する</a>。</li>
+			<li><a href="{$freo.core.http_file}/circle/admin_category">カテゴリーを管理する</a>。</li>
+		</ul>
+		<table summary="サークル">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>登録日時</th>
+					<th>名前</th>
+					<th>サークル名</th>
+					<th>サークル代表者名</th>
+					<th>権限</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>ID</th>
+					<th>登録日時</th>
+					<th>名前</th>
+					<th>サークル名</th>
+					<th>サークル代表者名</th>
+					<th>権限</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$users|smarty:nodefaults item='user'}-->
+				<tr>
+					<td>{$user.id}</td>
+					<td><!--{if $user.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$user.created|date_format:'%H:%M:%S'}<!--{else}-->{$user.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<td>{$user.name}</td>
+					<td>{$plugin_circles[$user.id].name}</td>
+					<td>{$plugin_circles[$user.id].owner_name}</td>
+					<td><!--{if $user.authority == 'root'}-->管理者<!--{elseif $user.authority == 'author'}-->投稿者<!--{elseif $user.authority == 'guest'}-->ゲスト<!--{/if}--></td>
+					<td><a href="{$freo.core.http_file}/circle/admin_form?id={$user.id}">編集</a></td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

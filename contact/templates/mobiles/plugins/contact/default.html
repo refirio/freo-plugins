@@ -1,0 +1,38 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メール送信</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾒｰﾙの送信はこちらからどうぞ。<br />
+
+<br />
+<form action="{$freo.core.http_file}/contact" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+件名<br />
+<input type="text" name="plugin_contact[subject]" size="20" value="{$input.plugin_contact.subject}" /><br />
+名前<br />
+<input type="text" name="plugin_contact[name]" size="20" value="{$input.plugin_contact.name}" /><br />
+Eﾒｰﾙ<br />
+<input type="text" name="plugin_contact[mail]" size="20" value="{$input.plugin_contact.mail}" /><br />
+本文<br />
+<textarea name="plugin_contact[text]" cols="20" rows="5">{$input.plugin_contact.text}</textarea><br />
+<br />
+<input type="checkbox" name="plugin_contact[copy]" value="1"{if $input.plugin_contact.copy} checked="checked"{/if} />送信者にｺﾋﾟｰを送る<br />
+<br />
+<div style="text-align:center;">
+<input type="submit" name="preview" value="確認する" />
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

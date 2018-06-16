@@ -1,0 +1,20 @@
+<!--{foreach from=$media_alls|smarty:nodefaults item='media_all'}-->
+	<!--{if $media_all.path == $path}-->
+	<!--{php}if (!$flag) :{/php}--><ul><!--{php}endif;{/php}-->
+	<li>
+		<!--{if $media_all.type == 'directory'}-->
+		{$media_all_names[$media_all.id]|default:$media_all.name}
+		<!--{if $media_all.restriction}-->
+		<div style="color:#FF0000;">このﾃﾞｨﾚｸﾄﾘには、閲覧制限が設定されています。</div>
+		<!--{/if}-->
+		<!--{else}-->
+		<a href="{$freo.core.http_file}/file/media/{$media_all.directory}{$media_all.name}">{$media_all.memo|default:$media_all.name}</a>
+		<!--{/if}-->
+		<!--{assign var="path" value=$media_all.id}-->
+		{include file='mobiles/plugins/media_all/media_all.html'}
+		<!--{assign var="path" value=$media_all.path}-->
+	</li>
+	<!--{php}$flag = 1;{/php}-->
+	<!--{/if}-->
+<!--{/foreach}-->
+<!--{php}if ($flag) :{/php}--></ul><!--{php}endif;{/php}-->

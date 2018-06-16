@@ -1,0 +1,42 @@
+{include file='header.html'}
+	<h2>プロフィール一覧</h2>
+	<ul>
+		<!--{if $smarty.get.category}--><li>カテゴリー「{$plugin_profile_categories[$smarty.get.category].name}」の検索結果は以下のとおりです。</li>
+		<!--{elseif $smarty.get.tag}--><li>タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</li>
+		<!--{else}-->
+			<li>登録されたプロフィールは以下のとおりです。</li>
+			<li>IDをクリックすると、詳細が表示されます。</li>
+		<!--{/if}-->
+	</ul>
+	<table summary="プロフィール">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>名前</th>
+				<th>フリガナ</th>
+				<th>カテゴリー</th>
+				<th>タグ</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>ID</th>
+				<th>名前</th>
+				<th>フリガナ</th>
+				<th>カテゴリー</th>
+				<th>タグ</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!--{foreach from=$plugin_profiles|smarty:nodefaults item='plugin_profile'}-->
+			<tr>
+				<td><a href="{$freo.core.http_file}/profile/{$plugin_profile.user_id}">{$plugin_profile.user_id}</a></td>
+				<td>{$users[$plugin_profile.user_id].name}</td>
+				<td>{$plugin_profile.kana}</td>
+				<td><!--{if $plugin_profile.category_id}--><a href="{$freo.core.http_file}/profile?category={$plugin_profile.category_id}">{$plugin_profile_categories[$plugin_profile.category_id].name}</a><!--{/if}--></td>
+				<td><!--{foreach from=$plugin_profile_tags[$plugin_profile.user_id]|smarty:nodefaults item='plugin_profile_tag' name='loop'}--><a href="{$freo.core.http_file}/profile?tag={$plugin_profile_tag|smarty:nodefaults|escape:'url'}">{$plugin_profile_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></td>
+			</tr>
+			<!--{/foreach}-->
+		</tbody>
+	</table>
+{include file='footer.html'}

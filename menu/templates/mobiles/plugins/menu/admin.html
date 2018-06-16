@@ -1,0 +1,29 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メニュー管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+ﾒﾆｭｰを新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+ID.{$freo.query.id}のﾒﾆｭｰを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ID.{$freo.query.id}のﾒﾆｭｰを削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたﾒﾆｭｰは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/menu/admin_form">ﾒﾆｭｰを登録する</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_menus|smarty:nodefaults item='plugin_menu'}-->
+▼[{$plugin_menu.id}]<a href="{$freo.core.http_file}/menu/admin_form?id={$plugin_menu.id}">{$plugin_menu.title}</a><br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

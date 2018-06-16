@@ -1,0 +1,45 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のメッセージを編集</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾒｯｾｰｼﾞを入力してください。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.http_file}/message/admin_form?id={$freo.query.id}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_message[id]" value="{$input.plugin_message.id}" />
+本文<span style="color:#FF0000;">*</span><br />
+<textarea name="plugin_message[text]" cols="20" rows="5">{$input.plugin_message.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のメッセージを削除</span></div>
+
+このﾒｯｾｰｼﾞを削除するには、削除ﾎﾞﾀﾝを押してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/message/admin_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="id" value="{$freo.query.id}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

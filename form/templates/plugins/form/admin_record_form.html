@@ -1,0 +1,75 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>No.{$input.plugin_form_record.count}の送信内容を表示</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>送信内容は以下のとおりです。</li>
+		</ul>
+		<dl>
+			<dt>送信日時</dt>
+				<dd>{$input.plugin_form_record.created|date_format:'%Y/%m/%d %H:%M:%S'}</dd>
+			<!--{if $input.plugin_form_record.subject}-->
+			<dt>件名</dt>
+				<dd>{$input.plugin_form_record.subject}</dd>
+			<!--{/if}-->
+			<!--{if $input.plugin_form_record.name}-->
+			<dt>送信者</dt>
+				<dd>{$input.plugin_form_record.name}<!--{if $input.plugin_form_record.mail}--> &lt;{$input.plugin_form_record.mail}&gt;<!--{/if}--></dd>
+			<!--{/if}-->
+			<dt>IPアドレス</dt>
+				<dd>{$input.plugin_form_record.ip}</dd>
+<!--
+			<dt>ヘッダ</dt>
+				<dd>{$input.plugin_form_record.header|nl2br}</dd>
+-->
+			<dt>送信内容</dt>
+				<dd>{$input.plugin_form_record.body|nl2br}</dd>
+			<!--{if $plugin_form_files|smarty:nodefaults}-->
+			<dt>添付ファイル</dt>
+				<dd>
+					<ul>
+						<!--{foreach from=$plugin_form_files|smarty:nodefaults item='plugin_form_file'}-->
+						<li><a href="{$freo.core.http_file}/form/admin_record_download?id={$freo.query.id}&amp;file={$plugin_form_file.name}">{$plugin_form_file.name}</a>（{$plugin_form_file.filesize/1024|intval}KB）</li>
+						<!--{/foreach}-->
+					</ul>
+				</dd>
+			<!--{/if}-->
+		</dl>
+		<h2>No.{$input.plugin_form_record.count}の送信内容を編集</h2>
+		<ul>
+			<li>メモを編集するには、<em>編集ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/form/admin_record_form?id={$freo.query.id}&amp;form_id={$freo.query.form_id}" method="post">
+			<fieldset>
+				<legend>送信内容編集フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_form_record[id]" value="{$input.plugin_form_record.id}" />
+				<input type="hidden" name="plugin_form_record[form_id]" value="{$input.plugin_form_record.form_id}" />
+				<dl>
+					<dt>メモ</dt>
+						<dd><textarea name="plugin_form_record[memo]" cols="50" rows="5">{$input.plugin_form_record.memo}</textarea></dd>
+				</dl>
+				<p><input type="submit" value="編集する" /></p>
+			</fieldset>
+		</form>
+		<h2>No.{$input.plugin_form_record.count}の送信内容を削除</h2>
+		<ul>
+			<li>この送信内容を削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/form/admin_record_delete" method="get" class="delete">
+			<fieldset>
+				<legend>送信内容削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<input type="hidden" name="form_id" value="{$freo.query.form_id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

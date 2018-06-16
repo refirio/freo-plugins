@@ -1,0 +1,30 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メッセージ送信</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+匿名で一言ﾒｯｾｰｼﾞを送信できます。<br />
+
+<br />
+<form action="{$freo.core.http_file}/message" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+本文<br />
+<textarea name="plugin_message[text]" cols="20" rows="5">{$input.plugin_message.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" name="preview" value="確認する" />
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

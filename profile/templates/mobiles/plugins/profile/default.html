@@ -1,0 +1,25 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">プロフィール一覧</span></div>
+
+<!--{if $smarty.get.category}-->ｶﾃｺﾞﾘｰ「{$plugin_profile_categories[$smarty.get.category].name}」の検索結果は以下のとおりです。<br />
+<!--{elseif $smarty.get.tag}-->ﾀｸﾞ「{$smarty.get.tag}」の検索結果は以下のとおりです。<br />
+<!--{else}-->
+登録されたﾌﾟﾛﾌｨｰﾙは以下のとおりです。<br />
+ﾌﾟﾛﾌｨｰﾙをｸﾘｯｸすると、詳細が表示されます。<br />
+<!--{/if}-->
+
+<br />
+<!--{foreach from=$plugin_profiles|smarty:nodefaults item='plugin_profile'}-->
+▼[<a href="{$freo.core.http_file}/profile/{$plugin_profile.user_id}">{$plugin_profile.user_id}</a>]{$users[$plugin_profile.user_id].name}
+<!--{if $plugin_profile.category_id}-->[<a href="{$freo.core.http_file}/profile?category={$plugin_profile.category_id}">{$plugin_profile_categories[$plugin_profile.category_id].name}</a>]<!--{/if}-->
+<!--{foreach from=$plugin_profile_tags[$plugin_profile.user_id]|smarty:nodefaults item='plugin_profile_tag' name='loop'}--><a href="{$freo.core.http_file}/profile?tag={$plugin_profile_tag|smarty:nodefaults|escape:'url'}">{$plugin_profile_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}-->
+<br />
+<!--{/foreach}-->
+
+<br />
+
+{include file='mobiles/footer.html'}

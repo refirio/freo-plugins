@@ -1,0 +1,169 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->ID.{$freo.query.id}のフォームを編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>フォームを入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/form/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>フォーム登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<!--{if $freo.query.id}-->
+				<input type="hidden" name="plugin_form[id]" value="{$input.plugin_form.id}" />
+				<!--{/if}-->
+				<dl>
+					<!--{if !$freo.query.id}-->
+					<dt>フォームID <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[id]" size="30" value="{$input.plugin_form.id}" /></dd>
+					<!--{/if}-->
+					<dt>フォームの名前 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[name]" size="50" value="{$input.plugin_form.name}" /></dd>
+					<dt>送信完了時のリダイレクト先</dt>
+						<dd><input type="text" name="plugin_form[complete]" size="50" value="{$input.plugin_form.complete}" /></dd>
+					<dt>送信済み回数 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[count]" size="5" value="{$input.plugin_form.count}" /> 回</dd>
+					<!--{if $smarty.const.FREO_HTTPS_URL}-->
+					<dt>SSLの使用 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[secure]">
+								<option value="yes"{if $input.plugin_form.secure == 'yes'} selected="selected"{/if}>使用する</option>
+								<option value="no"{if $input.plugin_form.secure == 'no'} selected="selected"{/if}>使用しない</option>
+							</select>
+						</dd>
+					<!--{else}-->
+					<input type="hidden" name="plugin_form[secure]" value="{$input.plugin_form.secure}" />
+					<!--{/if}-->
+					<dt>添付ファイル <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[attachment]">
+								<option value="yes"{if $input.plugin_form.attachment == 'yes'} selected="selected"{/if}>許可する</option>
+								<option value="no"{if $input.plugin_form.attachment == 'no'} selected="selected"{/if}>許可しない</option>
+							</select>
+						</dd>
+					<dt>メールの送信 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[mail]" id="form_mail">
+								<option value="yes"{if $input.plugin_form.mail == 'yes'} selected="selected"{/if}>送信する</option>
+								<option value="no"{if $input.plugin_form.mail == 'no'} selected="selected"{/if}>送信しない</option>
+							</select>
+						</dd>
+				</dl>
+				<dl id="form_mail_content">
+					<dt>メールの送信：送信先（改行区切りで複数指定可能） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><textarea name="plugin_form[mail_to]" cols="50" rows="5">{$input.plugin_form.mail_to}</textarea></dd>
+					<dt>メールの送信：Cc（改行区切りで複数指定可能）</dt>
+						<dd><textarea name="plugin_form[mail_cc]" cols="50" rows="5">{$input.plugin_form.mail_cc}</textarea></dd>
+					<dt>メールの送信：Bcc（改行区切りで複数指定可能）</dt>
+						<dd><textarea name="plugin_form[mail_bcc]" cols="50" rows="5">{$input.plugin_form.mail_bcc}</textarea></dd>
+					<dt>メールの送信：本文 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><textarea name="plugin_form[mail_text]" cols="50" rows="10">{$input.plugin_form.mail_text}</textarea></dd>
+				</dl>
+				<dl>
+					<dt>メールの自動返信 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[reply]" id="form_reply">
+								<option value="yes"{if $input.plugin_form.reply == 'yes'} selected="selected"{/if}>送信する</option>
+								<option value="no"{if $input.plugin_form.reply == 'no'} selected="selected"{/if}>送信しない</option>
+							</select>
+						</dd>
+				</dl>
+				<dl id="form_reply_content">
+					<dt>メールの自動返信：件名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[reply_subject]" size="50" value="{$input.plugin_form.reply_subject}" /></dd>
+					<dt>メールの自動返信：送信者名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[reply_name]" size="50" value="{$input.plugin_form.reply_name}" /></dd>
+					<dt>メールの自動返信：送信元アドレス <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_form[reply_from]" size="50" value="{$input.plugin_form.reply_from}" /></dd>
+					<dt>メールの自動返信：本文 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><textarea name="plugin_form[reply_text]" cols="50" rows="10">{$input.plugin_form.reply_text}</textarea></dd>
+				</dl>
+				<dl>
+					<dt>送信内容の記録 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[record]" id="form_record">
+								<option value="yes"{if $input.plugin_form.record == 'yes'} selected="selected"{/if}>記録する</option>
+								<option value="no"{if $input.plugin_form.record == 'no'} selected="selected"{/if}>記録しない</option>
+							</select>
+						</dd>
+				</dl>
+				<dl id="form_record_content">
+					<dt>送信内容の記録：本文 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><textarea name="plugin_form[record_text]" cols="50" rows="10">{$input.plugin_form.record_text}</textarea></dd>
+				</dl>
+				<dl>
+					<dt>フォームの説明</dt>
+						<dd><textarea name="plugin_form[memo]" cols="50" rows="5">{$input.plugin_form.memo}</textarea></dd>
+					<dt>状態 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_form[status]">
+								<option value="publish"{if $input.plugin_form.status == 'publish'} selected="selected"{/if}>公開</option>
+								<option value="private"{if $input.plugin_form.status == 'private'} selected="selected"{/if}>非公開</option>
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>ID.{$freo.query.id}のフォームを削除</h2>
+		<ul>
+			<li>このフォームを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/form/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>フォーム削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+	<script type="text/javascript">
+	{literal}
+	//メールの送信
+	if ($('#form_mail').val() == 'no') {
+		$('#form_mail_content').hide();
+	}
+	$('#form_mail').change(function() {
+		if ($(this).val() == 'yes') {
+			$('#form_mail_content').show();
+		} else {
+			$('#form_mail_content').hide();
+		}
+	});
+
+	//メールの自動返信
+	if ($('#form_reply').val() == 'no') {
+		$('#form_reply_content').hide();
+	}
+	$('#form_reply').change(function() {
+		if ($(this).val() == 'yes') {
+			$('#form_reply_content').show();
+		} else {
+			$('#form_reply_content').hide();
+		}
+	});
+
+	//送信内容の記録
+	if ($('#form_record').val() == 'no') {
+		$('#form_record_content').hide();
+	}
+	$('#form_record').change(function() {
+		if ($(this).val() == 'yes') {
+			$('#form_record_content').show();
+		} else {
+			$('#form_record_content').hide();
+		}
+	});
+	{/literal}
+	</script>
+{include file='internals/admin/footer.html'}

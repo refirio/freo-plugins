@@ -1,0 +1,32 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>イラスト登録</h2>
+		<applet mayscript code="{$plugin_paint_applet.code}" archive="{$plugin_paint_applet.archive}" name="paintbbs" width="550" height="450">
+			<param name="url_save" value="{$freo.core.http_file}/paint/save" />
+			<param name="url_exit" value="{$freo.core.http_file}/paint/admin?{if $smarty.get.id}exec=update&amp;id={$smarty.get.id}{else}exec=insert&amp;now={$smarty.now}{/if}" />
+			<param name="send_header" value="tool={$plugin_paint_applet.tool}&amp;key={$smarty.const.FREO_PLUGIN_PAINT_KEY}&amp;id={$smarty.get.id}" />
+			<param name="compress_level" value="{$freo.config.plugin.paint.compress_level}" />
+			<param name="dir_resource" value="{$smarty.const.FREO_PLUGIN_PAINT_RESOURCE_DIR}" />
+			<param name="image_width" value="{$smarty.post.width}" />
+			<param name="image_height" value="{$smarty.post.height}" />
+			<param name="image_interlace" value="false" />
+			<param name="image_jpeg" value="1" />
+			<param name="image_size" value="{if $freo.config.plugin.paint.format == 'png'}0{elseif $freo.config.plugin.paint.format == 'jpeg'}1{else}{$freo.config.plugin.paint.jpeg_size}{/if}" />
+			<param name="layer_count" value="{$plugin_paint_applet.layer}" />
+			<param name="pch_file" value="{if $smarty.get.id}{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/paint/{$smarty.get.id}.{$plugin_paint_applet.pch}?now={$smarty.now}{/if}" />
+			<param name="poo" value="false" />
+			<param name="quality" value="{$freo.config.plugin.paint.quality}" />
+			<param name="res.zip" value="{$plugin_paint_applet.reszip}" />
+			<param name="send_advance" value="true" />
+			<param name="send_header_count" value="true" />
+			<param name="send_header_image_type" value="true" />
+			<param name="send_header_timer" value="true" />
+			<param name="send_language" value="utf8" />
+			<param name="thumbnail_type" value="animation" />
+			<param name="tools" value="{$plugin_paint_applet.tools}" />
+			<param name="tt.zip" value="{$plugin_paint_applet.ttzip}" />
+			<param name="undo" value="100" />
+			<param name="undo_in_mg" value="100_IN_MG" />
+		</applet>
+	</div>
+{include file='internals/admin/footer.html'}

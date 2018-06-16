@@ -1,0 +1,24 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">カウント数確認</span></div>
+
+<br />
+■{$smarty.get.date|cat:'01000000'|date_format:'%Y'}年{$smarty.get.date|cat:'01000000'|date_format:'%m'}月のｶｳﾝﾄ数は以下のとおりです。<br />
+<br />
+
+<!--{foreach from=$plugin_count_days|smarty:nodefaults item='plugin_count_day'}-->
+{$plugin_count_day.day|intval|string_format:"%02d"}日 ... {$plugin_count_day.count}回({$plugin_count_day.session}人)<br />
+<!--{/foreach}-->
+
+<br />
+■過去のｶｳﾝﾄ数は以下のとおりです。<br />
+<br />
+
+<!--{foreach from=$plugin_count_months|smarty:nodefaults item='plugin_count_month'}-->
+<a href="{$freo.core.http_file}/count/admin?date={$plugin_count_month.month|cat:'01000000'|date_format:'%Y%m'}">{$plugin_count_month.month|cat:'01000000'|date_format:'%Y'}年{$plugin_count_month.month|cat:'01000000'|date_format:'%m'}月</a> ... {$plugin_count_month.count}回({$plugin_count_month.session}人)<br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

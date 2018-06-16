@@ -1,0 +1,35 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">拍手が送られました</span></div>
+
+<!--{if $smarty.post.plugin_clap.text}-->
+<div style="color:#00AA00;">以下のﾒｯｾｰｼﾞが送信されました。</div>
+{$smarty.post.plugin_clap.text|nl2br}<br />
+<!--{/if}-->
+<!--{if $smarty.session.clap.count > $freo.config.plugin.clap.max_clap}-->
+たくさんの拍手ありがとうございました。<br />
+一度に送信できる拍手は{$freo.config.plugin.clap.max_clap}回までです。<br />
+<!--{else}-->
+
+<!--{if $plugin_clap_thank}-->
+{$plugin_clap_thank.text|smarty:nodefaults}<br />
+<!--{/if}-->
+
+<br />
+<form action="{$freo.core.http_file}/clap" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_clap[title]" value="{$smarty.post.plugin_clap.title}" />
+ﾒｯｾｰｼﾞ<br />
+<textarea name="plugin_clap[text]" cols="20" rows="5"></textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="もっと送る" />
+</div>
+</form>
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

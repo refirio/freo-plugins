@@ -1,0 +1,242 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<!--{if $smarty.get.directory}-->
+		<h2><!--{if $smarty.get.name}-->ディレクトリ名変更<!--{else}-->ディレクトリ作成<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<!--{if $smarty.get.name}-->
+		<ul>
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> 内にある<!--{/if}-->ディレクトリ <code>{$smarty.get.name}</code> の名前を変更します。</li>
+			<li><a href="{$freo.core.http_file}/filemanager/admin{if $smarty.get.path}?path={$smarty.get.path|escape:'url'}{/if}"><!--{if $smarty.get.path}-->この階層の<!--{/if}-->ファイルを一欄表示する</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form?directory=1&amp;name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" method="post">
+			<fieldset>
+				<legend>ディレクトリ名変更フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="rename_directory" />
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<input type="hidden" name="plugin_filemanager[directory_org]" value="{$smarty.get.name}" />
+				<dl>
+					<dt>ディレクトリ名</dt>
+						<dd><input type="text" name="plugin_filemanager[directory]" size="50" value="{$smarty.get.name}" /></dd>
+				</dl>
+				<p><input type="submit" value="変更する" /></p>
+			</fieldset>
+		</form>
+		<h2>ディレクトリ移動</h2>
+		<ul>
+			<li>移動先を選択してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_move?directory=1&amp;name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" method="post">
+			<fieldset>
+				<legend>ディレクトリ移動フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<dl>
+					<dt>移動先</dt>
+						<dd>
+							<select name="plugin_filemanager[path]">
+								<option value="">ファイル管理ディレクトリ直下</option>
+								<!--{foreach from=$directories|smarty:nodefaults item='directory'}-->
+								<!--{if $smarty.get.path != $directory and $smarty.get.path|cat:$smarty.get.name|cat:'/' != $directory}-->
+								<option value="{$directory}">{$directory}</option>
+								<!--{/if}-->
+								<!--{/foreach}-->
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="移動する" /></p>
+			</fieldset>
+		</form>
+		<h2>ディレクトリ削除</h2>
+		<ul>
+			<li>このディレクトリを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>ディレクトリ削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="directory" value="1" />
+				<input type="hidden" name="name" value="{$smarty.get.name}/" />
+				<input type="hidden" name="path" value="{$smarty.get.path}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{else}-->
+		<ul>
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> 内に<!--{/if}-->ディレクトリを作成します。</li>
+			<li><a href="{$freo.core.http_file}/filemanager/admin{if $smarty.get.path}?path={$smarty.get.path|escape:'url'}{/if}"><!--{if $smarty.get.path}-->この階層の<!--{/if}-->ファイルを一欄表示する</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form?directory=1{if $smarty.get.path}&amp;path={$smarty.get.path|escape:'url'}{/if}" method="post">
+			<fieldset>
+				<legend>ディレクトリ作成フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="insert_directory" />
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<dl>
+					<dt>ディレクトリ名</dt>
+						<dd><input type="text" name="plugin_filemanager[directory]" size="50" value="{$input.plugin_filemanager.directory}" /></dd>
+				</dl>
+				<p><input type="submit" value="作成する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+		<!--{else}-->
+		<h2><!--{if $smarty.get.name}-->ファイル差し替え<!--{else}-->ファイル登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<!--{if $smarty.get.name}-->
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> に登録された<!--{/if}-->ファイル <code>{$smarty.get.name}</code> を差し替えます。</li>
+			<li>差し替えたいファイルを選択してください。</li>
+			<!--{else}-->
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> に<!--{/if}-->登録したいファイルを選択してください。</li>
+			<!--{/if}-->
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+			<li><a href="{$freo.core.http_file}/filemanager/admin{if $smarty.get.path}?path={$smarty.get.path|escape:'url'}{/if}"><!--{if $smarty.get.path}-->この階層の<!--{/if}-->ファイルを一欄表示する</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form{if $smarty.get.name}?name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}{/if}" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<legend>ファイル登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="insert" />
+				<!--{if $smarty.get.path}-->
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<!--{/if}-->
+				<!--{if $smarty.get.name}-->
+				<input type="hidden" name="plugin_filemanager[file_org]" value="{$smarty.get.name}" />
+				<!--{/if}-->
+				<dl id="media_file">
+					<!--{if !$smarty.get.path}-->
+					<dt>アップロード先 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_filemanager[path]">
+								<option value="">ファイル管理ディレクトリ直下</option>
+								<!--{foreach from=$directories|smarty:nodefaults item='directory'}-->
+								<option value="{$directory}"{if $input.plugin_filemanager.path and $input.plugin_filemanager.path == $directory} selected="selected"{/if}>{$directory}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<!--{/if}-->
+					<dt>ファイル <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="file" name="plugin_filemanager[file][]" size="30" /></dd>
+				</dl>
+				<!--{if !$smarty.get.name}-->
+				<dl id="media_template">
+					<dt>ファイル</dt>
+						<dd><input type="file" name="plugin_filemanager[file][]" size="30" /></dd>
+				</dl>
+				<p><a href="javascript:void(0)" id="media_add">ファイル選択欄を追加</a></p>
+				<!--{/if}-->
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $smarty.get.name}-->
+		<!--{if $input.plugin_filemanager.exec == 'edit_file'}-->
+		<h2>ファイル書き換え</h2>
+		<ul>
+			<li>ファイル <code>{$smarty.get.name}</code> の内容を書き換えます。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form?name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" method="post">
+			<fieldset>
+				<legend>ファイル書き換えフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="freo[trim]" value="keep" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="edit_file" />
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<input type="hidden" name="plugin_filemanager[file]" value="{$smarty.get.name}" />
+				<dl>
+					<dt>内容</dt>
+						<dd><textarea name="plugin_filemanager[text]" cols="50" rows="10">{$input.plugin_filemanager.text}</textarea></dd>
+				</dl>
+				<p><input type="submit" value="書き換える" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+		<h2>ファイル名変更</h2>
+		<ul>
+			<li>ファイル <code>{$smarty.get.name}</code> の名前を変更します。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form?name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" method="post">
+			<fieldset>
+				<legend>ファイル名変更フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="rename_file" />
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<input type="hidden" name="plugin_filemanager[file_org]" value="{$smarty.get.name}" />
+				<dl>
+					<dt>ファイル名</dt>
+						<dd><input type="text" name="plugin_filemanager[file]" size="50" value="{$smarty.get.name}" /></dd>
+				</dl>
+				<p><input type="submit" value="変更する" /></p>
+			</fieldset>
+		</form>
+		<h2>ファイル移動</h2>
+		<ul>
+			<li>移動先を選択してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_move?name={$smarty.get.name|escape:'url'}&amp;path={$smarty.get.path|escape:'url'}" method="post">
+			<fieldset>
+				<legend>ファイル移動フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[file]" value="{$smarty.get.name}" />
+				<dl>
+					<dt>移動先</dt>
+						<dd>
+							<select name="plugin_filemanager[path]">
+								<option value="">ファイル管理ディレクトリ直下</option>
+								<!--{foreach from=$directories|smarty:nodefaults item='directory'}-->
+								<!--{if $smarty.get.path != $directory}-->
+								<option value="{$directory}">{$directory}</option>
+								<!--{/if}-->
+								<!--{/foreach}-->
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="移動する" /></p>
+			</fieldset>
+		</form>
+		<h2>ファイル削除</h2>
+		<ul>
+			<li>このファイルを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>ファイル削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="name" value="{$smarty.get.name}" />
+				<input type="hidden" name="path" value="{$smarty.get.path}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{else}-->
+		<h2>ファイル作成</h2>
+		<ul>
+			<li><!--{if $smarty.get.path}--><code>{$smarty.get.path}</code> 内に<!--{/if}-->ファイルを作成します。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/filemanager/admin_form{if $smarty.get.path}?path={$smarty.get.path|escape:'url'}{/if}" method="post">
+			<fieldset>
+				<legend>ファイル作成フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_filemanager[exec]" value="insert_file" />
+				<input type="hidden" name="plugin_filemanager[path]" value="{$smarty.get.path}" />
+				<dl>
+					<dt>ファイル名</dt>
+						<dd><input type="text" name="plugin_filemanager[file]" size="50" value="{$input.plugin_filemanager.file}" /></dd>
+				</dl>
+				<p><input type="submit" value="作成する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+		<!--{/if}-->
+	</div>
+{include file='internals/admin/footer.html'}

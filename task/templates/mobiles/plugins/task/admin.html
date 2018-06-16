@@ -1,0 +1,38 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">タスク管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+ﾀｽｸを新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+No.{$freo.query.id}のﾀｽｸを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+No.{$freo.query.id}のﾀｽｸを削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたﾀｽｸは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/task/admin_form">ﾀｽｸを登録する</a>。<br />
+<a href="{$freo.core.http_file}/task/admin_archive">完了済みﾀｽｸを表示する</a>。<br />
+<a href="{$freo.core.http_file}/task/admin_category">ｶﾃｺﾞﾘｰを管理する</a>。<br />
+
+<!--{foreach from=$plugin_task_categories|smarty:nodefaults item='plugin_task_category'}-->
+<!--{if $plugin_tasks[$plugin_task_category.id]|smarty:nodefaults}-->
+<br />
+■{$plugin_task_category.name}<br />
+<br />
+
+<!--{foreach from=$plugin_tasks[$plugin_task_category.id]|smarty:nodefaults item='plugin_task'}-->
+▼<a href="{$freo.core.http_file}/task/admin_view?id={$plugin_task.id}">{$plugin_task.title}</a><br />
+<!--{/foreach}-->
+<!--{/if}-->
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

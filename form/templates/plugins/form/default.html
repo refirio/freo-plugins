@@ -1,0 +1,8 @@
+{include file='header.html'}
+	<h2>フォーム</h2>
+	<ul>
+		<!--{foreach from=$plugin_forms|smarty:nodefaults item='plugin_form'}-->
+		<li><a href="{if $plugin_form.secure == 'yes'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/{$plugin_form.id}">{$plugin_form.name}</a></li>
+		<!--{/foreach}-->
+	</ul>
+{include file='footer.html'}

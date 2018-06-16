@@ -1,0 +1,117 @@
+{include file='header.html'}
+	<h2>キーワード検索</h2>
+	<form action="{$freo.core.http_file}/search" method="get">
+		<fieldset>
+			<legend>キーワード検索フォーム</legend>
+			<dl>
+				<dt>キーワード</dt>
+					<dd><input type="text" name="word" size="50" value="{$smarty.get.word}" /></dd>
+				<!--{if !$smarty.get.page_name}-->
+				<dt>検索対象</dt>
+					<dd>
+						<select name="target">
+							<option value="">すべて</option>
+							<option value="entry"{if $smarty.get.target == 'entry'} selected="selected"{/if}>エントリー</option>
+							<option value="page"{if $smarty.get.target == 'page'} selected="selected"{/if}>ページ</option>
+						</select>
+					</dd>
+				<!--{/if}-->
+			</dl>
+			<!--{if $freo.refer.options|smarty:nodefaults}-->
+			<div id="search_option">
+				<h3>オプション項目で絞り込み</h3>
+				<dl>
+					<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+					<!--{if $option.type == 'text' and $option.validate == 'numeric'}-->
+					<dt>{$option.name}<span class="note">（指定した範囲の数値を含むデータを抽出。一方のみの指定も可能。）</span></dt>
+						<dd>
+							<input type="text" name="option[{$option.id}][from]" size="10" value="{$smarty.get.option[$option.id].from}" /> 以上、<input type="text" name="option[{$option.id}][to]" size="10" value="{$smarty.get.option[$option.id].to}" /> 以下
+						</dd>
+					<!--{elseif $option.type == 'text' or $option.type == 'textarea'}-->
+					<dt>{$option.name}<span class="note">（入力した文字列を含むデータを抽出。）</span></dt>
+						<dd><input type="text" name="option[{$option.id}]" size="50" value="{$smarty.get.option[$option.id]}" /></dd>
+					<!--{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}-->
+					<dt>{$option.name}<span class="note">（選択した項目をどれか一つでも含むデータを抽出。）</span></dt>
+						<dd>
+							<ul>
+								<!--{assign var='option_texts' value=$option.text|explode:"\n"}-->
+								<!--{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}-->
+								<li><input type="checkbox" name="option[{$option.id}][{$option_text}]" id="label_option_{$option.id}_{$smarty.foreach.loop.index}" value="{$option_text}"{if $smarty.get.option[$option.id][$option_text] == $option_text} checked="checked"{/if} /> <label for="label_option_{$option.id}_{$smarty.foreach.loop.index}">{$option_text}</label></li>
+								<!--{/foreach}-->
+							</ul>
+						</dd>
+					<!--{/if}-->
+					<!--{/foreach}-->
+				</dl>
+			</div>
+			<!--{/if}-->
+			<p><input type="submit" value="検索する" /></p>
+		</fieldset>
+	</form>
+	<h2>検索結果</h2>
+	<!--{if $smarty.get.word or $smarty.get.user or $smarty.get.tag or $smarty.get.date or $smarty.get.target or $smarty.get.page_name or $smarty.get.option}-->
+	<ul>
+		<!--{if $smarty.get.word}--><li>キーワード「{$smarty.get.word}」の検索結果は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.user}--><li>ユーザー「{$smarty.get.user}」の検索結果は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.tag}--><li>タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 4}--><li>{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}の記事は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 6}--><li>{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}の記事は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.date|count_characters == 8}--><li>{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の記事は以下のとおりです。</li><!--{/if}-->
+		<!--{if $smarty.get.page_name}--><li>検索対象は「{$smarty.get.page_name}」です。</li>
+		<!--{elseif $smarty.get.target}--><li>検索対象は「<!--{if $smarty.get.target == 'entry'}-->エントリー<!--{elseif $smarty.get.target == 'page'}-->ページ<!--{/if}-->」です。</li><!--{/if}-->
+		<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+			<!--{if $option.type == 'text' and $option.validate == 'numeric'}-->
+				<!--{if $smarty.get.option[$option.id].from != '' or $smarty.get.option[$option.id].to != ''}-->
+				<li>オプション項目「{$option.name}」から「{$smarty.get.option[$option.id].from}～{$smarty.get.option[$option.id].to}」で絞り込みました。</li>
+				<!--{/if}-->
+			<!--{elseif $option.type == 'text' or $option.type == 'textarea'}-->
+				<!--{if $smarty.get.option[$option.id] != ''}-->
+				<li>オプション項目「{$option.name}」から「{$smarty.get.option[$option.id]}」で絞り込みました。</li>
+				<!--{/if}-->
+			<!--{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}-->
+				<!--{if $smarty.get.option[$option.id] != ''}-->
+				<li>オプション項目「{$option.name}」から
+				<!--{assign var='option_texts' value=$option.text|explode:"\n"}-->
+				<!--{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}-->
+				<!--{if $smarty.get.option[$option.id][$option_text] == $option_text}-->「{$option_text}」<!--{/if}-->
+				<!--{/foreach}-->
+				で絞り込みました。</li>
+				<!--{/if}-->
+			<!--{/if}-->
+		<!--{/foreach}-->
+	</ul>
+	<!--{/if}-->
+	<p><em>{$article_count}</em>件ヒットしました。全<em>{$article_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</p>
+	<!--{if $articles|smarty:nodefaults}-->
+	<!--{foreach from=$articles|smarty:nodefaults item='article'}-->
+	<h3><a href="{$freo.core.http_file}/{if $article.type == 'entry'}view{else}page{/if}/{if $article.code}{$article.code}{else}{$article.id}{/if}">{$article.title}</a></h3>
+	<!--{if $article_texts[$article.id].excerpt}-->
+		{$article_texts[$article.id].excerpt|smarty:nodefaults|strip_tags|mb_truncate:200:'...'|escape}
+	<!--{/if}-->
+	<ul>
+		<li>{$article.datetime|date_format:'%Y/%m/%d %H:%M'}</li>
+		<!--{if $article_associates[$article.id].category}-->
+		<li>カテゴリー：<!--{foreach from=$article_associates[$article.id].category|smarty:nodefaults key='article_category' item='article_category' name='loop'}--><a href="{$freo.core.http_file}/category/{$article_category}">{$freo.refer.categories[$article_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+		<!--{/if}-->
+		<!--{if $article_tags[$article.id]}-->
+		<li>タグ：<!--{foreach from=$article_tags[$article.id]|smarty:nodefaults item='article_tag' name='loop'}--><a href="{$freo.core.http_file}/{$article.type}?tag={$article_tag|smarty:nodefaults|escape:'url'}">{$article_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+		<!--{/if}-->
+	</ul>
+	<!--{/foreach}-->
+	<div id="page">
+		<h2>ページ移動</h2>
+		<ul class="order">
+			<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/search?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.target}&amp;target={$smarty.get.target}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.page_name}&amp;page_name={$smarty.get.page_name}{/if}{if $smarty.get.page_id}&amp;page_id={$smarty.get.page_id}{/if}{if $smarty.get.page_pid}&amp;page_pid={$smarty.get.page_pid}{/if}{foreach from=$freo.refer.options|smarty:nodefaults item='option'}{if $option.type == 'text' and $option.validate == 'numeric'}&amp;option[{$option.id}][from]={$smarty.get.option[$option.id].from}&amp;option[{$option.id}][to]={$smarty.get.option[$option.id].to}{elseif $option.type == 'text' or $option.type == 'textarea'}&amp;option[{$option.id}]={$smarty.get.option[$option.id]}{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}{assign var='option_texts' value=$option.text|explode:"\n"}{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}{if $smarty.get.option[$option.id][$option_text] == $option_text}&amp;option[{$option.id}][{$option_text}]={$smarty.get.option[$option.id][$option_text]}{/if}{/foreach}{/if}{/foreach}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+			<li><!--{if $article_page > $freo.query.page}--><a href="{$freo.core.http_file}/search?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.target}&amp;target={$smarty.get.target}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.page_name}&amp;page_name={$smarty.get.page_name}{/if}{if $smarty.get.page_id}&amp;page_id={$smarty.get.page_id}{/if}{if $smarty.get.page_pid}&amp;page_pid={$smarty.get.page_pid}{/if}{foreach from=$freo.refer.options|smarty:nodefaults item='option'}{if $option.type == 'text' and $option.validate == 'numeric'}&amp;option[{$option.id}][from]={$smarty.get.option[$option.id].from}&amp;option[{$option.id}][to]={$smarty.get.option[$option.id].to}{elseif $option.type == 'text' or $option.type == 'textarea'}&amp;option[{$option.id}]={$smarty.get.option[$option.id]}{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}{assign var='option_texts' value=$option.text|explode:"\n"}{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}{if $smarty.get.option[$option.id][$option_text] == $option_text}&amp;option[{$option.id}][{$option_text}]={$smarty.get.option[$option.id][$option_text]}{/if}{/foreach}{/if}{/foreach}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+		</ul>
+		<ul class="direct">
+			<li>ページ</li>
+			<!--{section name='loop' loop=$article_page}-->
+			<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/search?page={$smarty.section.loop.iteration}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.target}&amp;target={$smarty.get.target}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.page_name}&amp;page_name={$smarty.get.page_name}{/if}{if $smarty.get.page_id}&amp;page_id={$smarty.get.page_id}{/if}{if $smarty.get.page_pid}&amp;page_pid={$smarty.get.page_pid}{/if}{foreach from=$freo.refer.options|smarty:nodefaults item='option'}{if $option.type == 'text' and $option.validate == 'numeric'}&amp;option[{$option.id}][from]={$smarty.get.option[$option.id].from}&amp;option[{$option.id}][to]={$smarty.get.option[$option.id].to}{elseif $option.type == 'text' or $option.type == 'textarea'}&amp;option[{$option.id}]={$smarty.get.option[$option.id]}{elseif $option.type == 'select' or $option.type == 'radio' or $option.type == 'checkbox'}{assign var='option_texts' value=$option.text|explode:"\n"}{foreach from=$option_texts|smarty:nodefaults item='option_text' name='loop'}{if $smarty.get.option[$option.id][$option_text] == $option_text}&amp;option[{$option.id}][{$option_text}]={$smarty.get.option[$option.id][$option_text]}{/if}{/foreach}{/if}{/foreach}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+			<!--{/section}-->
+		</ul>
+	</div>
+	<!--{else}-->
+	<p>ヒットしませんでした。</p>
+	<!--{/if}-->
+{include file='footer.html'}

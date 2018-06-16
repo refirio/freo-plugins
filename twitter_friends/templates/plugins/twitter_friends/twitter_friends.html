@@ -1,0 +1,14 @@
+<!--{if ($entry_securities[$entry.id] and $entry_associates[$entry.id].group[$freo.config.plugin.twitter_friends.group]) or ($page_securities[$page.id] and $page_associates[$page.id].group[$freo.config.plugin.twitter_friends.group]) or ($entry_security and $entry_associate.group[$freo.config.plugin.twitter_friends.group]) or ($page_security and $page_associate.group[$freo.config.plugin.twitter_friends.group]) or $media_associate.group.twitter_friends}-->
+<div class="twitter_friends">
+	<h4>Twitter認証</h4>
+	<!--{if $freo.query.error}-->
+	<ul class="attention">
+		<li>あなたは @{$freo.config.plugin.twitter_friends.screen_name} にフォローされていません。</li>
+	</ul>
+	<!--{/if}-->
+	<p>このコンテンツは <a href="http://twitter.com/{$freo.config.plugin.twitter_friends.screen_name}">@{$freo.config.plugin.twitter_friends.screen_name}</a> からフォローされている人にのみ公開されています。コンテンツを閲覧するためには、Twitterで認証してください。</p>
+	<ul>
+		<li><a href="{$freo.core.http_file}/twitter_friends?media_path={$smarty.get.path}&amp;entry_id={$entry.id}&amp;page_id={$page.id}">Twitterで認証する</a></li>
+	</ul>
+</div>
+<!--{/if}-->

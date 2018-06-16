@@ -1,0 +1,42 @@
+{include file='internals/admin/iframe_header.html'}
+	<h2>漫画挿入</h2>
+	<ul>
+		<li><code>{$freo.query.path}</code> 内に登録された画像ファイルを、まとめて漫画として挿入します。</li>
+		<li>オプションを選択して<em>挿入ボタン</em>を押してください。</li>
+		<li><a href="{$freo.core.http_file}/admin/media{if $freo.query.path}?path={$freo.query.path}&amp;{else}?{/if}type=iframe">この階層のメディアを一欄表示する</a>。</li>
+	</ul>
+	<form action="{$freo.core.http_file}/media_comic/admin?path={$freo.query.path}&amp;type=iframe" method="post" id="media_comic_insert">
+		<fieldset>
+			<legend>漫画挿入フォーム</legend>
+			<input type="hidden" name="plugin_media_comic[path]" value="{$freo.core.http_file}/media_comic/{$plugin_media_comic_path}" />
+			<dl>
+				<dt>表示ページ</dt>
+					<dd>
+						<input type="radio" name="plugin_media_comic[columns]" value="2" checked="checked" /> 2ページずつ表示する /
+						<input type="radio" name="plugin_media_comic[columns]" value="1" /> 1ページずつ表示する
+					</dd>
+				<dt>ページ表示順（2ページずつ表示する場合に有効）</dt>
+					<dd>
+						<input type="radio" name="plugin_media_comic[direction]" value="rtl" checked="checked" /> 右→左 /
+						<input type="radio" name="plugin_media_comic[direction]" value="ltr" /> 左→右
+					</dd>
+				<dt>ページ分割</dt>
+					<dd>
+						<input type="radio" name="plugin_media_comic[devide]" value="off" checked="checked" /> 一括で表示 /
+						<input type="radio" name="plugin_media_comic[devide]" value="on" /> 分割で表示
+					</dd>
+				<dt>終了ページ</dt>
+					<dd>
+						<input type="radio" name="plugin_media_comic[end]" value="off" checked="checked" /> 表示しない /
+						<input type="radio" name="plugin_media_comic[end]" value="on" /> 表示する
+					</dd>
+				<dt>ナビゲーション</dt>
+					<dd>
+						<input type="radio" name="plugin_media_comic[navigation]" value="on" checked="checked" /> 表示する /
+						<input type="radio" name="plugin_media_comic[navigation]" value="off" /> 表示しない
+					</dd>
+			</dl>
+			<p><input type="submit" value="挿入する" /></p>
+		</fieldset>
+	</form>
+{include file='internals/admin/iframe_footer.html'}

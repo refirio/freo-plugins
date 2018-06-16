@@ -1,0 +1,18 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">文章表示</span></div>
+
+■{$media_document_information.title|default:$media_document_memo|default:$media_document_name}
+
+{$media_document_text|smarty:nodefaults}
+
+ﾌｧｲﾙ名：{$media_document_name}<br />
+ﾌｧｲﾙｻｲｽﾞ：{$media_document_size}byte<br />
+<!--{if $media_document_information.update}-->
+更新日：{$media_document_information.update}<br />
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

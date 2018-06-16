@@ -1,0 +1,47 @@
+{include file='plugins/form/iframe_header.html'}
+	<h2>エラー</h2>
+	<p>エラーが発生しました。入力内容を確認してください。</p>
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error.message}</li>
+		<!--{/foreach}-->
+	</ul>
+	<div id="action">
+		<form action="{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/{$freo.query.id}" method="get" id="plugin_form">
+			<fieldset>
+				<legend>メール編集フォーム</legend>
+				<p><input type="submit" value="編集する" /></p>
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript">
+	//エラーメッセージを削除
+	window.parent.$('.plugin_form_error').html('');
+
+	//エラーメッセージを表示
+	var errors = '';
+	{foreach from=$errors|smarty:nodefaults item='error'}
+	if (window.parent.$('#plugin_form_error_{$error.id}').size()) {ldelim}
+		window.parent.$('#plugin_form_error_{$error.id}').html('<span class="plugin_form_error">{$error.message}</span>');
+	{rdelim} else {ldelim}
+		errors += '<li>{$error.message}</li>';
+	{rdelim}
+	{/foreach}
+	if (errors) {ldelim}
+		window.parent.$('#plugin_form_error').html('<ul class="plugin_form_error">' + errors + '</ul>');
+	{rdelim}
+
+	{literal}
+	//入力画面へ戻る
+	$('form#plugin_form').submit(function() {
+		if (window == window.parent) {
+			history.back();
+		} else {
+			window.parent.$.fn.subwindow.close();
+		}
+
+		return false;
+	});
+	{/literal}
+	</script>
+{include file='plugins/form/iframe_footer.html'}

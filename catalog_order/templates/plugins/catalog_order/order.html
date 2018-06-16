@@ -1,0 +1,62 @@
+{include file='header.html'}
+	<h2>ユーザー用ページ</h2>
+	<h3>ご注文履歴</h3>
+	<ul>
+		<li>ご注文履歴は以下のとおりです。</li>
+	</ul>
+	<ul>
+		<li><em>{$plugin_catalog_order_count}</em>件の注文。全<em>{$plugin_catalog_order_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</li>
+	</ul>
+	<table summary="注文">
+		<thead>
+			<tr>
+				<th>注文ID</th>
+				<th>対応状況</th>
+				<th>注文日時</th>
+				<th>連絡事項</th>
+				<th>名前</th>
+				<th>作業</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>注文ID</th>
+				<th>対応状況</th>
+				<th>注文日時</th>
+				<th>連絡事項</th>
+				<th>名前</th>
+				<th>作業</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!--{foreach from=$plugin_catalog_orders|smarty:nodefaults item='plugin_catalog_order'}-->
+			<tr>
+				<td>{$freo.config.plugin.catalog.order_prefix}{$plugin_catalog_order.record_id}</td>
+				<td>{$plugin_catalog_order_status[$plugin_catalog_order.status].name}</td>
+				<td><!--{if $plugin_catalog_order.datetime|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_catalog_order.datetime|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_catalog_order.datetime|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+				<td>{$plugin_catalog_order.user_text|mb_truncate:20:'...'}</td>
+				<td>{$plugin_catalog_order.name}</td>
+				<td>
+					<a href="{$freo.core.https_file}/catalog_order/order_view?id={$plugin_catalog_order.record_id}">確認</a>
+					<!--{if $plugin_catalog_order_status[$plugin_catalog_order.status].cancel_ok}-->
+					<a href="{$freo.core.https_file}/catalog_order/cancel?id={$plugin_catalog_order.record_id}">キャンセル</a>
+					<!--{/if}-->
+				</td>
+			</tr>
+			<!--{/foreach}-->
+		</tbody>
+	</table>
+	<div id="page">
+		<h2>ページ移動</h2>
+		<ul class="order">
+			<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.https_file}/catalog_order/order?page={$freo.query.page-1}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+			<li><!--{if $plugin_catalog_order_page > $freo.query.page}--><a href="{$freo.core.https_file}/catalog_order/order?page={$freo.query.page+1}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+		</ul>
+		<ul class="direct">
+			<li>ページ</li>
+			<!--{section name='loop' loop=$plugin_catalog_order_page}-->
+			<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.https_file}/catalog_order/order?page={$smarty.section.loop.iteration}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+			<!--{/section}-->
+		</ul>
+	</div>
+{include file='footer.html'}

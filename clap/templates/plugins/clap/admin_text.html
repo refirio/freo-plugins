@@ -1,0 +1,52 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>拍手管理</h2>
+		<ul>
+			<li>送信された拍手メッセージは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/clap/admin_text">メッセージを管理する</a>。</li>
+			<li><a href="{$freo.core.http_file}/clap/admin_thank">お礼を管理する</a>。</li>
+		</ul>
+		<h3>拍手メッセージ</h3>
+		<table summary="拍手メッセージ">
+			<thead>
+				<tr>
+					<th>送信時間</th>
+					<th>メッセージ</th>
+					<th>タイトル</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>送信時間</th>
+					<th>メッセージ</th>
+					<th>タイトル</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_clap_texts|smarty:nodefaults item='plugin_clap_text'}-->
+				<tr>
+					<td><!--{if $plugin_clap_text.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_clap_text.created|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_clap_text.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<td>{$plugin_clap_text.text|nl2br}</td>
+					<td>{$plugin_clap_text.title}</td>
+					<td><a href="{$freo.core.http_file}/clap/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_clap_text.id}" class="delete">削除</a></td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<div id="page">
+			<h2>ページ移動</h2>
+			<ul class="order">
+				<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/clap/admin_text?page={$freo.query.page-1}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+				<li><!--{if $plugin_clap_text_page > $freo.query.page}--><a href="{$freo.core.http_file}/clap/admin_text?page={$freo.query.page+1}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+			</ul>
+			<ul class="direct">
+				<li>ページ</li>
+				<!--{section name='loop' loop=$plugin_clap_text_page}-->
+				<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/clap/admin_text?page={$smarty.section.loop.iteration}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+				<!--{/section}-->
+			</ul>
+		</div>
+	</div>
+{include file='internals/admin/footer.html'}

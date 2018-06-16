@@ -1,0 +1,32 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メール送信</span></div>
+
+以下の内容で送信します。<br />
+<br />
+件名:{$plugin_contact.subject}<br />
+名前:{$plugin_contact.name}<br />
+Eﾒｰﾙ:{$plugin_contact.mail}<br />
+ﾒｯｾｰｼﾞ:{$plugin_contact.text|nl2br}<br />
+ｺﾋﾟｰの送信:<!--{if $plugin_contact.copy}-->送信する<!--{else}-->送信しない<!--{/if}--><br />
+
+<br />
+<form action="{$freo.core.http_file}/contact" method="get">
+<input type="hidden" name="action" value="comment_form" />
+<input type="hidden" name="session" value="1" />
+<div style="text-align:center;">
+<input type="submit" value="戻る" />
+</div>
+</form>
+<form action="{$freo.core.http_file}/contact/preview" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<div style="text-align:center;">
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

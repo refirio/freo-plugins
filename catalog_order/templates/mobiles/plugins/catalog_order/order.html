@@ -1,0 +1,25 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/user">ﾕｰｻﾞｰ用ﾍﾟｰｼﾞに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ご注文履歴</span></div>
+
+ご注文履歴は以下のとおりです。<br />
+
+<br />
+<!--{foreach from=$plugin_catalog_orders|smarty:nodefaults item='plugin_catalog_order'}-->
+▼[{$freo.config.plugin.catalog.order_prefix}{$plugin_catalog_order.record_id}]
+{$plugin_catalog_order_status[$plugin_catalog_order.status].name}
+<a href="{$freo.core.https_file}/catalog_order/order_view?id={$plugin_catalog_order.record_id}">確認</a>
+<!--{if $plugin_catalog_order_status[$plugin_catalog_order.status].cancel_ok}-->
+<a href="{$freo.core.https_file}/catalog_order/cancel?id={$plugin_catalog_order.record_id}">ｷｬﾝｾﾙ</a>
+<!--{/if}-->
+<br />
+<!--{/foreach}-->
+
+<br />
+<!--{if $freo.query.page > 1}--><a href="{$freo.core.https_file}/catalog_order/order?page={$freo.query.page-1}">前のﾍﾟｰｼﾞ</a><!--{else}-->前のﾍﾟｰｼﾞ<!--{/if}--> |
+<!--{if $plugin_catalog_order_page > $freo.query.page}--><a href="{$freo.core.https_file}/catalog_order/order?page={$freo.query.page+1}">次のﾍﾟｰｼﾞ</a><!--{else}-->次のﾍﾟｰｼﾞ<!--{/if}-->
+
+{include file='mobiles/footer.html'}

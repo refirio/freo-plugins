@@ -1,0 +1,15 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>No.{$freo.query.id}のタスク</h2>
+		<dl>
+			<dt>内容</dt>
+				<dd>{$plugin_task.title}</dd>
+			<dt>詳細</dt>
+				<dd>{$plugin_task.text|nl2br}</dd>
+			<dt>カテゴリー</dt>
+				<dd>{$plugin_task_categories[$plugin_task.category_id].name}</dd>
+			<dt>状態</dt>
+				<dd><!--{if $plugin_task.status == 'publish'}-->未完了<!--{elseif $input.plugin_task.status == 'complete'}-->完了<!--{/if}--></dd>
+		</dl>
+	</div>
+{include file='internals/admin/footer.html'}

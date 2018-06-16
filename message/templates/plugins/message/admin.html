@@ -1,0 +1,83 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>メッセージ管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>メッセージを新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>No.{$freo.query.id}のメッセージを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>No.{$freo.query.id}のメッセージを削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたメッセージは以下のとおりです。</li>
+		</ul>
+		<div id="search">
+			<form action="{$freo.core.http_file}/message/admin" method="get">
+				<fieldset>
+					<legend>メッセージ検索フォーム</legend>
+					<dl>
+						<dt>キーワード</dt>
+							<dd><input type="text" name="word" size="50" value="{$smarty.get.word}" /></dd>
+					</dl>
+					<p><input type="submit" value="検索する" /></p>
+				</fieldset>
+			</form>
+		</div>
+		<ul>
+			<li><em>{$plugin_message_count}</em>件のメッセージ。全<em>{$plugin_message_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</li>
+		</ul>
+		<table summary="メッセージ">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>日時</th>
+					<th>本文</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>No</th>
+					<th>日時</th>
+					<th>本文</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_messages|smarty:nodefaults item='plugin_message'}-->
+				<tr>
+					<td>{$plugin_message.id}</td>
+					<td><!--{if $plugin_message.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_message.created|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_message.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<td>{$plugin_message.text|mb_truncate:20:'...'}</td>
+					<td>
+						<a href="{$freo.core.http_file}/message/admin_view?id={$plugin_message.id}">確認</a>
+						<a href="{$freo.core.http_file}/message/admin_form?id={$plugin_message.id}">編集</a>
+						<a href="{$freo.core.http_file}/message/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_message.id}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<div id="page">
+			<h2>ページ移動</h2>
+			<ul class="order">
+				<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/message/admin?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+				<li><!--{if $plugin_message_page > $freo.query.page}--><a href="{$freo.core.http_file}/message/admin?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+			</ul>
+			<ul class="direct">
+				<li>ページ</li>
+				<!--{section name='loop' loop=$plugin_message_page}-->
+				<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/message/admin?page={$smarty.section.loop.iteration}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+				<!--{/section}-->
+			</ul>
+		</div>
+	</div>
+{include file='internals/admin/footer.html'}

@@ -1,0 +1,31 @@
+{include file='header.html'}
+	<h2>拍手が送られました</h2>
+	<!--{if $smarty.post.plugin_clap.text}-->
+		<ul class="complete">
+			<li>以下のメッセージが送信されました。</li>
+		</ul>
+		<blockquote>
+			<p>{$smarty.post.plugin_clap.text|nl2br}</p>
+		</blockquote>
+	<!--{/if}-->
+	<!--{if $smarty.session.clap.count > $freo.config.plugin.clap.max_clap}-->
+		<p>たくさんの拍手ありがとうございました。</p>
+		<p>一度に送信できる拍手は{$freo.config.plugin.clap.max_clap}回までです。</p>
+	<!--{else}-->
+		<!--{if $plugin_clap_thank}-->
+			<p>{$plugin_clap_thank.text|smarty:nodefaults}</p>
+		<!--{/if}-->
+		<form action="{$freo.core.http_file}/clap" method="post">
+			<fieldset>
+				<legend>お礼メッセージ送信フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_clap[title]" value="{$smarty.post.plugin_clap.title}" />
+				<dl>
+					<dt>メッセージ</dt>
+						<dd><textarea name="plugin_clap[text]" cols="50" rows="5"></textarea></dd>
+				</dl>
+				<p><input type="submit" value="もっと送る" /></p>
+			</fieldset>
+		</form>
+	<!--{/if}-->
+{include file='footer.html'}

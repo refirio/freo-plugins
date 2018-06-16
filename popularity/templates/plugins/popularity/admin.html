@@ -1,0 +1,74 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>人気コンテンツ</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>データを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>データをリセットしました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>各コンテンツのアクセス数は以下の通りです。</li>
+			<!--{if $freo.query.type == 'all'}-->
+			<li><a href="{$freo.core.http_file}/popularity/admin">上位のデータを表示する</a>。</li>
+			<!--{else}-->
+			<li><a href="{$freo.core.http_file}/popularity/admin?type=all">すべてのデータを表示する</a>。</li>
+			<!--{/if}-->
+		</ul>
+		<table summary="カウント">
+			<thead>
+				<tr>
+					<th>ページ</th>
+					<th>アクセス数</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>ページ</th>
+					<th>アクセス数</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<!--{if $plugin_popularity_raws|smarty:nodefaults}-->
+			<tbody>
+				<!--{foreach from=$plugin_popularity_raws|smarty:nodefaults item='plugin_popularity_raw'}-->
+				<tr>
+					<td><a href="{$freo.core.http_file}{$plugin_popularity_raw.parameter}">{$plugin_popularity_raw.title|default:$plugin_popularity_raw.parameter}</a></td>
+					<td class="number">{$plugin_popularity_raw.count}</td>
+					<td><a href="{$freo.core.http_file}/popularity/admin_form?parameter={$plugin_popularity_raw.parameter|escape:'url'}">編集</a></td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+			<!--{else}-->
+			<tbody>
+				<!--{foreach from=$plugin_popularities|smarty:nodefaults item='plugin_popularity'}-->
+				<tr>
+					<td><a href="{$freo.core.http_file}{$plugin_popularity.parameter}">{$plugin_popularity.title|default:$plugin_popularity.parameter}</a></td>
+					<td class="number">{$plugin_popularity.count}</td>
+					<td><a href="{$freo.core.http_file}/popularity/admin_form?parameter={$plugin_popularity.parameter|escape:'url'}">編集</a></td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+			<!--{/if}-->
+		</table>
+		<h2>データリセット</h2>
+		<ul>
+			<li>データをすべて削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/popularity/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>データリセットフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

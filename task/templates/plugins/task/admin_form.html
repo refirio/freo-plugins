@@ -1,0 +1,60 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->No.{$freo.query.id}のタスクを編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>タスクを入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/task/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>タスク登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_task[id]" value="{$input.plugin_task.id}" />
+				<dl>
+					<dt>内容 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_task[title]" size="50" value="{$input.plugin_task.title}" /></dd>
+					<dt>詳細</dt>
+						<dd><textarea name="plugin_task[text]" cols="50" rows="5">{$input.plugin_task.text}</textarea></dd>
+					<dt>カテゴリー <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_task[category_id]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_task_categories|smarty:nodefaults item='plugin_task_category'}-->
+								<option value="{$plugin_task_category.id}"{if $input.plugin_task.category_id == $plugin_task_category.id} selected="selected"{/if} >{$plugin_task_category.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>状態 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_task[status]">
+								<option value="publish"{if $input.plugin_task.status == 'publish'} selected="selected"{/if}>未完了</option>
+								<option value="complete"{if $input.plugin_task.status == 'complete'} selected="selected"{/if}>完了</option>
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>No.{$freo.query.id}のタスクを削除</h2>
+		<ul>
+			<li>このタスクを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/task/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>タスク削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+{include file='internals/admin/footer.html'}

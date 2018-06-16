@@ -1,0 +1,50 @@
+{include file='header.html'}
+	<h2>ブックマーク</h2>
+	<!--{if $smarty.get.word}--><p>キーワード「{$smarty.get.word}」の検索結果は以下のとおりです。</p><!--{/if}-->
+	<!--{if $smarty.get.tag}--><p>タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</p><!--{/if}-->
+	<!--{if $smarty.get.date|count_characters == 4}--><p>{$smarty.get.date|cat:'0101000000'|date_format:'%Y年'}の記事は以下のとおりです。</p><!--{/if}-->
+	<!--{if $smarty.get.date|count_characters == 6}--><p>{$smarty.get.date|cat:'01000000'|date_format:'%Y年%m月'}の記事は以下のとおりです。</p><!--{/if}-->
+	<!--{if $smarty.get.date|count_characters == 8}--><p>{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の記事は以下のとおりです。</p><!--{/if}-->
+	<h3>キーワード検索</h3>
+	<div class="content">
+		<form action="{$freo.core.http_file}/bookmark" method="get">
+			<fieldset>
+				<legend>ブックマーク検索フォーム</legend>
+				<dl>
+					<dt>キーワード</dt>
+						<dd><input type="text" name="word" size="50" value="{$smarty.get.word}" /></dd>
+				</dl>
+				<p><input type="submit" value="検索する" /></p>
+			</fieldset>
+		</form>
+	</div>
+	<h3>記事一覧</h3>
+	<dl class="bookmark">
+		<!--{foreach from=$plugin_bookmarks|smarty:nodefaults item='plugin_bookmark'}-->
+		<dt><a href="{$plugin_bookmark.url}">{$plugin_bookmark.title}</a></dt>
+			<dd>
+				{$plugin_bookmark.created|date_format:'%Y/%m/%d'}
+				タグ：<!--{foreach from=$plugin_bookmark_tags[$plugin_bookmark.id]|smarty:nodefaults item='plugin_bookmark_tag' name='loop'}--><a href="{$freo.core.http_file}/bookmark?tag={$plugin_bookmark_tag|smarty:nodefaults|escape:'url'}">{$plugin_bookmark_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}-->
+				<!--{if $freo.user.authority == 'root' or $freo.user.authority == 'author'}-->
+				<a href="{$freo.core.http_file}/bookmark/admin_form?id={$plugin_bookmark.id}"><img src="{$freo.core.http_url}images/icons/edit.png" alt="編集" title="編集" width="16" height="16" /></a>
+				<!--{/if}-->
+				<!--{if $plugin_bookmark.text}--><br />{$plugin_bookmark.text}<!--{/if}-->
+			</dd>
+		<!--{/foreach}-->
+	</dl>
+	<div id="page">
+		<h2>ページ移動</h2>
+		<ul class="order">
+			<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/bookmark?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+			<li><!--{if $plugin_bookmark_page > $freo.query.page}--><a href="{$freo.core.http_file}/bookmark?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+		</ul>
+		<!--{if $smarty.get.word or $smarty.get.tag}-->
+		<ul class="direct">
+			<li>ページ</li>
+			<!--{section name='loop' loop=$plugin_bookmark_page}-->
+			<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/bookmark?page={$smarty.section.loop.iteration}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+			<!--{/section}-->
+		</ul>
+		<!--{/if}-->
+	</div>
+{include file='footer.html'}

@@ -1,0 +1,46 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ID.{$freo.query.id}の地域別送料を編集</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li><em>{$input.plugin_catalog_delivery.name}</em>の地域別送料を入力してください。</li>
+			<li>地域別送料は送料に加算されます。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_delivery_prefecture_post" method="post">
+			<fieldset>
+				<legend>配送方法並び替えフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_catalog_delivery_prefecture[delivery_id]" value="{$input.plugin_catalog_delivery.id}" />
+				<table summary="配送方法">
+					<thead>
+						<tr>
+							<th>都道府県</th>
+							<th>送料</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>配送方法名</th>
+							<th>送料</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+						<tr>
+							<td>{$plugin_catalog_prefecture.name}</td>
+							<td class="number"><input type="text" name="sort[{$plugin_catalog_prefecture.id}]" size="3" value="{$input.plugin_catalog_delivery_prefectures[$plugin_catalog_prefecture.id].carriage|default:0}" /> 円</td>
+						</tr>
+						<!--{/foreach}-->
+					</tbody>
+				</table>
+				<p><input type="submit" value="地域別送料を編集する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

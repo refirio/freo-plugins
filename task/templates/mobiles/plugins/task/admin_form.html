@@ -1,0 +1,61 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;"><!--{if $freo.query.id}-->No.{$freo.query.id}のタスクを編集<!--{else}-->新規登録<!--{/if}--></span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾀｽｸを入力してください。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.http_file}/task/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_task[id]" value="{$input.plugin_task.id}" />
+内容<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_task[title]" size="20" value="{$input.plugin_task.title}" /><br />
+詳細<br />
+<textarea name="plugin_task[text]" cols="20" rows="5">{$input.plugin_task.text}</textarea><br />
+ｶﾃｺﾞﾘｰ<span style="color:#FF0000;">*</span><br />
+<select name="plugin_task[category_id]">
+<option value="">▼選択してください</option>
+<!--{foreach from=$plugin_task_categories|smarty:nodefaults item='plugin_task_category'}-->
+<option value="{$plugin_task_category.id}"{if $input.plugin_task.category_id == $plugin_task_category.id} selected="selected"{/if} >▼{$plugin_task_category.name}</option>
+<!--{/foreach}-->
+</select><br />
+状態<span style="color:#FF0000;">*</span><br />
+<select name="plugin_task[status]">
+<option value="publish"{if $input.plugin_task.status == 'publish'} selected="selected"{/if}>▼未完了</option>
+<option value="complete"{if $input.plugin_task.status == 'complete'} selected="selected"{/if}>▼完了</option>
+</select><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+<!--{if $freo.query.id}-->
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のタスクを削除</span></div>
+
+このﾀｽｸを削除するには、削除ﾎﾞﾀﾝを押してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/task/admin_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="id" value="{$freo.query.id}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

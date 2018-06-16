@@ -1,0 +1,36 @@
+{include file='header.html'}
+	<h2>メール送信</h2>
+	<!--{if $errors}-->
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error}</li>
+		<!--{/foreach}-->
+	</ul>
+	<!--{/if}-->
+	<ul>
+		<li>メールの送信はこちらからどうぞ。</li>
+	</ul>
+	<form action="{$freo.core.http_file}/contact" method="post">
+		<fieldset>
+			<legend>メール送信フォーム</legend>
+			<input type="hidden" name="freo[token]" value="{$token}" />
+			<dl>
+				<dt>件名</dt>
+					<dd><input type="text" name="plugin_contact[subject]" size="30" value="{$input.plugin_contact.subject}" /></dd>
+				<dt>名前</dt>
+					<dd><input type="text" name="plugin_contact[name]" size="30" value="{$input.plugin_contact.name}" /></dd>
+				<dt>Ｅメール</dt>
+					<dd><input type="text" name="plugin_contact[mail]" size="30" value="{$input.plugin_contact.mail}" /></dd>
+				<dt>本文</dt>
+					<dd><textarea name="plugin_contact[text]" cols="50" rows="10">{$input.plugin_contact.text}</textarea></dd>
+			</dl>
+			<ul>
+				<li><input type="checkbox" name="plugin_contact[copy]" id="label_copy" value="1"{if $input.plugin_contact.copy} checked="checked"{/if} /> <label for="label_copy">送信者にコピーを送る</label></li>
+			</ul>
+			<p>
+				<input type="submit" name="preview" value="確認する" />
+				<input type="submit" value="送信する" />
+			</p>
+		</fieldset>
+	</form>
+{include file='footer.html'}

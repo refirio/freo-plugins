@@ -1,0 +1,89 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">商品ご注文</span></div>
+
+以下の内容で注文します。<br />
+
+<br />
+■ご注文内容<br />
+<br />
+<!--{foreach from=$plugin_catalog_cart.catalogs|smarty:nodefaults item='catalog'}-->
+[{$catalog.id}]{$catalog.name}<br />
+{$catalog.price}円×{$plugin_catalog_cart.catalog_counts[$catalog.id]}{$catalog.unit}＝{$plugin_catalog_cart.catalog_price_subtotals[$catalog.id]}円<br />
+<br />
+<!--{/foreach}-->
+商品合計（税込）:{$plugin_catalog_cart.catalog_price_total}円<br />
+<!--{if $plugin_catalog_delivery.carriage != ''}-->
+送料（税込）:{$plugin_catalog_delivery.carriage}円<br />
+<!--{/if}-->
+<!--{if $plugin_catalog_payment.charge != ''}-->
+手数料（税込）:{$plugin_catalog_payment.charge}円<br />
+<!--{/if}-->
+お支払い額合計（税込）:{$plugin_catalog_cart.catalog_price_total+$plugin_catalog_delivery.carriage+$plugin_catalog_payment.charge}円<br />
+
+<br />
+■配送方法・お支払い方法<br />
+<br />
+希望する配送方法:{$plugin_catalog_delivery.name}<!--{if $plugin_catalog_delivery.text}--><br />{$plugin_catalog_delivery.text}<!--{/if}--><br />
+<!--{if $plugin_catalog_order.preferred_week}-->
+希望する配送曜日:{$plugin_catalog_order.preferred_week}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog_order.preferred_time}-->
+希望する配送時間:{$plugin_catalog_order.preferred_time}<br />
+<!--{/if}-->
+<br />
+お支払い方法:{$plugin_catalog_payment.name}<!--{if $plugin_catalog_payment.text}--><br />{$plugin_catalog_payment.text}<!--{/if}--><br />
+
+<br />
+■ご注文者<br />
+<br />
+名前:{$plugin_catalog_order.name}<br />
+名前(ﾌﾘｶﾞﾅ):{$plugin_catalog_order.kana}<br />
+Eﾒｰﾙ:{$plugin_catalog_order.mail}<br />
+<!--{if $plugin_catalog_order.tel}-->
+電話番号:{$plugin_catalog_order.tel}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog_cart.catalog_target_max}-->
+対象確認:
+<!--{foreach from=$plugin_catalog_targets|smarty:nodefaults item='plugin_catalog_target'}-->
+<!--{if $plugin_catalog_order.target[$plugin_catalog_target.id]}-->
+私は{$plugin_catalog_target.name}です。<br />
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+
+<!--{if $plugin_catalog_cart.catalog_short_max > 0 and $plugin_catalog_cart.catalog_long_max > 0}-->
+<br />
+■配送先住所<br />
+<br />
+郵便番号:{$plugin_catalog_order.zipcode}<br />
+都道府県:{$plugin_catalog_prefectures[$plugin_catalog_order.prefecture].name}<br />
+住所:{$plugin_catalog_order.address}<br />
+<!--{/if}-->
+
+<!--{if $plugin_catalog_order.text}-->
+<br />
+■連絡事項<br />
+<br />
+連絡事項など:{$plugin_catalog_order.text|nl2br}<br />
+<!--{/if}-->
+
+<br />
+<form action="{$freo.core.https_file}/catalog/order" method="get">
+<input type="hidden" name="session" value="1" />
+<div style="text-align:center;">
+<input type="submit" value="戻る" />
+</div>
+</form>
+<form action="{$freo.core.https_file}/catalog/order_preview" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<div style="text-align:center;">
+<input type="submit" value="注文する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

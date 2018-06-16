@@ -1,0 +1,53 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;"><!--{if $freo.query.id}-->No.{$freo.query.id}のブックマークを編集<!--{else}-->新規登録<!--{/if}--></span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾌﾞｯｸﾏｰｸを入力してください。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.http_file}/bookmark/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_bookmark[id]" value="{$input.plugin_bookmark.id}" />
+ﾀｲﾄﾙ<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_bookmark[title]" size="20" value="{$input.plugin_bookmark.title}{$smarty.get.title}" /><br />
+URL<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_bookmark[url]" size="20" value="{$input.plugin_bookmark.url}{$smarty.get.url}" /><br />
+本文<br />
+<textarea name="plugin_bookmark[text]" cols="20" rows="5">{$input.plugin_bookmark.text}</textarea><br />
+ﾀｸﾞ<br />
+<input type="text" name="plugin_bookmark[tag]" size="20" value="{$input.plugin_bookmark.tag}" /><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+<!--{if $freo.query.id}-->
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のブックマークを削除</span></div>
+
+このﾌﾞｯｸﾏｰｸを削除するには、削除ﾎﾞﾀﾝを押してください。
+
+<br />
+<form action="{$freo.core.http_file}/bookmark/admin_delete" method="get">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="id" value="{$freo.query.id}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

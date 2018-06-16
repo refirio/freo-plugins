@@ -1,0 +1,8 @@
+<div class="end">
+	<p>{$plugin_media_comic_memo|default:$freo.query.comic}（全<em>{$plugin_media_comic_all}</em>ページ）</p>
+	<ul>
+		<li><a href="{$plugin_media_comic_referer}" rel="external">戻る</a></li>
+		<li><a href="{if $freo.query.devide == 'off'}#page-{$plugin_media_comic_first}{else}{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_first}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}{/if}">表紙へ</a></li>
+		<li><a href="{if $freo.query.devide == 'off'}#page-{$plugin_media_comic_end-1}{else}{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_end-1}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}{/if}">最後のページへ</a></li>
+	</ul>
+</div>

@@ -1,0 +1,28 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メッセージ送信</span></div>
+
+以下の内容で送信します。<br />
+<br />
+ﾒｯｾｰｼﾞ:{$plugin_message.text|nl2br}<br />
+
+<br />
+<form action="{$freo.core.http_file}/message" method="get">
+<input type="hidden" name="action" value="comment_form" />
+<input type="hidden" name="session" value="1" />
+<div style="text-align:center;">
+<input type="submit" value="戻る" />
+</div>
+</form>
+<form action="{$freo.core.http_file}/message/preview" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<div style="text-align:center;">
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

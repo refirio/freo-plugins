@@ -1,0 +1,29 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ブログパーツ管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+ﾌﾞﾛｸﾞﾊﾟｰﾂを新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+ID.{$freo.query.id}のﾌﾞﾛｸﾞﾊﾟｰﾂを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ID.{$freo.query.id}のﾌﾞﾛｸﾞﾊﾟｰﾂを削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたﾌﾞﾛｸﾞﾊﾟｰﾂは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/parts/admin_form">ﾌﾞﾛｸﾞﾊﾟｰﾂを登録する</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_parts|smarty:nodefaults item='plugin_part'}-->
+▼[{$plugin_part.id}]<a href="{$freo.core.http_file}/parts/admin_form?id={$plugin_part.id}">{$plugin_part.name}</a><br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

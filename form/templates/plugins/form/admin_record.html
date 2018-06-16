@@ -1,0 +1,108 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>送信内容管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>No.{$freo.query.id}の送信内容を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>No.{$freo.query.id}の送信内容を削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li><em>{$plugin_form.name}</em>への送信内容は以下のとおりです。</li>
+		</ul>
+		<div id="search">
+			<form action="{$freo.core.http_file}/form/admin_record" method="get">
+				<fieldset>
+					<legend>送信内容検索フォーム</legend>
+					<input type="hidden" name="form_id" value="{$freo.query.form_id}" />
+					<dl>
+						<dt>キーワード</dt>
+							<dd><input type="text" name="word" size="50" value="{$smarty.get.word}" /></dd>
+					</dl>
+					<p><input type="submit" value="検索する" /></p>
+				</fieldset>
+			</form>
+		</div>
+		<ul>
+			<li><em>{$plugin_form_record_count}</em>件の送信内容。全<em>{$plugin_form_record_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</li>
+		</ul>
+		<table summary="送信内容">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>送信日時</th>
+					<!--{if $plugin_form_record_show_subject}-->
+					<th>件名</th>
+					<!--{/if}-->
+					<!--{if $plugin_form_record_show_name}-->
+					<th>名前</th>
+					<!--{/if}-->
+					<th>送信内容</th>
+					<!--{if $plugin_form_record_show_memo}-->
+					<th>メモ</th>
+					<!--{/if}-->
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>No</th>
+					<th>送信日時</th>
+					<!--{if $plugin_form_record_show_subject}-->
+					<th>件名</th>
+					<!--{/if}-->
+					<!--{if $plugin_form_record_show_name}-->
+					<th>名前</th>
+					<!--{/if}-->
+					<th>送信内容</th>
+					<!--{if $plugin_form_record_show_memo}-->
+					<th>メモ</th>
+					<!--{/if}-->
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_form_records|smarty:nodefaults item='plugin_form_record'}-->
+				<tr>
+					<td>{$plugin_form_record.count}</td>
+					<td><!--{if $plugin_form_record.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_form_record.created|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_form_record.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<!--{if $plugin_form_record_show_subject}-->
+					<td>{$plugin_form_record.subject|mb_truncate:10:'...'}</td>
+					<!--{/if}-->
+					<!--{if $plugin_form_record_show_name}-->
+					<td>{$plugin_form_record.name|mb_truncate:10:'...'}</td>
+					<!--{/if}-->
+					<td>{$plugin_form_record.body|mb_truncate:10:'...'}</td>
+					<!--{if $plugin_form_record_show_memo}-->
+					<td>{$plugin_form_record.memo|mb_truncate:10:'...'}</td>
+					<!--{/if}-->
+					<td>
+						<a href="{$freo.core.http_file}/form/admin_record_form?form_id={$plugin_form_record.form_id}&amp;id={$plugin_form_record.id}">表示</a>
+						<a href="{$freo.core.http_file}/form/admin_record_delete?freo%5Btoken%5D={$token}&amp;form_id={$plugin_form_record.form_id}&amp;id={$plugin_form_record.id}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<div id="page">
+			<h2>ページ移動</h2>
+			<ul class="order">
+				<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/form/admin_record?page={$freo.query.page-1}&amp;form_id={$freo.query.form_id}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+				<li><!--{if $plugin_form_record_page > $freo.query.page}--><a href="{$freo.core.http_file}/form/admin_record?page={$freo.query.page+1}&amp;form_id={$freo.query.form_id}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+			</ul>
+			<ul class="direct">
+				<li>ページ</li>
+				<!--{section name='loop' loop=$plugin_form_record_page}-->
+				<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/form/admin_record?page={$smarty.section.loop.iteration}&amp;form_id={$freo.query.form_id}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+				<!--{/section}-->
+			</ul>
+		</div>
+	</div>
+{include file='internals/admin/footer.html'}

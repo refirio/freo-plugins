@@ -1,0 +1,447 @@
+{include file='header.html'}
+	<h2>商品ご注文</h2>
+	<!--{if $errors}-->
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error}</li>
+		<!--{/foreach}-->
+	</ul>
+	<!--{/if}-->
+	<ul>
+		<li>カート内の商品を注文します。</li>
+		<!--{if $freo.config.plugin.catalog.free_shipping and $plugin_catalog_cart.catalog_price_total >= $freo.config.plugin.catalog.free_shipping}-->
+		<li>商品合計が<em>{$freo.config.plugin.catalog.free_shipping}円以上</em>なので送料が無料になります。</li>
+		<!--{/if}-->
+		<li><a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>。</li>
+	</ul>
+	<ul>
+		<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		<li>ご希望の方法で配送できないことがあります。あらかじめご了承ください。</li>
+	</ul>
+	<h3>ご注文内容</h3>
+	<table summary="カート">
+		<thead>
+			<tr>
+				<th>商品</th>
+				<th>画像</th>
+				<th>価格（税込）</th>
+				<th>数量</th>
+				<th>小計（税込）</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>商品</th>
+				<th>画像</th>
+				<th>価格（税込）</th>
+				<th>数量</th>
+				<th>小計（税込）</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!--{foreach from=$plugin_catalog_cart.catalogs|smarty:nodefaults item='catalog'}-->
+			<tr>
+				<td>[{$catalog.id}]<br />{$catalog.name}</td>
+				<td>
+					<!--{if $plugin_catalog_cart.catalog_files[$catalog.id].file_thumbnail or $plugin_catalog_cart.catalog_files[$catalog.id].file}-->
+					<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$catalog.id}/{$plugin_catalog_cart.catalog_files[$catalog.id].file_thumbnail|default:$plugin_catalog_cart.catalog_files[$catalog.id].file}" alt="商品画像" width="50" />
+					<!--{/if}-->
+				</td>
+				<td class="number">{$catalog.price}円</td>
+				<td class="number">{$plugin_catalog_cart.catalog_counts[$catalog.id]}{$catalog.unit}</td>
+				<td class="number">{$plugin_catalog_cart.catalog_price_subtotals[$catalog.id]}円</td>
+			</tr>
+			<!--{/foreach}-->
+		</tbody>
+	</table>
+	<table summary="合計">
+		<tr>
+			<th>商品合計（税込）</th>
+			<td>{$plugin_catalog_cart.catalog_price_total}円</td>
+		</tr>
+	</table>
+	<div id="calculation">
+		<h3>利用可能な配送方法を求めるための計算表</h3>
+		<h4>サイズ計算</h4>
+		<ul>
+			<li>カート内の商品を梱包したときのサイズは以下のとおりです。</li>
+			<li><span style="color:#669966;">梱包材による加算は緑の数値で表示されています。</span></li>
+		</ul>
+		<table summary="サイズ計算">
+			<thead>
+				<tr>
+					<th>商品</th>
+					<th>サイズ</th>
+					<th>数量</th>
+					<th>短辺（mm）</th>
+					<th>長辺（mm）</th>
+					<th>厚さ（mm）</th>
+					<th>重さ（g）</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>商品</th>
+					<th>サイズ</th>
+					<th>数量</th>
+					<th>短辺（mm）</th>
+					<th>長辺（mm）</th>
+					<th>厚さ（mm）</th>
+					<th>重さ（g）</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_catalog_cart.catalogs|smarty:nodefaults item='catalog'}-->
+				<tr>
+					<td>{$catalog.name}</td>
+					<td><!--{if $catalog.size == 'data'}-->なし（データのみ）<!--{elseif $catalog.size == 'direct'}-->直接入力<!--{else}-->{$plugin_catalog_sizes[$catalog.size].name}<!--{/if}--></td>
+					<td class="number">{$plugin_catalog_cart.catalog_counts[$catalog.id]}{$catalog.unit}</td>
+					<td class="number">
+						<!--{if $plugin_catalog_sizes[$catalog.size].short}-->
+							{$plugin_catalog_sizes[$catalog.size].short}<span style="color:#669966;">＋{$catalog.packing_short}</span>＝{$plugin_catalog_sizes[$catalog.size].short+$catalog.packing_short}
+						<!--{else}-->
+							{$catalog.size_short}<span style="color:#669966;">＋{$catalog.packing_short}</span>＝{$catalog.size_short+$catalog.packing_short}
+						<!--{/if}-->
+					</td>
+					<td class="number">
+						<!--{if $plugin_catalog_sizes[$catalog.size].long}-->
+							{$plugin_catalog_sizes[$catalog.size].long}<span style="color:#669966;">＋{$catalog.packing_long}</span>＝{$plugin_catalog_sizes[$catalog.size].long+$catalog.packing_long}
+						<!--{else}-->
+							{$catalog.size_long}<span style="color:#669966;">＋{$catalog.packing_long}</span>＝{$catalog.size_long+$catalog.packing_long}
+						<!--{/if}-->
+					</td>
+					<td class="number">
+						{$catalog.thickness}×{$plugin_catalog_cart.catalog_counts[$catalog.id]}<span style="color:#669966;">＋{$catalog.packing_thickness}×{$plugin_catalog_cart.catalog_counts[$catalog.id]}</span>＝{$catalog.thickness*$plugin_catalog_cart.catalog_counts[$catalog.id]+$catalog.packing_thickness*$plugin_catalog_cart.catalog_counts[$catalog.id]}
+					</td>
+					<td class="number">
+						{$catalog.weight}×{$plugin_catalog_cart.catalog_counts[$catalog.id]}<span style="color:#669966;">＋{$catalog.packing_weight}×{$plugin_catalog_cart.catalog_counts[$catalog.id]}</span>＝{$catalog.weight*$plugin_catalog_cart.catalog_counts[$catalog.id]+$catalog.packing_weight*$plugin_catalog_cart.catalog_counts[$catalog.id]}
+					</td>
+				</tr>
+				<!--{/foreach}-->
+				<tr>
+					<td colspan="3"></td>
+					<td class="number">最大<em>{$plugin_catalog_cart.catalog_short_max}</em></td>
+					<td class="number">最大<em>{$plugin_catalog_cart.catalog_long_max}</em></td>
+					<td class="number">合計<em>{$plugin_catalog_cart.catalog_thickness_total}</em></td>
+					<td class="number">合計<em>{$plugin_catalog_cart.catalog_weight_total}</em></td>
+				</tr>
+			</tbody>
+		</table>
+		<!--{if $plugin_catalog_parallel_total}-->
+		<h4>並列梱包確認</h4>
+		<p>「商品サイズが梱包サイズの半分以下で、なおかつ並列梱包（商品を2つ並べて梱包）が許可された商品」が複数ある場合、並列梱包により厚さを抑えます。厚さを抑えられる可能性がある配送方法は以下のとおりです。</p>
+		<ul>
+			<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+			<!--{if $plugin_catalog_parallel_totals[$plugin_catalog_delivery.id]}-->
+			<li>{$plugin_catalog_delivery.name}</li>
+			<!--{/if}-->
+			<!--{/foreach}-->
+		</ul>
+		<p>並列梱包される商品は以下のとおりです。</p>
+		<ul>
+			<!--{foreach from=$plugin_catalog_parallels|smarty:nodefaults item='plugin_catalog_parallel'}-->
+			<li><em>{$plugin_catalog_cart.catalogs[$plugin_catalog_parallel.thin].name}</em>と<em>{$plugin_catalog_cart.catalogs[$plugin_catalog_parallel.thick].name}</em>を並列梱包することにより、厚さの合計から<em>{$plugin_catalog_parallel.thickness}</em>mm差し引かれます。</li>
+			<!--{/foreach}-->
+		</ul>
+		<p>つまり厚さの合計から<em>{$plugin_catalog_parallel_total}</em>mm差し引かれ、商品全体の厚さは<em>{$plugin_catalog_cart.catalog_thickness_total-$plugin_catalog_parallel_total}</em>mmとなります。</p>
+		<!--{/if}-->
+		<h4>配送方法</h4>
+		<ul>
+			<li>配送方法は以下のとおりです。</li>
+			<li><span style="color:#669966;">梱包材による減算は緑の数値で表示されています。</span></li>
+		</ul>
+		<table summary="配送方法">
+			<thead>
+				<tr>
+					<th>配送方法</th>
+					<th>短辺（mm）</th>
+					<th>長辺（mm）</th>
+					<th>厚さ（mm）</th>
+					<th>3辺合計（mm）</th>
+					<th>重さ（g）</th>
+					<th>利用</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>配送方法</th>
+					<th>短辺（mm）</th>
+					<th>長辺（mm）</th>
+					<th>厚さ（mm）</th>
+					<th>3辺合計（mm）</th>
+					<th>重さ（g）</th>
+					<th>利用</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+				<tr>
+					<td>{$plugin_catalog_delivery.name}</td>
+					<td class="number">{$plugin_catalog_delivery.short_min}～{$plugin_catalog_delivery.short_max}<span style="color:#669966;">－{$plugin_catalog_delivery.packing_short}</span></td>
+					<td class="number">{$plugin_catalog_delivery.long_min}～{$plugin_catalog_delivery.long_max}<span style="color:#669966;">－{$plugin_catalog_delivery.packing_long}</span></td>
+					<td class="number">{$plugin_catalog_delivery.thickness_min}～{$plugin_catalog_delivery.thickness_max}<span style="color:#669966;">－{$plugin_catalog_delivery.packing_thickness}</span></td>
+					<td class="number">{$plugin_catalog_delivery.total_min}～{$plugin_catalog_delivery.total_max}<span style="color:#669966;">－{$plugin_catalog_delivery.packing_total}</span></td>
+					<td class="number">{$plugin_catalog_delivery.weight_min}～{$plugin_catalog_delivery.weight_max}<span style="color:#669966;">－{$plugin_catalog_delivery.packing_weight}</span></td>
+					<td><!--{if $plugin_catalog_delivery_availables[$plugin_catalog_delivery.id]}--><em>可</em><!--{/if}--></td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<p>以上により、利用可能な配送方法は以下のとおりです。</p>
+		<ul>
+			<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+			<!--{if $plugin_catalog_delivery_availables[$plugin_catalog_delivery.id]}-->
+			<li>{$plugin_catalog_delivery.name}</li>
+			<!--{/if}-->
+			<!--{/foreach}-->
+		</ul>
+	</div>
+	<form action="{$freo.core.https_file}/catalog/order" method="post">
+		<fieldset>
+			<legend>商品注文フォーム</legend>
+			<input type="hidden" name="freo[token]" value="{$token}" />
+			<h3>配送方法・お支払い方法</h3>
+			<dl id="order_delivery">
+				<dt>希望する配送方法（<a href="#calculation">利用可能な配送方法を求めるための計算表</a>） <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd>
+						<table summary="配送方法">
+							<thead>
+								<tr>
+									<th>選択</th>
+									<th>配送方法</th>
+									<th>説明</th>
+									<th>送料</th>
+									<th>利用できるお支払い方法</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>選択</th>
+									<th>配送方法</th>
+									<th>説明</th>
+									<th>送料</th>
+									<th>利用できるお支払い方法</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+								<!--{if $plugin_catalog_delivery_availables[$plugin_catalog_delivery.id]}-->
+								<tr>
+									<td>
+										<input type="radio" name="plugin_catalog_order[delivery_id]" value="{$plugin_catalog_delivery.id}"{if $input.plugin_catalog_order.delivery_id == $plugin_catalog_delivery.id} checked="checked"{/if} />
+										<input type="hidden" name="preferred_week[{$plugin_catalog_delivery.id}]" value="{$plugin_catalog_delivery.preferred_week}" />
+										<input type="hidden" name="preferred_time[{$plugin_catalog_delivery.id}]" value="{$plugin_catalog_delivery.preferred_time}" />
+									</td>
+									<td>{$plugin_catalog_delivery.name}</td>
+									<td>{$plugin_catalog_delivery.text|nl2br}</td>
+									<td class="number">
+										<!--{if $freo.config.plugin.catalog.free_shipping and $plugin_catalog_cart.catalog_price_total >= $freo.config.plugin.catalog.free_shipping}-->
+											送料無料
+										<!--{else}-->
+											<!--{if $plugin_catalog_delivery_prefectures[$plugin_catalog_delivery.id]}--><a href="{$freo.core.http_file}/catalog/delivery_prefecture?id={$plugin_catalog_delivery.id}" class="colorbox" title="地域別送料">地域によって異なります</a><!--{elseif $plugin_catalog_delivery.carriage != ''}-->{$plugin_catalog_delivery.carriage}円<!--{/if}-->
+										<!--{/if}-->
+									</td>
+									<td><!--{foreach from=$plugin_catalog_delivery_sets[$plugin_catalog_delivery.id]|smarty:nodefaults item='plugin_catalog_delivery_set' name='loop'}--><!--{if !$smarty.foreach.loop.first}-->、<!--{/if}-->{$plugin_catalog_payments[$plugin_catalog_delivery_set.payment_id].name}<!--{/foreach}--></td>
+								</tr>
+								<!--{/if}-->
+								<!--{/foreach}-->
+							</tbody>
+						</table>
+					</dd>
+			</dl>
+			<dl id="order_preferred_week">
+				<dt>希望する配送曜日</dt>
+					<dd>
+						<select name="plugin_catalog_order[preferred_week]">
+							<option value="">希望なし</option>
+							<!--{foreach from=$freo.config.plugin.catalog.delivery_week|explode:"\n" item='value'}-->
+							<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_week} selected="selected"{/if}>{$value}</option>
+							<!--{/foreach}-->
+						</select>
+					</dd>
+			</dl>
+			<dl id="order_preferred_time">
+				<dt>希望する配送時間</dt>
+					<dd>
+						<select name="plugin_catalog_order[preferred_time]">
+							<option value="">希望なし</option>
+							<!--{foreach from=$freo.config.plugin.catalog.delivery_time|explode:"\n" item='value'}-->
+							<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_time} selected="selected"{/if}>{$value}</option>
+							<!--{/foreach}-->
+						</select>
+					</dd>
+			</dl>
+			<dl id="order_payment">
+				<dt>お支払い方法 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd>
+						<table summary="お支払い方法">
+							<thead>
+								<tr>
+									<th>選択</th>
+									<th>お支払い方法</th>
+									<th>説明</th>
+									<th>手数料</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>選択</th>
+									<th>お支払い方法</th>
+									<th>説明</th>
+									<th>手数料</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<!--{foreach from=$plugin_catalog_payments|smarty:nodefaults item='plugin_catalog_payment'}-->
+								<!--{if $plugin_catalog_payment_availables[$plugin_catalog_payment.id]}-->
+								<tr>
+									<td><input type="radio" name="plugin_catalog_order[payment_id]" value="{$plugin_catalog_payment.id}"{if $input.plugin_catalog_order.payment_id == $plugin_catalog_payment.id} checked="checked"{/if} /></td>
+									<td>{$plugin_catalog_payment.name}</td>
+									<td>{$plugin_catalog_payment.text|nl2br}</td>
+									<td class="number"><!--{if $plugin_catalog_payment.charge}-->{$plugin_catalog_payment.charge}円<!--{/if}--></td>
+								</tr>
+								<!--{/if}-->
+								<!--{/foreach}-->
+							</tbody>
+						</table>
+					</dd>
+			</dl>
+			<h3>ご注文者</h3>
+			<dl>
+				<dt>名前 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order[name]" size="30" value="{$input.plugin_catalog_order.name}" /></dd>
+				<dt>名前（フリガナ） <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order[kana]" size="30" value="{$input.plugin_catalog_order.kana}" /></dd>
+				<dt>Ｅメール <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order[mail]" size="30" value="{$input.plugin_catalog_order.mail}" /></dd>
+				<dt>電話番号</dt>
+					<dd><input type="text" name="plugin_catalog_order[tel]" size="30" value="{$input.plugin_catalog_order.tel}" /></dd>
+				<!--{if $plugin_catalog_cart.catalog_target_max}-->
+				<dt>対象確認 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd>
+						<!--{foreach from=$plugin_catalog_targets|smarty:nodefaults item='plugin_catalog_target'}-->
+						<!--{if $plugin_catalog_cart.catalog_target_max == $plugin_catalog_target.id}-->
+						<input type="checkbox" name="plugin_catalog_order[confirm][{$plugin_catalog_target.id}]" id="label_confirm_{$plugin_catalog_target.id}" value="{$plugin_catalog_target.id}"{if $input.plugin_catalog_order.confirm[$plugin_catalog_target.id]} checked="checked"{/if} /> <label for="label_confirm_{$plugin_catalog_target.id}">私は<em>{$plugin_catalog_target.name}</em>です。</label>
+						<input type="hidden" name="plugin_catalog_order[target][{$plugin_catalog_target.id}]" value="{$plugin_catalog_target.id}" /><br />
+						<!--{/if}-->
+						<!--{/foreach}-->
+					</dd>
+				<!--{/if}-->
+			</dl>
+			<!--{if $plugin_catalog_cart.catalog_short_max > 0 and $plugin_catalog_cart.catalog_long_max > 0}-->
+			<h3>配送先住所</h3>
+			<dl>
+				<dt>郵便番号 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order[zipcode]" size="10" value="{$input.plugin_catalog_order.zipcode}" id="catalog_order_zipcode" /></dd>
+				<dt>都道府県 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd>
+						<select name="plugin_catalog_order[prefecture]">
+							<option value="">選択してください</option>
+							<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+							<option value="{$plugin_catalog_prefecture.id}"{if $input.plugin_catalog_order.prefecture == $plugin_catalog_prefecture.id} selected="selected"{/if}>{$plugin_catalog_prefecture.name}</option>
+							<!--{/foreach}-->
+						</select>
+					</dd>
+				<dt>住所 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order[address]" size="50" value="{$input.plugin_catalog_order.address}" /></dd>
+			</dl>
+			<!--{else}-->
+			<input type="hidden" name="plugin_catalog_order[zipcode]" value="{$input.plugin_catalog_order.zipcode}" />
+			<input type="hidden" name="plugin_catalog_order[prefecture]" value="{$input.plugin_catalog_order.prefecture}" />
+			<input type="hidden" name="plugin_catalog_order[address]" value="{$input.plugin_catalog_order.address}" />
+			<!--{/if}-->
+			<h3>連絡事項</h3>
+			<dl>
+				<dt>連絡事項など</dt>
+					<dd><textarea name="plugin_catalog_order[text]" cols="50" rows="5">{$input.plugin_catalog_order.text}</textarea></dd>
+			</dl>
+			<p><input type="submit" value="確認画面へ進む" /></p>
+		</fieldset>
+	</form>
+	<!--{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}-->
+	<script type="text/javascript" src="https://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3-https.js"></script>
+	<!--{else}-->
+	<script type="text/javascript" src="http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js"></script>
+	<!--{/if}-->
+	<script type="text/javascript">
+	//初期値の設定
+	var delivery_selected = {$freo.config.plugin.catalog.delivery_selected|default:0};
+	var payment_selected  = {$freo.config.plugin.catalog.payment_selected|default:0};
+
+	{literal}
+	//利用可能な配送方法を求めるための計算表
+	$('#calculation').insertBefore('form dl#order_delivery table');
+	$('#calculation').css({
+		margin: '10px 0',
+		padding: '10px 20px',
+		border: '2px solid #9999FF'
+	});
+	$('#calculation h3').hide();
+	$('#calculation ul').css({
+		margin: '10px 20px'
+	});
+	$('#calculation ul li').css({
+		listStyle: 'disc'
+	});
+	$('#calculation').hide();
+
+	$('a[href^=#calculation]').click(function() {
+		$('#calculation').slideToggle(500);
+
+		return false;
+	});
+
+	//配送方法の初期値
+	if (delivery_selected) {
+		if ($('form input[name="plugin_catalog_order\[delivery_id]"]:checked').val() == undefined) {
+			$('form input[name="plugin_catalog_order\[delivery_id]"]:first').attr('checked', 'checked');
+		}
+	}
+
+	//お支払い方法の初期値
+	if (payment_selected) {
+		if ($('form input[name="plugin_catalog_order\[payment_id]"]:checked').val() == undefined) {
+			$('form input[name="plugin_catalog_order\[payment_id]"]:first').attr('checked', 'checked');
+		}
+	}
+
+	//配送日時
+	var preferred_week = $('form input[name="preferred_week\[' + $('form input[name="plugin_catalog_order\[delivery_id\]"]:checked').val() + '\]"]').val();
+	var preferred_time = $('form input[name="preferred_time\[' + $('form input[name="plugin_catalog_order\[delivery_id\]"]:checked').val() + '\]"]').val();
+
+	if (preferred_week == 'yes') {
+		$('#order_preferred_week').show();
+	} else {
+		$('#order_preferred_week').hide();
+	}
+
+	if (preferred_time == 'yes') {
+		$('#order_preferred_time').show();
+	} else {
+		$('#order_preferred_time').hide();
+	}
+
+	$('form input[name="plugin_catalog_order\[delivery_id\]"]').change(function() {
+		var preferred_week = $('form input[name="preferred_week\[' + $(this).val() + '\]"]').val();
+		var preferred_time = $('form input[name="preferred_time\[' + $(this).val() + '\]"]').val();
+
+		if (preferred_week == 'yes') {
+			$('#order_preferred_week').show();
+		} else {
+			$('#order_preferred_week').hide();
+		}
+
+		if (preferred_time == 'yes') {
+			$('#order_preferred_time').show();
+		} else {
+			$('#order_preferred_time').hide();
+		}
+	});
+
+	//郵便番号から住所を検索
+	$('#catalog_order_zipcode').keyup(function() {
+		AjaxZip3.zip2addr(this, '', 'plugin_catalog_order[prefecture]', 'plugin_catalog_order[address]');
+	});
+	{/literal}
+	</script>
+{include file='footer.html'}

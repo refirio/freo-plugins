@@ -1,0 +1,118 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>注文履歴</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>注文を新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}の注文を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}の注文を削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>注文履歴は以下のとおりです。</li>
+		</ul>
+		<div id="search">
+			<form action="{$freo.core.http_file}/catalog_order/admin_order" method="get">
+				<fieldset>
+					<legend>注文検索フォーム</legend>
+					<dl>
+						<dt>対応状況</dt>
+							<dd>
+								<select name="status">
+									<option value=""></option>
+									<!--{foreach from=$plugin_catalog_order_status|smarty:nodefaults item='plugin_catalog_order_stat'}-->
+									<option value="{$plugin_catalog_order_stat.id}"{if $plugin_catalog_order_stat.id == $smarty.get.status} selected="selected"{/if}>{$plugin_catalog_order_stat.name}</option>
+									<!--{/foreach}-->
+								</select>
+							</dd>
+						<dt>注文日時</dt>
+							<dd>
+								<select name="date">
+									<option value=""></option>
+									<!--{foreach from=$plugin_catalog_order_months|smarty:nodefaults item='plugin_catalog_order_month'}-->
+									<option value="{$plugin_catalog_order_month.year}{$plugin_catalog_order_month.month}"{if $plugin_catalog_order_month.year|cat:$plugin_catalog_order_month.month == $smarty.get.date} selected="selected"{/if}>{$plugin_catalog_order_month.year}年{$plugin_catalog_order_month.month}月</option>
+									<!--{/foreach}-->
+								</select>
+							</dd>
+						<dt>名前</dt>
+							<dd><input type="text" name="name" size="30" value="{$smarty.get.name}" /></dd>
+						<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+						<dt>ユーザーID</dt>
+							<dd><input type="text" name="user_id" size="30" value="{$smarty.get.user_id}" /></dd>
+						<!--{/if}-->
+					</dl>
+					<p><input type="submit" value="検索する" /></p>
+				</fieldset>
+			</form>
+		</div>
+		<ul>
+			<li><em>{$plugin_catalog_order_count}</em>件の注文。全<em>{$plugin_catalog_order_page}</em>ページ中<em>{$freo.query.page}</em>ページ目を表示しています。</li>
+		</ul>
+		<table summary="注文">
+			<thead>
+				<tr>
+					<th>注文ID</th>
+					<th>対応状況</th>
+					<th>注文日時</th>
+					<th>名前</th>
+					<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+					<th>ユーザーID</th>
+					<!--{/if}-->
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>注文ID</th>
+					<th>対応状況</th>
+					<th>注文日時</th>
+					<th>名前</th>
+					<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+					<th>ユーザーID</th>
+					<!--{/if}-->
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_catalog_orders|smarty:nodefaults item='plugin_catalog_order'}-->
+				<tr>
+					<td>{$freo.config.plugin.catalog.order_prefix}{$plugin_catalog_order.record_id}</td>
+					<td>{$plugin_catalog_order_status[$plugin_catalog_order.status].name}</td>
+					<td><!--{if $plugin_catalog_order.datetime|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_catalog_order.datetime|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_catalog_order.datetime|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<td>{$plugin_catalog_order.name}</td>
+					<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+					<td><!--{if $plugin_catalog_order.user_id}--><a href="{$freo.core.https_file}/catalog_order/admin_user_form?id={$plugin_catalog_order.user_id}">{$plugin_catalog_order.user_id}</a><!--{/if}--></td>
+					<!--{/if}-->
+					<td>
+						<a href="{$freo.core.https_file}/catalog_order/admin_order_form?id={$plugin_catalog_order.record_id}">編集</a>
+						<!--{if $plugin_catalog_order.zipcode and $plugin_catalog_order.prefecture and $plugin_catalog_order.address}-->
+						<a href="{$freo.core.https_file}/catalog_order/admin_order_form?id={$plugin_catalog_order.record_id}&amp;type=print">印刷用ページ</a>
+						<!--{/if}-->
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<div id="page">
+			<h2>ページ移動</h2>
+			<ul class="order">
+				<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/catalog_order/admin_order?page={$freo.query.page-1}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.status}&amp;status={$smarty.get.status}{/if}{if $smarty.get.name}&amp;name={$smarty.get.name|smarty:nodefaults|escape:'url'}{/if}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+				<li><!--{if $plugin_catalog_order_page > $freo.query.page}--><a href="{$freo.core.http_file}/catalog_order/admin_order?page={$freo.query.page+1}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.status}&amp;status={$smarty.get.status}{/if}{if $smarty.get.name}&amp;name={$smarty.get.name|smarty:nodefaults|escape:'url'}{/if}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+			</ul>
+			<ul class="direct">
+				<li>ページ</li>
+				<!--{section name='loop' loop=$plugin_catalog_order_page}-->
+				<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/catalog_order/admin_order?page={$smarty.section.loop.iteration}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}{if $smarty.get.status}&amp;status={$smarty.get.status}{/if}{if $smarty.get.name}&amp;name={$smarty.get.name|smarty:nodefaults|escape:'url'}{/if}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+				<!--{/section}-->
+			</ul>
+		</div>
+	</div>
+{include file='internals/admin/footer.html'}

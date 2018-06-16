@@ -1,0 +1,72 @@
+{include file='header.html'}
+	<h2>ユーザー用ページ</h2>
+	<h3>ご注文者情報を編集</h3>
+	<!--{if $errors}-->
+	<ul class="attention">
+		<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+		<li>{$error}</li>
+		<!--{/foreach}-->
+	</ul>
+	<!--{elseif $freo.query.exec == 'update'}-->
+	<ul class="complete">
+		<li>ご注文者情報を編集しました。</li>
+	</ul>
+	<!--{/if}-->
+	<ul>
+		<li>ご注文者情報を入力してください。</li>
+		<li>この情報は注文履歴とは別に管理されています。ここで名前や住所などを編集しても、注文履歴には影響ありません。</li>
+		<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+	</ul>
+	<form action="{$freo.core.https_file}/catalog_order/form" method="post">
+		<fieldset>
+			<legend>注文者登録フォーム</legend>
+			<input type="hidden" name="freo[token]" value="{$token}" />
+			<h3>ご注文者</h3>
+			<dl>
+				<dt>名前 <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order_user[name]" size="30" value="{$input.plugin_catalog_order_user.name}" /></dd>
+				<dt>名前（フリガナ） <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order_user[kana]" size="30" value="{$input.plugin_catalog_order_user.kana}" /></dd>
+				<dt>Ｅメール <abbr class="attention" title="入力必須">*</abbr></dt>
+					<dd><input type="text" name="plugin_catalog_order_user[mail]" size="30" value="{$input.plugin_catalog_order_user.mail}" /></dd>
+				<dt>電話番号</dt>
+					<dd><input type="text" name="plugin_catalog_order_user[tel]" size="30" value="{$input.plugin_catalog_order_user.tel}" /></dd>
+			</dl>
+			<h3>配送先住所</h3>
+			<dl>
+				<dt>郵便番号</dt>
+					<dd><input type="text" name="plugin_catalog_order_user[zipcode]" size="10" value="{$input.plugin_catalog_order_user.zipcode}" id="catalog_order_zipcode" /></dd>
+				<dt>都道府県</dt>
+					<dd>
+						<select name="plugin_catalog_order_user[prefecture]">
+							<option value="">選択してください</option>
+							<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+							<option value="{$plugin_catalog_prefecture.id}"{if $input.plugin_catalog_order_user.prefecture == $plugin_catalog_prefecture.id} selected="selected"{/if}>{$plugin_catalog_prefecture.name}</option>
+							<!--{/foreach}-->
+						</select>
+					</dd>
+				<dt>住所</dt>
+					<dd><input type="text" name="plugin_catalog_order_user[address]" size="50" value="{$input.plugin_catalog_order_user.address}" /></dd>
+			</dl>
+			<h3>連絡事項</h3>
+			<dl>
+				<dt>連絡事項など</dt>
+					<dd><textarea name="plugin_catalog_order_user[text]" cols="50" rows="5">{$input.plugin_catalog_order_user.text}</textarea></dd>
+			</dl>
+			<p><input type="submit" value="登録する" /></p>
+		</fieldset>
+	</form>
+	<!--{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}-->
+	<script type="text/javascript" src="https://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3-https.js"></script>
+	<!--{else}-->
+	<script type="text/javascript" src="http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js"></script>
+	<!--{/if}-->
+	<script type="text/javascript">
+	{literal}
+	//郵便番号から住所を検索
+	$('#catalog_order_zipcode').keyup(function() {
+		AjaxZip3.zip2addr(this, '', 'plugin_catalog_order_user[prefecture]', 'plugin_catalog_order_user[address]');
+	});
+	{/literal}
+	</script>
+{include file='footer.html'}

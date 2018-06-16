@@ -1,0 +1,73 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>配送方法管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>配送方法を新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}の配送方法を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}の配送方法を削除しました。</li>
+			<!--{elseif $freo.query.exec == 'prefecture'}-->
+			<li>ID.{$freo.query.id}の地域別送料を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'sort'}-->
+			<li>配送方法を並び替えました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録された配送方法は以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/catalog/admin_delivery_form">配送方法登録</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_delivery_update" method="post">
+			<fieldset>
+				<legend>配送方法並び替えフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<table summary="配送方法">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>配送方法名</th>
+							<th>送料</th>
+							<th>状態</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>配送方法名</th>
+							<th>送料</th>
+							<th>状態</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+						<tr>
+							<td>{$plugin_catalog_delivery.id}</td>
+							<td>{$plugin_catalog_delivery.name}</td>
+							<td class="number"><!--{if $plugin_catalog_delivery.carriage != ''}-->{$plugin_catalog_delivery.carriage}円<!--{/if}--></td>
+							<td><!--{if $plugin_catalog_delivery.status == 'publish'}-->使用<!--{elseif $plugin_catalog_delivery.status == 'private'}-->未使用<!--{/if}--></td>
+							<td class="number"><input type="text" name="sort[{$plugin_catalog_delivery.id}]" size="3" value="{$plugin_catalog_delivery.sort}" /></td>
+							<td>
+								<a href="{$freo.core.http_file}/catalog/admin_delivery_prefecture_form?id={$plugin_catalog_delivery.id}">地域別送料</a>
+								<a href="{$freo.core.http_file}/catalog/admin_delivery_form?id={$plugin_catalog_delivery.id}">編集</a>
+								<a href="{$freo.core.http_file}/catalog/admin_delivery_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_catalog_delivery.id}" class="delete">削除</a>
+							</td>
+						</tr>
+						<!--{/foreach}-->
+					</tbody>
+				</table>
+				<p><input type="submit" value="並び順を編集する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

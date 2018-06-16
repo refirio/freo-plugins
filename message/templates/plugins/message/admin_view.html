@@ -1,0 +1,13 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>No.{$freo.query.id}のメッセージ</h2>
+		<dl>
+			<dt>登録日時</dt>
+				<dd>{$plugin_message.created|date_format:'%Y/%m/%d %H:%M:%S'}</dd>
+			<dt>メッセージ</dt>
+				<dd>{$plugin_message.text|nl2br}</dd>
+			<dt>IPアドレス</dt>
+				<dd>{$plugin_message.ip}</dd>
+		</dl>
+	</div>
+{include file='internals/admin/footer.html'}

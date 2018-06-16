@@ -1,0 +1,45 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ID.{$freo.query.id}のフォームを確認</h2>
+		<ul>
+			<li><a href="{if $plugin_form.secure == 'yes'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/{$plugin_form.id}"><!--{if $plugin_form.secure == 'yes'}-->{$freo.core.https_file}<!--{else}-->{$freo.core.http_file}<!--{/if}-->/form/{$plugin_form.id}</a> にアクセスするとフォームが表示されます。</li>
+			<li>もしくは、以下のコードを任意のページに貼り付けてください。</li>
+		</ul>
+		<h3>headタグ内に追加</h3>
+		<pre><code>&lt;link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}jquery.subwindow.css" /&gt;
+&lt;script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.subwindow.js"&gt;&lt;/script&gt;</code></pre>
+		<h3>bodyタグ内に追加</h3>
+		<pre><code>&lt;form action="{if $plugin_form.secure == 'yes'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/send?id={$plugin_form.id}" method="post"{if $plugin_form.attachment == 'yes'} enctype="multipart/form-data"{/if} id="plugin_form"&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;送信フォーム&lt;/legend&gt;
+    &lt;input type="hidden" name="plugin_form[id]" value="{$plugin_form.id}" /&gt;
+
+    &lt;input type="hidden" name="plugin_form[__label][subject]" value="件名" /&gt;
+    &lt;input type="hidden" name="plugin_form[__label][name]" value="名前" /&gt;
+    &lt;input type="hidden" name="plugin_form[__label][mail]" value="メールアドレス" /&gt;
+    &lt;input type="hidden" name="plugin_form[__label][message]" value="メッセージ" /&gt;
+
+    &lt;input type="hidden" name="plugin_form[__require][name]" value="1" /&gt;
+    &lt;input type="hidden" name="plugin_form[__require][mail]" value="1" /&gt;
+    &lt;input type="hidden" name="plugin_form[__require][message]" value="1" /&gt;
+
+    &lt;input type="hidden" name="plugin_form[__type][subject]" value="line" /&gt;
+    &lt;input type="hidden" name="plugin_form[__type][name]" value="line" /&gt;
+    &lt;input type="hidden" name="plugin_form[__type][mail]" value="mail" /&gt;
+
+    &lt;dl&gt;
+      &lt;dt&gt;件名&lt;/dt&gt;
+        &lt;dd&gt;&lt;input type="text" name="plugin_form[subject]" size="30" value="" /&gt;&lt;/dd&gt;
+      &lt;dt&gt;名前 &lt;abbr class="attention" title="入力必須"&gt;*&lt;/abbr&gt;&lt;/dt&gt;
+        &lt;dd&gt;&lt;input type="text" name="plugin_form[name]" size="30" value="" /&gt;&lt;/dd&gt;
+      &lt;dt&gt;メールアドレス &lt;abbr class="attention" title="入力必須"&gt;*&lt;/abbr&gt;&lt;/dt&gt;
+        &lt;dd&gt;&lt;input type="text" name="plugin_form[mail]" size="30" value="" /&gt;&lt;/dd&gt;
+      &lt;dt&gt;メッセージ &lt;abbr class="attention" title="入力必須"&gt;*&lt;/abbr&gt;&lt;/dt&gt;
+        &lt;dd&gt;&lt;textarea name="plugin_form[message]" cols="50" rows="10"&gt;&lt;/textarea&gt;&lt;/dd&gt;
+    &lt;/dl&gt;
+    &lt;p&gt;&lt;input type="submit" value="確認する" /&gt;&lt;/p&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+&lt;script src="{if $plugin_form.secure == 'yes'}{$freo.core.https_url}{else}{$freo.core.http_url}{/if}{$smarty.const.FREO_JS_DIR}plugins/form.js"&gt;&lt;/script&gt;</code></pre>
+	</div>
+{include file='internals/admin/footer.html'}

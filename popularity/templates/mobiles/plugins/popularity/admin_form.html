@@ -1,0 +1,37 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">パラメーター{$input.plugin_popularity.parameter}のデータを編集</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+ﾃﾞｰﾀを入力してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/popularity/admin_form?parameter={$freo.query.parameter}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_popularity[parameter]" value="{$input.plugin_popularity.parameter}" />
+ﾀｲﾄﾙ<br />
+<input type="text" name="plugin_popularity[title]" size="50" value="{$input.plugin_popularity.title}{$smarty.get.title}" /><br />
+ｱｸｾｽ数<br />
+<input type="text" name="plugin_popularity[count]" size="5" value="{$input.plugin_popularity.count}"{if $freo.agent.career == 'docomo'} style="-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;"{else} istyle="4" format="*N" mode="numeric"{/if} /><br />
+状態<br />
+<select name="plugin_popularity[status]">
+<option value="publish"{if $input.plugin_popularity.status == 'publish'} selected="selected"{/if}>▼表示</option>
+<option value="private"{if $input.plugin_popularity.status == 'private'} selected="selected"{/if}>▼非表示</option>
+</select><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

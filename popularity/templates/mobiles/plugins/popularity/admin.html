@@ -1,0 +1,50 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">人気コンテンツ</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'update'}-->
+ﾃﾞｰﾀを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ﾃﾞｰﾀをリセットしました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+各ｺﾝﾃﾝﾂのｱｸｾｽ数は以下の通りです。<br />
+<!--{if $freo.query.type == 'all'}-->
+<a href="{$freo.core.http_file}/popularity/admin">上位のﾃﾞｰﾀを表示する</a>。<br />
+<!--{else}-->
+<a href="{$freo.core.http_file}/popularity/admin?type=all">すべてのﾃﾞｰﾀを表示する</a>。<br />
+<!--{/if}-->
+
+<br />
+<!--{if $plugin_popularity_raws|smarty:nodefaults}-->
+<!--{foreach from=$plugin_popularity_raws|smarty:nodefaults item='plugin_popularity_raw'}-->
+▼<a href="{$freo.core.http_file}/popularity/admin_form?parameter={$plugin_popularity_raw.parameter|escape:'url'}">{$plugin_popularity_raw.title|default:$plugin_popularity_raw.parameter}</a>({$plugin_popularity_raw.count}回)<br />
+<!--{/foreach}-->
+<!--{else}-->
+<!--{foreach from=$plugin_popularities|smarty:nodefaults item='plugin_popularity'}-->
+▼<a href="{$freo.core.http_file}/popularity/admin_form?parameter={$plugin_popularity.parameter|escape:'url'}">{$plugin_popularity.title|default:$plugin_popularity.parameter}</a>({$plugin_popularity.count}回)<br />
+<!--{/foreach}-->
+<!--{/if}-->
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">データリセット</span></div>
+
+ﾃﾞｰﾀをすべて削除するには、削除ﾎﾞﾀﾝを押してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/popularity/admin_delete" method="get" class="delete">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<div style="text-align:center;">
+<input type="submit" value="削除する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

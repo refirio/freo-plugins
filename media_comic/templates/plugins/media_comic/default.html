@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" dir="ltr">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<title>{$plugin_media_comic_memo|default:'comic'} | {$freo.config.basis.title}</title>
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}common.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}plugins/media_comic.css" type="text/css" media="all" />
+	<style rel="stylesheet">
+
+	{if $plugin_media_comic_cover == false}
+		div#menu ul li.first {ldelim}
+			display: none;
+		{rdelim}
+		div#menu ul li.last {ldelim}
+			display: none;
+		{rdelim}
+	{elseif $freo.query.columns == 1}
+		div#menu ul li.last {ldelim}
+			display: none;
+		{rdelim}
+	{elseif $plugin_media_comic_all % 2 == 0}
+		div#menu ul li.last {ldelim}
+			display: none;
+		{rdelim}
+	{/if}
+
+	{if $freo.query.direction == 'ltr'}
+		div#media_comic div.media_comic {ldelim}
+			direction: ltr;
+		{rdelim}
+	{else}
+		div#media_comic div.media_comic {ldelim}
+			direction: rtl;
+		{rdelim}
+	{/if}
+
+	{if $freo.query.devide == 'off'}
+		div#media_comic div.media_comic {ldelim}
+			height: 100%;
+			min-height: {$media_comic_height}px;
+		{rdelim}
+	{/if}
+
+	{if $freo.query.end == 'off'}
+		div#menu ul li.end {ldelim}
+			display: none;
+		{rdelim}
+		div#media_comic div.end {ldelim}
+			display: none;
+		{rdelim}
+	{/if}
+
+	{if $freo.query.navigation == 'off'}
+		div#menu {ldelim}
+			display: none;
+		{rdelim}
+	{/if}
+
+	</style>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.js"></script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}common.js"></script>
+
+	{if $freo.query.devide == 'off'}
+	<script type="text/javascript">
+
+		var media_comic_columns = {$freo.query.columns};
+		var media_comic_end     = '{$freo.query.end}';
+		var media_comic_from    = {$plugin_media_comic_from};
+		var media_comic_to      = {$plugin_media_comic_to};
+		var media_comic_cover   = {if $plugin_media_comic_cover}true{else}false{/if};
+		var media_comic_all     = {$plugin_media_comic_all};
+
+	</script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}plugins/media_comic.js"></script>
+	{/if}
+
+</head>
+
+<body>
+	<div id="header">
+		<h1><a href="{$freo.core.http_file}">{$freo.config.basis.title}</a></h1>
+	</div>
+	<!--{if $freo.query.devide == 'off'}-->
+		<div id="menu">
+			<ul>
+				<li class="back"><a href="{$plugin_media_comic_referer}" rel="external">戻る</a></li>
+			</ul>
+			<ul>
+				<li class="first"><a href="#page-{$plugin_media_comic_first}" id="first">表紙</a></li>
+				<li class="previous"><a href="#page-{$plugin_media_comic_previous}" id="previous">前のページ</a></li>
+				<li class="next"><a href="#page-{$plugin_media_comic_next}" id="next">次のページ</a></li>
+				<li class="last"><a href="#page-{$plugin_media_comic_last}" id="last">裏表紙</a></li>
+				<li class="end"><a href="#page-{$plugin_media_comic_end}" id="end">終了</a></li>
+			</ul>
+			<ul>
+				<li class="first"><a href="#page-{$plugin_media_comic_first}">表紙</a></li>
+				<!--{foreach from=$plugin_media_comic_pages|smarty:nodefaults item='plugin_media_comic_page'}-->
+				<li class="page"><a href="#page-{$plugin_media_comic_page.id}">{$plugin_media_comic_page.label}</a></li>
+				<!--{/foreach}-->
+				<li class="last"><a href="#page-{$plugin_media_comic_last}">裏表紙</a></li>
+				<li class="end"><a href="#page-{$plugin_media_comic_end}">終了</a></li>
+			</ul>
+			<ul>
+				<li id="status">全<em>{$plugin_media_comic_all}</em>ページ</li>
+			</ul>
+		</div>
+		<div id="media_comic">
+			<!--{foreach from=$plugin_media_comics|smarty:nodefaults key='page' item='plugin_media_comic'}-->
+			<div class="media_comic" id="page-{$page}">
+				<!--{foreach from=$plugin_media_comic|smarty:nodefaults item='plugin_media_comic'}--><p><a href="#page-{$plugin_media_comic.link}"><img src="{if $plugin_media_comic_restriction}{$freo.core.http_file}/file/media/{$smarty.const.FREO_PLUGIN_MEDIA_COMIC_DIR}{$smarty.get.comic}/{$plugin_media_comic.file}{else}{$freo.core.http_url}{$plugin_media_comic_dir}{$plugin_media_comic.file}{/if}" alt="{$plugin_media_comic.id}" title="{$plugin_media_comic.id}" width="{$plugin_media_comic_width}" height="{$plugin_media_comic_height}" /></a></p><!--{/foreach}-->
+			</div>
+			<!--{/foreach}-->
+			<div class="media_comic end" id="page-{$plugin_media_comic_end}">
+				{include file='plugins/media_comic/end.html'}
+			</div>
+		</div>
+	<!--{else}-->
+		<div id="menu">
+			<ul>
+				<li class="back"><a href="{$plugin_media_comic_referer}" rel="external">戻る</a></li>
+			</ul>
+			<ul>
+				<li class="first"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_first}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}" id="first">表紙</a></li>
+				<li class="previous"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_previous}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}" id="previous">前のページ</a></li>
+				<li class="next"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_next}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}" id="next">次のページ</a></li>
+				<li class="last"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_last}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}" id="last">裏表紙</a></li>
+				<li class="end"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_end}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}" id="end">終了</a></li>
+			</ul>
+			<ul>
+				<li class="first"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_first}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}">表紙</a></li>
+				<!--{foreach from=$plugin_media_comic_pages|smarty:nodefaults item='plugin_media_comic_page'}-->
+				<li class="page"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_page.id}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}">{$plugin_media_comic_page.label}</a></li>
+				<!--{/foreach}-->
+				<li class="last"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_last}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}">裏表紙</a></li>
+				<li class="end"><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic_end}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}">終了</a></li>
+			</ul>
+			<ul>
+				<li id="status">全<em>{$plugin_media_comic_all}</em>ページ<!--{if $plugin_media_comic_show}--> / <em>{$plugin_media_comic_show}</em>ページ目を表示<!--{/if}--></li>
+			</ul>
+		</div>
+		<div id="media_comic">
+			<!--{foreach from=$plugin_media_comics|smarty:nodefaults key='page' item='plugin_media_comic'}-->
+			<!--{if $page == $freo.query.page}-->
+			<div class="media_comic">
+				<!--{foreach from=$plugin_media_comic|smarty:nodefaults item='plugin_media_comic'}--><p><a href="{$freo.core.https_file}/media_comic/{$freo.query.comic}?page={$plugin_media_comic.link}{if $freo.query.columns == '1'}&amp;columns=1{/if}{if $freo.query.direction == 'ltr'}&amp;direction=ltr{/if}&amp;devide=on{if $freo.query.end == 'on'}&amp;end=on{/if}{if $freo.query.navigation == 'off'}&amp;navigation=off{/if}"><img src="{if $plugin_media_comic_restriction}{$freo.core.http_file}/file/media/{$smarty.const.FREO_PLUGIN_MEDIA_COMIC_DIR}{$smarty.get.comic}/{$plugin_media_comic.file}{else}{$freo.core.http_url}{$plugin_media_comic_dir}{$plugin_media_comic.file}{/if}" alt="{$plugin_media_comic.id}" title="{$plugin_media_comic.id}" width="{$plugin_media_comic_width}" height="{$plugin_media_comic_height}" /></a></p><!--{/foreach}-->
+			</div>
+			<!--{/if}-->
+			<!--{/foreach}-->
+			<!--{if $freo.query.page == $plugin_media_comic_end}-->
+			<div class="media_comic end" id="page-{$plugin_media_comic_end}">
+				{include file='plugins/media_comic/end.html'}
+			</div>
+			<!--{/if}-->
+		</div>
+	<!--{/if}-->
+	<div id="footer">
+		<address>Created by <a href="http://freo.jp/">freo</a>.</address>
+	</div>
+</body>
+
+</html>

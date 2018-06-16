@@ -1,0 +1,77 @@
+	<div id="utility">
+		<h2>ユーティリティ</h2>
+		<!--{if $smarty.request.freo.work == 'cart'}-->
+		<div class="utility">
+			<h3>注文</h3>
+			<div class="content">
+				<ul>
+					<!--{if $plugin_catalog_cart.catalogs|smarty:nodefaults}-->
+					<li><a href="{$freo.core.https_file}/catalog/order">カート内の商品を注文</a></li>
+					<!--{else}-->
+					<li>商品はありません</li>
+					<!--{/if}-->
+				</ul>
+			</div>
+		</div>
+		<!--{else}-->
+		<div class="utility">
+			<h3>カート</h3>
+			<div class="content">
+				<ul>
+					<li><a href="{$freo.core.http_file}/catalog/cart">カートの内容を表示</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="utility">
+			<h3>カテゴリー</h3>
+			<div class="content">
+				<ul>
+					<!--{foreach from=$plugin_catalog_categories|smarty:nodefaults item='plugin_catalog_category'}-->
+					<li><a href="{$freo.core.http_file}/catalog?category_id={$plugin_catalog_category.id}">{$plugin_catalog_category.name}</a></li>
+					<!--{/foreach}-->
+				</ul>
+			</div>
+		</div>
+		<div class="utility">
+			<!--{section name='loop' start=1 loop=11}-->
+			<!--{assign var='number' value=$smarty.section.loop.index|string_format:'%02d'}-->
+			<!--{assign var='option_name' value="option`$number`_name"}-->
+			<!--{assign var='option_type' value="option`$number`_type"}-->
+			<!--{assign var='option_text' value="option`$number`_text"}-->
+			<!--{if $freo.config.plugin.catalog[$option_name] and ($freo.config.plugin.catalog[$option_type] == 'select' or $freo.config.plugin.catalog[$option_type] == 'radio')}-->
+			<h3>{$freo.config.plugin.catalog[$option_name]}</h3>
+			<div class="content">
+				<ul>
+					<!--{foreach from=$freo.config.plugin.catalog[$option_text]|explode:"\n" item='value'}-->
+					<li><a href="{$freo.core.http_file}/catalog?option{$number}={$value|escape:'url'}">{$value}</a></li>
+					<!--{/foreach}-->
+				</ul>
+			</div>
+			<!--{/if}-->
+			<!--{/section}-->
+		</div>
+		<div class="utility">
+			<h3>販売状況</h3>
+			<div class="content">
+				<ul>
+					<li><a href="{$freo.core.http_file}/catalog?condition=prerelease">予約商品</a></li>
+					<li><a href="{$freo.core.http_file}/catalog?condition=new">新着商品</a></li>
+					<li><a href="{$freo.core.http_file}/catalog?condition=soldout">売り切れ商品</a></li>
+					<li><a href="{$freo.core.http_file}/catalog?condition=end">販売終了商品</a></li>
+				</ul>
+			</div>
+		</div>
+		<!--{if $freo.config.plugin.catalog.target}-->
+		<div class="utility">
+			<h3>対象</h3>
+			<div class="content">
+				<ul>
+					<!--{foreach from=$plugin_catalog_targets|smarty:nodefaults item='plugin_catalog_target'}-->
+					<li><a href="{$freo.core.http_file}/catalog/target/{$plugin_catalog_target.id}">{$plugin_catalog_target.name}</a></li>
+					<!--{/foreach}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+		<!--{/if}-->
+	</div>

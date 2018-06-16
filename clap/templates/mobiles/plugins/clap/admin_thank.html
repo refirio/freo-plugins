@@ -1,0 +1,30 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">お礼管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+お礼を新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+ID.{$freo.query.id}のお礼を編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ID.{$freo.query.id}のお礼を削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたお礼は以下のとおりです。<br />
+<a href="{$freo.core.http_file}/clap/admin_text">ﾒｯｾｰｼﾞを管理する</a>。<br />
+<a href="{$freo.core.http_file}/clap/admin_thank_form">お礼を登録する</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_clap_thanks|smarty:nodefaults item='plugin_clap_thank'}-->
+▼[{$plugin_clap_thank.id}]<a href="{$freo.core.http_file}/clap/admin_thank_form?id={$plugin_clap_thank.id}">{$plugin_clap_thank.memo|mb_truncate:20:'...'}(<!--{if $plugin_clap_thank.target == 'pc'}-->PC<!--{elseif $plugin_clap_thank.target == 'mobile'}-->携帯<!--{else}-->PCと携帯<!--{/if}-->)</a><br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

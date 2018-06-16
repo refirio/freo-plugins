@@ -1,0 +1,57 @@
+{include file='header.html'}
+	<div id="media">
+		<h2>メディア一覧</h2>
+		<!--{if $smarty.get.directory}--><h3>{$media_list_names[$smarty.get.directory]|default:$smarty.get.directory}</h3><!--{/if}-->
+		<!--{if $media_list_restriction}-->
+		<p class="attention">このディレクトリには、閲覧制限が設定されています。</p>
+		<!--{/if}-->
+
+		<!--{if $smarty.get.target == 'directory'}-->
+		<div class="directories">
+			<!--{foreach from=$media_lists|smarty:nodefaults item='media_list'}-->
+			<div class="directory">
+				<p>
+					<a href="{$freo.core.http_file}/media_list?directory={if $smarty.get.directory}{$smarty.get.directory}/{/if}{$media_list.name}"{if $media_list.memo} title="{$media_list.memo}"{/if}>
+						<!--{if $media_list.thumbnail.id}--><img src="{$freo.core.http_url}{$media_list.thumbnail.id}" /><!--{/if}-->
+					</a>
+					<!--{if $smarty.get.directory}-->
+						<!--{assign var="name" value=$smarty.get.directory|cat:'/'|cat:$media_list.name}-->
+					<!--{else}-->
+						<!--{assign var="name" value=$media_list.name}-->
+					<!--{/if}-->
+					{$media_list_names[$name]|default:$media_list.name}
+				</p>
+			</div>
+			<!--{/foreach}-->
+		</div>
+		<!--{else}-->
+		<ul>
+			<!--{foreach from=$media_lists|smarty:nodefaults item='media_list'}-->
+			<li>
+				<!--{if $media_list.width and $media_list.height}-->
+				<a href="{if $media_list_restriction}{$freo.core.http_file}/file/media/{$smarty.get.directory}/{$media_list.name}{else}{$freo.core.http_url}{$media_list.id}{/if}"{if $media_list.memo} title="{$media_list.memo}"{/if}><img src="{if $media_list_restriction}{$freo.core.http_file}/file/media/{$smarty.get.directory}/{$media_list.name}{if $media_list.thumbnail.id}?type=thumbnail{/if}{else}{$freo.core.http_url}{if $media_list.thumbnail.id}{$media_list.thumbnail.id}{else}{$media_list.id}{/if}{/if}" alt="{$media_list.name}（{$media_list.width}px × {$media_list.height}px）" title="{$media_list.name}（{$media_list.width}px × {$media_list.height}px）" /></a>
+				<!--{else}-->
+				<a href="{if $media_list_restriction}{$freo.core.http_file}/file/media/{$smarty.get.directory}/{$media_list.name}{else}{$freo.core.http_url}{$media_list.id}{/if}"{if $media_list.memo} title="{$media_list.memo}"{/if}>{$media_list.name}</a>
+				<!--{/if}-->
+			</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+
+	</div>
+	<!--{if ($smarty.get.target == 'directory' and $freo.config.plugin.media_list.directory_limit) or ($smarty.get.target == 'file' and $freo.config.plugin.media_list.media_limit)}-->
+	<div id="page">
+		<h2>ページ移動</h2>
+		<ul class="order">
+			<li><!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/media_list?{if $smarty.get.directory}directory={$smarty.get.directory}&amp;{/if}{if $smarty.get.target}target={$smarty.get.target}&amp;{/if}page={$freo.query.page-1}">前のページ</a><!--{else}-->前のページ<!--{/if}--></li>
+			<li><!--{if $media_list_page > $freo.query.page}--><a href="{$freo.core.http_file}/media_list?{if $smarty.get.directory}directory={$smarty.get.directory}&amp;{/if}{if $smarty.get.target}target={$smarty.get.target}&amp;{/if}page={$freo.query.page+1}">次のページ</a><!--{else}-->次のページ<!--{/if}--></li>
+		</ul>
+		<ul class="direct">
+			<li>ページ</li>
+			<!--{section name='loop' loop=$media_list_page}-->
+			<li><!--{if $smarty.section.loop.iteration != $freo.query.page}--><a href="{$freo.core.http_file}/media_list?{if $smarty.get.directory}directory={$smarty.get.directory}&amp;{/if}{if $smarty.get.target}target={$smarty.get.target}&amp;{/if}page={$smarty.section.loop.iteration}">{$smarty.section.loop.iteration}</a><!--{else}-->{$smarty.section.loop.iteration}<!--{/if}--></li>
+			<!--{/section}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+{include file='footer.html'}

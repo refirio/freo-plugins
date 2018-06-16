@@ -1,0 +1,15 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のタスク</span></div>
+
+内容:{$plugin_task.title}<br />
+詳細:{$plugin_task.text|nl2br}<br />
+ｶﾃｺﾞﾘｰ:{$plugin_task_categories[$plugin_task.category_id].name}<br />
+状態:<!--{if $plugin_task.status == 'publish'}-->未完了<!--{elseif $input.plugin_task.status == 'complete'}-->完了<!--{/if}--><br />
+<br />
+<a href="{$freo.core.http_file}/task/admin_form?id={$plugin_task.id}">編集する</a>
+
+{include file='mobiles/footer.html'}

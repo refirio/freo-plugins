@@ -1,0 +1,26 @@
+{include file='header.html'}
+	<h2>メッセージ送信</h2>
+	<ul>
+		<li>以下の内容で送信します。</li>
+	</ul>
+	<dl>
+		<dt>メッセージ</dt>
+			<dd>{$plugin_message.text|nl2br}</dd>
+	</dl>
+	<div id="action">
+		<form action="{$freo.core.http_file}/message" method="get">
+			<fieldset>
+				<legend>メッセージ編集フォーム</legend>
+				<input type="hidden" name="session" value="1" />
+				<p><input type="submit" value="戻る" /></p>
+			</fieldset>
+		</form>
+		<form action="{$freo.core.http_file}/message/preview" method="post">
+			<fieldset>
+				<legend>メッセージ送信フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<p><input type="submit" value="送信する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='footer.html'}

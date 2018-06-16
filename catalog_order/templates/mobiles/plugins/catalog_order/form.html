@@ -1,0 +1,61 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/user">ﾕｰｻﾞｰ用ﾍﾟｰｼﾞに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ご注文者情報を編集</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{elseif $freo.query.exec == 'update'}-->
+<div style="color:#00AA00;">ご注文者情報を編集しました。</div>
+<!--{/if}-->
+
+ご注文者情報を入力してください。<br />
+この情報は注文履歴とは別に管理されています。ここで名前や住所などを編集しても、注文履歴には影響ありません。<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+
+<br />
+<form action="{$freo.core.https_file}/catalog_order/form" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+■ご注文者<br />
+<br />
+名前<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order_user[name]" size="20" value="{$input.plugin_catalog_order_user.name}" /><br />
+名前(ﾌﾘｶﾞﾅ)<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order_user[kana]" size="20" value="{$input.plugin_catalog_order_user.kana}" /><br />
+Eﾒｰﾙ<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order_user[mail]" size="20" value="{$input.plugin_catalog_order_user.mail}" /><br />
+電話番号<br />
+<input type="text" name="plugin_catalog_order_user[tel]" size="20" value="{$input.plugin_catalog_order_user.tel}" /><br />
+<br />
+■配送先住所<br />
+<br />
+郵便番号<br />
+<input type="text" name="plugin_catalog_order_user[zipcode]" size="10" value="{$input.plugin_catalog_order_user.zipcode}" /><br />
+都道府県<br />
+<select name="plugin_catalog_order_user[prefecture]">
+<option value="">▼選択してください</option>
+<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+<option value="{$plugin_catalog_prefecture.id}"{if $input.plugin_catalog_order_user.prefecture == $plugin_catalog_prefecture.id} selected="selected"{/if}>▼{$plugin_catalog_prefecture.name}</option>
+<!--{/foreach}-->
+</select><br />
+住所<br />
+<input type="text" name="plugin_catalog_order_user[address]" size="20" value="{$input.plugin_catalog_order_user.address}" /><br />
+<br />
+■連絡事項<br />
+<br />
+連絡事項など<br />
+<textarea name="plugin_catalog_order_user[text]" cols="20" rows="5">{$input.plugin_catalog_order_user.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

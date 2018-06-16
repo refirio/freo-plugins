@@ -1,0 +1,11 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メール投稿</span></div>
+
+{$plugin_entry_receive_mail}件のﾒｰﾙを受信しました。<br />
+<!--{if $plugin_entry_receive_trash}-->そのうち、{$plugin_entry_receive_trash}件のﾒｰﾙを無効なﾒｰﾙとして処理しました。<br /><!--{/if}-->
+
+{include file='mobiles/footer.html'}

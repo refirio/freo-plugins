@@ -1,0 +1,28 @@
+{include file='mobiles/header.html'}
+
+<div style="text-align:center;">パスワード認証</div>
+<hr />
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+
+ｺﾝﾃﾝﾂを閲覧するためには、ﾊﾟｽﾜｰﾄﾞを入力してください。<br />
+
+<form action="{$freo.core.http_file}/password" method="{$freo.agent.method}">
+<input type="hidden" name="freo[method]" value="post" />
+ﾊﾟｽﾜｰﾄﾞ<br />
+<input type="text" name="plugin[password][password]" size="20" value="{$smarty.post.plugin.password.password}"{if $freo.agent.career == 'docomo'} style="-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;"{else} istyle="3" format="*m" mode="alphabet"{/if} /><br />
+<br />
+<input type="checkbox" name="plugin[password][session]" value="keep" />ﾛｸﾞｲﾝ状態を記憶する<br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="認証する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,61 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>カウント数確認</h2>
+		<ul>
+			<li>{$smarty.get.date|cat:'01000000'|date_format:'%Y'}年{$smarty.get.date|cat:'01000000'|date_format:'%m'}月のカウント数は以下のとおりです。</li>
+		</ul>
+		<table summary="カウント">
+			<thead>
+				<tr>
+					<th>日</th>
+					<th>ページビュー</th>
+					<th>ユニークアクセス</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>日</th>
+					<th>ページビュー</th>
+					<th>ユニークアクセス</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_count_days|smarty:nodefaults item='plugin_count_day'}-->
+				<tr>
+					<td>{$plugin_count_day.day|intval}日</td>
+					<td class="number">{$plugin_count_day.count}</td>
+					<td class="number">{$plugin_count_day.session}</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<ul>
+			<li>過去のカウント数は以下のとおりです。</li>
+		</ul>
+		<table summary="カウント">
+			<thead>
+				<tr>
+					<th>年月</th>
+					<th>ページビュー</th>
+					<th>ユニークアクセス</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>年月</th>
+					<th>ページビュー</th>
+					<th>ユニークアクセス</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_count_months|smarty:nodefaults item='plugin_count_month'}-->
+				<tr>
+					<td><a href="{$freo.core.http_file}/count/admin?date={$plugin_count_month.month|cat:'01000000'|date_format:'%Y%m'}">{$plugin_count_month.month|cat:'01000000'|date_format:'%Y'}年{$plugin_count_month.month|cat:'01000000'|date_format:'%m'}月</a></td>
+					<td class="number">{$plugin_count_month.count}</td>
+					<td class="number">{$plugin_count_month.session}</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

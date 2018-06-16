@@ -1,0 +1,16 @@
+{include file='header.html'}
+	<div id="document">
+		<h2>{$media_document_information.title|default:$media_document_memo|default:$media_document_name}</h2>
+		{$media_document_text|smarty:nodefaults}
+		<dl>
+			<dt>ファイル名</dt>
+				<dd>{$media_document_name}</dd>
+			<dt>ファイルサイズ</dt>
+				<dd>{$media_document_size}byte</dd>
+			<!--{if $media_document_information.update}-->
+			<dt>更新日</dt>
+				<dd>{$media_document_information.update}</dd>
+			<!--{/if}-->
+		</dl>
+	</div>
+{include file='footer.html'}

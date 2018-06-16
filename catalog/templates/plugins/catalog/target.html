@@ -1,0 +1,27 @@
+{include file='header.html'}
+	<div id="content">
+		<h2>対象確認</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<!--{if $freo.query.catalog_id}-->
+			<li>この商品は<em>{$plugin_catalog_targets[$freo.query.id].name}</em>対象の商品です。</li>
+			<!--{else}-->
+			<li>商品一覧に<em>{$plugin_catalog_targets[$freo.query.id].name}</em>対象の商品も表示します。</li>
+			<!--{/if}-->
+		</ul>
+		<form action="{$freo.core.https_file}/catalog/target/{$freo.query.id}" method="post">
+			<fieldset>
+				<legend>フィルター設定フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_catalog_target" value="{$freo.query.id}" />
+				<input type="hidden" name="plugin_catalog" value="{$freo.query.catalog_id}" />
+				<p><input type="submit" value="{$plugin_catalog_targets[$freo.query.id].name}なので表示する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='plugins/catalog/utility.html'}
+{include file='footer.html'}

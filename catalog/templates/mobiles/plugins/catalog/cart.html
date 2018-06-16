@@ -1,0 +1,67 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">カート</span></div>
+
+<!--{if $freo.config.plugin.catalog.closed}-->
+<div style="color:#FF0000;">現在、すべての商品の販売を休止しています。</div>
+<!--{/if}-->
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'putin'}-->
+ｶｰﾄに商品を追加しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+商品の数量を更新しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+ｶｰﾄからID.{$freo.query.id}の商品を削除しました。
+<!--{elseif $freo.query.exec == 'clear'}-->
+ｶｰﾄをｶﾗにしました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+
+<!--{if $plugin_catalog_cart.catalogs|smarty:nodefaults}-->
+<br />
+<div style="text-align:center;"><a href="{$freo.core.https_file}/catalog/order">ｶｰﾄ内の商品を注文</a></div>
+<!--{/if}-->
+
+<!--{if $plugin_catalog_cart.catalogs|smarty:nodefaults}-->
+<br />
+ｶｰﾄの内容は以下のとおりです。<br />
+<!--{if $freo.config.plugin.catalog.free_shipping}-->
+<!--{if $plugin_catalog_cart.catalog_price_total >= $freo.config.plugin.catalog.free_shipping}-->
+商品合計が{$freo.config.plugin.catalog.free_shipping}円以上なので送料が無料になります。<br />
+<!--{else}-->
+商品合計が{$freo.config.plugin.catalog.free_shipping}円以上で送料が無料になります。<br />
+<!--{/if}-->
+<!--{/if}-->
+<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>。<br />
+
+<br />
+<form action="{$freo.core.http_file}/catalog/cart_update" method="{$freo.agent.method}">
+<input type="hidden" name="freo[method]" value="{$freo.agent.method}" />
+<input type="hidden" name="freo[method]" value="post" />
+<!--{foreach from=$plugin_catalog_cart.catalogs|smarty:nodefaults item='catalog'}-->
+[{$catalog.id}]{$catalog.name}<br />
+{$catalog.price}円×<input type="text" name="count[{$catalog.id}]" size="3" value="{$plugin_catalog_cart.catalog_counts[$catalog.id]}"{if $freo.agent.career == 'docomo'} style="-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;"{else} istyle="4" format="*N" mode="numeric"{/if} />＝{$plugin_catalog_cart.catalog_price_subtotals[$catalog.id]}円<br />
+<a href="{$freo.core.http_file}/catalog/cart_delete?id={$catalog.id}" class="delete">削除</a><br />
+<br />
+<!--{/foreach}-->
+商品合計(税込):{$plugin_catalog_cart.catalog_price_total}円<br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="数量を更新する" />
+</div>
+</form>
+<!--{else}-->
+<br />
+ｶｰﾄ内に商品はありません。<br />
+<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>。<br />
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,23 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">拍手管理</span></div>
+
+送信された拍手ﾒｯｾｰｼﾞは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/clap/admin_text">ﾒｯｾｰｼﾞを管理する</a>。<br />
+<a href="{$freo.core.http_file}/clap/admin_thank">お礼を管理する</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_clap_texts|smarty:nodefaults item='plugin_clap_text'}-->
+{$plugin_clap_text.created|date_format:'%H'}時{$plugin_clap_text.created|date_format:'%M'}分 ... <a href="{$freo.core.http_file}/clap/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_clap_text.id}">削除</a><br />
+{$plugin_clap_text.text|nl2br}<br />
+<!--{if $plugin_clap_titles|smarty:nodefaults}-->({$plugin_clap_text.title})<br /><!--{/if}-->
+<br />
+<!--{/foreach}-->
+
+<!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/clap/admin_text?page={$freo.query.page-1}">前のﾍﾟｰｼﾞ</a><!--{else}-->前のﾍﾟｰｼﾞ<!--{/if}--> |
+<!--{if $plugin_clap_text_page > $freo.query.page}--><a href="{$freo.core.http_file}/clap/admin_text?page={$freo.query.page+1}">次のﾍﾟｰｼﾞ</a><!--{else}-->次のﾍﾟｰｼﾞ<!--{/if}-->
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,118 @@
+{include file='header.html'}
+	<h2>ユーザー用ページ</h2>
+	<h3>ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文</h3>
+	<ul>
+		<li>注文内容は以下のとおりです。</li>
+	</ul>
+	<dl>
+		<dt>対応状況</dt>
+			<dd>{$plugin_catalog_order_status[$plugin_catalog_order.status].name}</dd>
+		<dt>注文日時</dt>
+			<dd>{$plugin_catalog_order.datetime|date_format:'%Y/%m/%d %H:%M:%S'}</dd>
+		<!--{if $plugin_catalog_order.user_text}-->
+		<dt>連絡事項</dt>
+			<dd>{$plugin_catalog_order.user_text|nl2br}</dd>
+		<!--{/if}-->
+	</dl>
+	<h3>注文内容</h3>
+	<table summary="注文内容">
+		<thead>
+			<tr>
+				<th>商品</th>
+				<th>価格（税込）</th>
+				<th>数量</th>
+				<th>小計（税込）</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>商品</th>
+				<th>価格（税込）</th>
+				<th>数量</th>
+				<th>小計（税込）</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!--{foreach from=$plugin_catalogs|smarty:nodefaults item='catalog'}-->
+			<tr>
+				<td>[{$catalog.id}]<br />{$catalog.name}</td>
+				<td class="number">{$plugin_catalog_order_sets[$catalog.id].price}円</td>
+				<td class="number">{$plugin_catalog_order_sets[$catalog.id].count}</td>
+				<td class="number">{$plugin_catalog_price_subtotals[$catalog.id]}円</td>
+			</tr>
+			<!--{/foreach}-->
+		</tbody>
+	</table>
+	<table summary="合計">
+		<tr>
+			<th>商品合計（税込）</th>
+			<td class="number">{$plugin_catalog_price_total}円</td>
+		</tr>
+		<tr>
+			<th>送料（税込）</th>
+			<td class="number">{$plugin_catalog_order.carriage}円</td>
+		</tr>
+		<tr>
+			<th>手数料（税込）</th>
+			<td class="number">{$plugin_catalog_order.charge}円</td>
+		</tr>
+		<!--{if $plugin_catalog_order.discount}-->
+		<tr>
+			<th>値引き（税込）</th>
+			<td class="number">-{$plugin_catalog_order.discount}円</td>
+		</tr>
+		<!--{/if}-->
+		<tr>
+			<th>お支払い額合計（税込）</th>
+			<td class="number"><em>{$plugin_catalog_price_total+$plugin_catalog_order.carriage+$plugin_catalog_order.charge-$plugin_catalog_order.discount}円</em></td>
+		</tr>
+	</table>
+	<h3>配送方法・お支払い方法</h3>
+	<dl>
+		<dt>配送方法</dt>
+			<dd>{$plugin_catalog_deliveries[$plugin_catalog_order.delivery_id].name}</dd>
+		<!--{if $plugin_catalog_order.preferred_week}-->
+		<dt>希望する配送曜日</dt>
+			<dd>{$plugin_catalog_order.preferred_week}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_catalog_order.preferred_week}-->
+		<dt>希望する配送時間</dt>
+			<dd>{$plugin_catalog_order.preferred_time}</dd>
+		<!--{/if}-->
+		<dt>お支払い方法</dt>
+			<dd>{$plugin_catalog_payments[$plugin_catalog_order.payment_id].name}</dd>
+	</dl>
+	<h3>ご注文者</h3>
+	<dl>
+		<dt>ユーザーID</dt>
+			<dd>{$plugin_catalog_order.user_id}</dd>
+		<dt>名前</dt>
+			<dd>{$plugin_catalog_order.name}</dd>
+		<dt>名前（フリガナ）</dt>
+			<dd>{$plugin_catalog_order.kana}</dd>
+		<dt>Ｅメール</dt>
+			<dd>{$plugin_catalog_order.mail}</dd>
+		<!--{if $plugin_catalog_order.tel}-->
+		<dt>電話番号</dt>
+			<dd>{$plugin_catalog_order.tel}</dd>
+		<!--{/if}-->
+	</dl>
+	<!--{if $plugin_catalog_order.zipcode and $plugin_catalog_order.prefecture and $plugin_catalog_order.address}-->
+	<h3>配送先住所</h3>
+	<dl>
+		<dt>郵便番号</dt>
+			<dd>{$plugin_catalog_order.zipcode}</dd>
+		<dt>都道府県</dt>
+			<dd>{$plugin_catalog_prefectures[$plugin_catalog_order.prefecture].name}</dd>
+		<dt>住所</dt>
+			<dd>{$plugin_catalog_order.address}</dd>
+	</dl>
+	<!--{/if}-->
+	<!--{if $plugin_catalog_order.text}-->
+	<h3>連絡事項</h3>
+	<dl>
+		<dt>連絡事項など</dt>
+			<dd>{$plugin_catalog_order.text|nl2br}</dd>
+	</dl>
+	<!--{/if}-->
+{include file='footer.html'}

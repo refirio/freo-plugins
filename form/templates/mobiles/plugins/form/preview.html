@@ -1,0 +1,28 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">確認</span></div>
+
+以下の内容で送信します。よろしければ、ﾍﾟｰｼﾞ下部の送信ﾎﾞﾀﾝを押してください。<br />
+<br />
+<!--{foreach from=$plugin_form.__label|smarty:nodefaults key='id' item='label'}-->
+{$label}:{$plugin_form[$id]|nl2br|default:'-'}<br />
+<!--{/foreach}-->
+
+<br />
+<form action="{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/{$freo.query.id}" method="get">
+<div style="text-align:center;">
+<input type="submit" value="戻る" />
+</div>
+</form>
+<form action="{if $smarty.server.HTTPS and $smarty.server.HTTPS != 'off'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/send/{$freo.query.id}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<div style="text-align:center;">
+<input type="submit" value="送信する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

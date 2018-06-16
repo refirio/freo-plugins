@@ -1,0 +1,69 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>プロフィール管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}のプロフィールを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}のプロフィールを削除しました。</li>
+			<!--{elseif $freo.query.exec == 'sort'}-->
+			<li>プロフィールを並び替えました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたプロフィールは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/profile/admin_form?id={$freo.user.id}">自身のプロフィール情報を登録・編集する</a>。</li>
+			<li><a href="{$freo.core.http_file}/profile/admin_category">カテゴリーを管理する</a>。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/profile/admin_update" method="post">
+			<fieldset>
+				<legend>カテゴリー並び替えフォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<table summary="プロフィール">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>登録日時</th>
+							<th>名前</th>
+							<th>フリガナ</th>
+							<th>権限</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>登録日時</th>
+							<th>名前</th>
+							<th>フリガナ</th>
+							<th>権限</th>
+							<th>並び順</th>
+							<th>作業</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						<!--{foreach from=$users|smarty:nodefaults item='user'}-->
+						<tr>
+							<td>{$user.id}</td>
+							<td><!--{if $user.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$user.created|date_format:'%H:%M:%S'}<!--{else}-->{$user.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+							<td>{$user.name}</td>
+							<td>{$plugin_profiles[$user.id].kana}</td>
+							<td><!--{if $user.authority == 'root'}-->管理者<!--{elseif $user.authority == 'author'}-->投稿者<!--{elseif $user.authority == 'guest'}-->ゲスト<!--{/if}--></td>
+							<td class="number"><!--{if $plugin_profiles[$user.id].sort != ''}--><input type="text" name="sort[{$user.id}]" size="3" value="{$plugin_profiles[$user.id].sort}" /><!--{/if}--></td>
+							<td><a href="{$freo.core.http_file}/profile/admin_form?id={$user.id}">編集</a></td>
+						</tr>
+						<!--{/foreach}-->
+					</tbody>
+				</table>
+				<p><input type="submit" value="並び順を編集する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

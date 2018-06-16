@@ -1,0 +1,48 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ページ親ID一括変更</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'update'}-->
+親IDを編集しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+一括変更したい親IDを設定してください。<br />
+
+<br />
+<form action="{$freo.core.http_file}/page_pid_update/admin" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+親IDが
+<select name="plugin_page_pid_update[old]">
+	<option value=""></option>
+	<!--{foreach from=$page_pids|smarty:nodefaults item='page_pid'}-->
+	<option value="{$page_pid.pid}">{$page_pid.pid}</option>
+	<!--{/foreach}-->
+</select>
+のﾍﾟｰｼﾞを対象に、<br />
+親IDを
+<select name="plugin_page_pid_update[new]">
+	<option value=""></option>
+	<!--{foreach from=$page_ids|smarty:nodefaults item='page_id'}-->
+	<option value="{$page_id.id}">{$page_id.id}</option>
+	<!--{/foreach}-->
+</select>
+に変更<br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="登録する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

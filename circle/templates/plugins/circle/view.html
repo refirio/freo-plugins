@@ -1,0 +1,72 @@
+{include file='header.html'}
+	<h2>サークル表示</h2>
+	<ul>
+		<li>サークル「{$plugin_circle.name}」の詳細は以下のとおりです。</li>
+	</ul>
+	<dl>
+		<!--{if $plugin_circle.category_id}-->
+		<dt>カテゴリー</dt>
+			<dd>{$plugin_circle_categories[$plugin_circle.category_id].name}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.created}-->
+		<dt>登録日時</dt>
+			<dd>{$plugin_circle.created|date_format:'%Y/%m/%d %H:%M'}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.modified}-->
+		<dt>更新日時</dt>
+			<dd>{$plugin_circle.modified|date_format:'%Y/%m/%d %H:%M'}</dd>
+		<!--{/if}-->
+		<dt>サークル名</dt>
+			<dd>{$plugin_circle.name}</dd>
+		<dt>サークル名（フリガナ）</dt>
+			<dd>{$plugin_circle.kana}</dd>
+		<!--{if $plugin_circle.url}-->
+		<dt>サークルURL</dt>
+			<dd><a href="{$plugin_circle.url}">{$plugin_circle.url}</a></dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.image}-->
+		<dt>サークルカット</dt>
+			<dd><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/circle_images/{$plugin_circle.user_id}/{$plugin_circle.image}" alt="サークルカット" /></dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.file}-->
+		<dt>添付ファイル</dt>
+			<dd><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/circle_files/{$plugin_circle.user_id}/{$plugin_circle.file}" alt="添付ファイル" /></dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.space}-->
+		<dt>サークルスペース</dt>
+			<dd>{$plugin_circle.space}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.coupling}-->
+		<dt>カップリング</dt>
+			<dd>{$plugin_circle.coupling}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.tag}-->
+		<dt>タグ</dt>
+			<dd><!--{foreach from=$plugin_circle_tags|smarty:nodefaults item='plugin_circle_tag' name='loop'}--><a href="{$freo.core.http_file}/circle?tag={$plugin_circle_tag|smarty:nodefaults|escape:'url'}">{$plugin_circle_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.coupling}-->
+		<dt>紹介文</dt>
+			<dd>{$plugin_circle.text|nl2br}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.owner_name}-->
+		<dt>サークル代表者名</dt>
+			<dd>{$plugin_circle.owner_name}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.owner_kana}-->
+		<dt>サークル代表者名（フリガナ）</dt>
+			<dd>{$plugin_circle.owner_kana}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.plan_name}-->
+		<dt>企画名</dt>
+			<dd>{$plugin_circle.plan_name}</dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.plan_url}-->
+		<dt>企画URL</dt>
+			<dd><a href="{$plugin_circle.plan_url}">{$plugin_circle.plan_url}</a></dd>
+		<!--{/if}-->
+		<!--{if $plugin_circle.plan_text}-->
+		<dt>企画詳細</dt>
+			<dd>{$plugin_circle.plan_text|nl2br}</dd>
+		<!--{/if}-->
+	</dl>
+{include file='footer.html'}

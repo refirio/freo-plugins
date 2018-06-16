@@ -1,0 +1,14 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">No.{$freo.query.id}のメッセージ</span></div>
+
+登録日時:{$plugin_message.created|date_format:'%Y/%m/%d %H:%M:%S'}<br />
+ﾒｯｾｰｼﾞ:{$plugin_message.text|nl2br}<br />
+IPｱﾄﾞﾚｽ:{$plugin_message.ip}<br />
+<br />
+<a href="{$freo.core.http_file}/message/admin_form?id={$plugin_message.id}">編集する</a><br />
+
+{include file='mobiles/footer.html'}

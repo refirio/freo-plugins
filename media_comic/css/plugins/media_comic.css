@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+/********* HTML再定義 ***********************************************/
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #DDDDDD;
+}
+
+/********* ヘッダー *************************************************/
+
+div#header {
+	display: none;
+}
+
+/********* フッター *************************************************/
+
+div#footer {
+	z-index: 1;
+	position: fixed;
+	clear: both;
+	bottom: 10px;
+	right: 10px;
+}
+
+/********* メニュー *************************************************/
+
+div#menu {
+	z-index: 1;
+	position: fixed;
+	clear: both;
+	bottom: 10px;
+	left: 10px;
+}
+div#menu ul {
+	float: left;
+	margin: 0 10px 0 0;
+	padding: 0;
+	border-right: 1px solid #222222;
+}
+div#menu ul li {
+	display: inline;
+	list-style: none;
+	margin-right: 10px;
+}
+
+/********* 漫画表示 *************************************************/
+
+div#media_comic {
+	height: 100%;
+	text-align: center;
+}
+div#media_comic div.media_comic {
+	overflow-x: auto;
+	overflow-y: hidden;
+	width: 100%;
+	margin: 0;
+	padding: 10px 0 30px;
+	white-space: nowrap;
+}
+div#media_comic div.media_comic p {
+	margin: 0;
+	padding: 10px 0 0 0;
+	display: inline;
+}
+div#media_comic div.media_comic p a img {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #AAAAAA;
+}
+
+/********* 最終ページ表示 *******************************************/
+
+div#media_comic div.media_comic div.end {
+	direction: ltr;
+	width: 500px;
+	margin: 0 auto;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+	background-color: #EEEEEE;
+	text-align: left;
+}

@@ -1,0 +1,137 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">商品ご注文</span></div>
+
+<!--{if $errors}-->
+<div style="color:#FF0000;">
+<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+{$error}<br />
+<!--{/foreach}-->
+</div>
+<!--{/if}-->
+
+ｶｰﾄ内の商品を注文します。<br />
+<!--{if $freo.config.plugin.catalog.free_shipping and $plugin_catalog_cart.catalog_price_total >= $freo.config.plugin.catalog.free_shipping}-->
+商品合計が{$freo.config.plugin.catalog.free_shipping}円以上なので送料が無料になります。<br />
+<!--{/if}-->
+<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>。<br />
+
+<br />
+<span style="color:#FF0000;">*</span>の付いた項目は入力必須項目です。<br />
+ご希望の方法で配送できないことがあります。あらかじめご了承ください。<br />
+
+<br />
+■ご注文内容<br />
+<br />
+<!--{foreach from=$plugin_catalog_cart.catalogs|smarty:nodefaults item='catalog'}-->
+[{$catalog.id}]{$catalog.name}<br />
+{$catalog.price}円×{$plugin_catalog_cart.catalog_counts[$catalog.id]}{$catalog.unit}＝{$plugin_catalog_cart.catalog_price_subtotals[$catalog.id]}円<br />
+<br />
+<!--{/foreach}-->
+商品合計（税込）:{$plugin_catalog_cart.catalog_price_total}円<br />
+
+<br />
+<form action="{$freo.core.https_file}/catalog/order" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+■配送方法・お支払い方法<br />
+<br />
+希望する配送方法<span style="color:#FF0000;">*</span><br />
+<!--{foreach from=$plugin_catalog_deliveries|smarty:nodefaults item='plugin_catalog_delivery'}-->
+<!--{if $plugin_catalog_delivery_availables[$plugin_catalog_delivery.id]}-->
+<input type="radio" name="plugin_catalog_order[delivery_id]" value="{$plugin_catalog_delivery.id}"{if $input.plugin_catalog_order.delivery_id == $plugin_catalog_delivery.id} checked="checked"{/if} />
+<input type="hidden" name="preferred_week[{$plugin_catalog_delivery.id}]" value="{$plugin_catalog_delivery.preferred_week}" />
+<input type="hidden" name="preferred_time[{$plugin_catalog_delivery.id}]" value="{$plugin_catalog_delivery.preferred_time}" />
+{$plugin_catalog_delivery.name}
+<!--{if $freo.config.plugin.catalog.free_shipping and $plugin_catalog_cart.catalog_price_total >= $freo.config.plugin.catalog.free_shipping}-->
+…送料:無料
+<!--{else}-->
+<!--{if $plugin_catalog_delivery_prefectures[$plugin_catalog_delivery.id]}-->…送料:地域によって異なります<!--{elseif $plugin_catalog_delivery.carriage != ''}-->…送料:{$plugin_catalog_delivery.carriage}円<!--{/if}-->
+<!--{/if}-->
+<br />
+<!--{/if}-->
+<!--{/foreach}-->
+<br />
+希望する配送曜日<br />
+<select name="plugin_catalog_order[preferred_week]">
+<option value="">▼希望なし</option>
+<!--{foreach from=$freo.config.plugin.catalog.delivery_week|explode:"\n" item='value'}-->
+<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_week} selected="selected"{/if}>▼{$value}</option>
+<!--{/foreach}-->
+</select><br />
+<br />
+希望する配送時間<br />
+<select name="plugin_catalog_order[preferred_time]">
+<option value="">▼希望なし</option>
+<!--{foreach from=$freo.config.plugin.catalog.delivery_time|explode:"\n" item='value'}-->
+<option value="{$value}"{if $value == $input.plugin_catalog_order.preferred_time} selected="selected"{/if}>▼{$value}</option>
+<!--{/foreach}-->
+</select><br />
+<br />
+お支払い方法<span style="color:#FF0000;">*</span><br />
+<!--{foreach from=$plugin_catalog_payments|smarty:nodefaults item='plugin_catalog_payment'}-->
+<!--{if $plugin_catalog_payment_availables[$plugin_catalog_payment.id]}-->
+<input type="radio" name="plugin_catalog_order[payment_id]" value="{$plugin_catalog_payment.id}"{if $input.plugin_catalog_order.payment_id == $plugin_catalog_payment.id} checked="checked"{/if} />
+{$plugin_catalog_payment.name}
+<!--{if $plugin_catalog_payment.charge}-->…手数料:{$plugin_catalog_payment.charge}円<!--{/if}-->
+<br />
+<!--{/if}-->
+<!--{/foreach}-->
+
+<br />
+■ご注文者<br />
+<br />
+名前<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order[name]" size="20" value="{$input.plugin_catalog_order.name}" /><br />
+名前(ﾌﾘｶﾞﾅ)<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order[kana]" size="20" value="{$input.plugin_catalog_order.kana}" /><br />
+Eﾒｰﾙ<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order[mail]" size="20" value="{$input.plugin_catalog_order.mail}" /><br />
+電話番号<br />
+<input type="text" name="plugin_catalog_order[tel]" size="20" value="{$input.plugin_catalog_order.tel}" /><br />
+<!--{if $plugin_catalog_cart.catalog_target_max}-->
+対象確認<span style="color:#FF0000;">*</span><br />
+<!--{foreach from=$plugin_catalog_targets|smarty:nodefaults item='plugin_catalog_target'}-->
+<!--{if $plugin_catalog_cart.catalog_target_max == $plugin_catalog_target.id}-->
+<input type="checkbox" name="plugin_catalog_order[confirm][{$plugin_catalog_target.id}]" value="{$plugin_catalog_target.id}"{if $input.plugin_catalog_order.confirm[$plugin_catalog_target.id]} checked="checked"{/if} />私は{$plugin_catalog_target.name}です。<br />
+<input type="hidden" name="plugin_catalog_order[target][{$plugin_catalog_target.id}]" value="{$plugin_catalog_target.id}" /><br />
+<!--{/if}-->
+<!--{/foreach}-->
+<!--{/if}-->
+
+<!--{if $plugin_catalog_cart.catalog_short_max > 0 and $plugin_catalog_cart.catalog_long_max > 0}-->
+<br />
+■配送先住所<br />
+<br />
+郵便番号<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order[zipcode]" size="10" value="{$input.plugin_catalog_order.zipcode}" /><br />
+都道府県<span style="color:#FF0000;">*</span><br />
+<select name="plugin_catalog_order[prefecture]">
+<option value="">▼選択してください</option>
+<!--{foreach from=$plugin_catalog_prefectures|smarty:nodefaults item='plugin_catalog_prefecture'}-->
+<option value="{$plugin_catalog_prefecture.id}"{if $input.plugin_catalog_order.prefecture == $plugin_catalog_prefecture.id} selected="selected"{/if}>▼{$plugin_catalog_prefecture.name}</option>
+<!--{/foreach}-->
+</select><br />
+住所<span style="color:#FF0000;">*</span><br />
+<input type="text" name="plugin_catalog_order[address]" size="20" value="{$input.plugin_catalog_order.address}" /><br />
+<!--{else}-->
+<input type="hidden" name="plugin_catalog_order[zipcode]" value="{$input.plugin_catalog_order.zipcode}" />
+<input type="hidden" name="plugin_catalog_order[prefecture]" value="{$input.plugin_catalog_order.prefecture}" />
+<input type="hidden" name="plugin_catalog_order[address]" value="{$input.plugin_catalog_order.address}" />
+<!--{/if}-->
+
+<br />
+■連絡事項<br />
+<br />
+連絡事項など<br />
+<textarea name="plugin_catalog_order[text]" cols="20" rows="5">{$input.plugin_catalog_order.text}</textarea><br />
+<br />
+<div style="text-align:center;">
+<input type="submit" value="確認画面へ進む" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,30 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/admin">管理ﾒﾆｭｰに戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">なぞなぞ管理</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{elseif $freo.query.exec}-->
+<div style="color:#00AA00;">
+<!--{if $freo.query.exec == 'insert'}-->
+なぞなぞを新規に登録しました。
+<!--{elseif $freo.query.exec == 'update'}-->
+No.{$freo.query.id}のなぞなぞを編集しました。
+<!--{elseif $freo.query.exec == 'delete'}-->
+No.{$freo.query.id}のなぞなぞを削除しました。
+<!--{/if}-->
+</div>
+<!--{/if}-->
+登録されたなぞなぞは以下のとおりです。<br />
+<a href="{$freo.core.http_file}/riddle/admin_form">なぞなぞを登録する</a>。<br />
+
+<br />
+<!--{foreach from=$plugin_riddles|smarty:nodefaults item='plugin_riddle'}-->
+▼[{$plugin_riddle.id}]
+<a href="{$freo.core.http_file}/riddle/admin_form?id={$plugin_riddle.id}">{$plugin_riddle.question|mb_truncate:20:'...'}</a><br />
+<!--{/foreach}-->
+
+{include file='mobiles/footer.html'}

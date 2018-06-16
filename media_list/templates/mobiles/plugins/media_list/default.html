@@ -1,0 +1,41 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">メディア一覧</span></div>
+
+<!--{if $smarty.get.directory}-->
+■{$media_list_names[$smarty.get.directory]|default:$smarty.get.directory}
+<br />
+<!--{/if}-->
+
+<!--{if $media_list_restriction}-->
+<br />
+<div style="color:#FF0000;">このﾃﾞｨﾚｸﾄﾘには、閲覧制限が設定されています。</div>
+<!--{/if}-->
+
+<!--{if $smarty.get.target == 'directory'}-->
+<br />
+<!--{foreach from=$media_lists|smarty:nodefaults item='media_list'}-->
+<!--{if $smarty.get.directory}-->
+<!--{assign var="name" value=$smarty.get.directory|cat:'/'|cat:$media_list.name}-->
+<!--{else}-->
+<!--{assign var="name" value=$media_list.name}-->
+<!--{/if}-->
+<a href="{$freo.core.http_file}/media_list?directory={if $smarty.get.directory}{$smarty.get.directory}/{/if}{$media_list.name}"{if $media_list.memo} title="{$media_list.memo}"{/if}>{$media_list_names[$name]|default:$media_list.name}</a><br />
+<!--{/foreach}-->
+<!--{else}-->
+<br />
+<!--{foreach from=$media_lists|smarty:nodefaults item='media_list'}-->
+<a href="{if $media_list_restriction}{$freo.core.http_file}/file/media/{$smarty.get.directory}/{$media_list.name}{else}{$freo.core.http_url}{$media_list.id}{/if}"{if $media_list.memo} title="{$media_list.memo}"{/if}>{$media_list.memo|default:$media_list.name}</a><br />
+<!--{/foreach}-->
+<!--{/if}-->
+
+<!--{if ($smarty.get.target == 'directory' and $freo.config.plugin.media_list.directory_limit) or ($smarty.get.target == 'file' and $freo.config.plugin.media_list.media_limit)}-->
+<br />
+<!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/media_list?{if $smarty.get.directory}directory={$smarty.get.directory}&amp;{/if}{if $smarty.get.target}target={$smarty.get.target}&amp;{/if}page={$freo.query.page-1}">前のﾍﾟｰｼﾞ</a><!--{else}-->前のﾍﾟｰｼﾞ<!--{/if}--> |
+<!--{if $media_list_page > $freo.query.page}--><a href="{$freo.core.http_file}/media_list?{if $smarty.get.directory}directory={$smarty.get.directory}&amp;{/if}{if $smarty.get.target}target={$smarty.get.target}&amp;{/if}page={$freo.query.page+1}">次のﾍﾟｰｼﾞ</a><!--{else}-->次のﾍﾟｰｼﾞ<!--{/if}-->
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

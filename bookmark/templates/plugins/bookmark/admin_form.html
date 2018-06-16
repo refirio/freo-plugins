@@ -1,0 +1,48 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->No.{$freo.query.id}のブックマークを編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>ブックマークを入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/bookmark/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>ブックマーク登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_bookmark[id]" value="{$input.plugin_bookmark.id}" />
+				<dl>
+					<dt>タイトル <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_bookmark[title]" size="50" value="{$input.plugin_bookmark.title}{$smarty.get.title}" /></dd>
+					<dt>URL <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_bookmark[url]" size="50" value="{$input.plugin_bookmark.url}{$smarty.get.url}" /></dd>
+					<dt>本文</dt>
+						<dd><textarea name="plugin_bookmark[text]" cols="50" rows="5">{$input.plugin_bookmark.text}</textarea></dd>
+					<dt>タグ</dt>
+						<dd><input type="text" name="plugin_bookmark[tag]" size="50" value="{$input.plugin_bookmark.tag}" /></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>No.{$freo.query.id}のブックマークを削除</h2>
+		<ul>
+			<li>このブックマークを削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/bookmark/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>ブックマーク削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+{include file='internals/admin/footer.html'}

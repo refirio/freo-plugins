@@ -1,0 +1,31 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>ID.{$freo.config.plugin.catalog.order_prefix}{$freo.query.id}の注文に商品を追加</h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>追加したい商品を入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+			<li><strong>必要に応じて在庫数を調整してください。</strong>（自動では反映されません。）</li>
+		</ul>
+		<form action="{$freo.core.https_file}/catalog_order/admin_order_cart_form?id={$freo.query.id}" method="post">
+			<fieldset>
+				<legend>注文商品追加フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="plugin_catalog[id]" value="{$freo.query.id}" />
+				<dl>
+					<dt>商品ID <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[catalog_id]" size="30" value="{$input.plugin_catalog.catalog_id}" /></dd>
+					<dt>数量 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[count]" size="5" value="{$input.plugin_catalog.count}" /></dd>
+				</dl>
+				<p><input type="submit" value="追加する" /></p>
+			</fieldset>
+		</form>
+	</div>
+{include file='internals/admin/footer.html'}

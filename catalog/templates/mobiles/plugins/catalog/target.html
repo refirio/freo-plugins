@@ -1,0 +1,29 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">対象確認</span></div>
+
+<!--{if $freo.query.error}-->
+<div style="color:#FF0000;">不正なｱｸｾｽです。</div>
+<!--{/if}-->
+
+<!--{if $freo.query.catalog_id}-->
+この商品は{$plugin_catalog_targets[$freo.query.id].name}対象の商品です。<br />
+<!--{else}-->
+商品一覧に{$plugin_catalog_targets[$freo.query.id].name}対象の商品も表示します。<br />
+<!--{/if}-->
+
+<br />
+<form action="{$freo.core.https_file}/catalog/target/{$freo.query.id}" method="{$freo.agent.method}">
+<input type="hidden" name="freo[token]" value="{$token}" />
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_catalog_target" value="{$freo.query.id}" />
+<input type="hidden" name="plugin_catalog" value="{$freo.query.catalog_id}" />
+<div style="text-align:center;">
+<input type="submit" value="{$plugin_catalog_targets[$freo.query.id].name}なので表示する" />
+</div>
+</form>
+
+{include file='mobiles/footer.html'}

@@ -1,0 +1,58 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>注文者管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'update'}-->
+			<li>ID.{$freo.query.id}の注文者を編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>ID.{$freo.query.id}の注文者を削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録された注文者は以下のとおりです。</li>
+			<li>注文者情報が登録されていないユーザーは、名前が空欄で表示されます。</li>
+		</ul>
+		<table summary="注文者">
+			<thead>
+				<tr>
+					<th>ユーザーID</th>
+					<th>登録日時</th>
+					<th>注文者</th>
+					<th>権限</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>ユーザーID</th>
+					<th>登録日時</th>
+					<th>注文者</th>
+					<th>権限</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$users|smarty:nodefaults item='user'}-->
+				<tr>
+					<td>{$user.id}</td>
+					<td><!--{if $user.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$user.created|date_format:'%H:%M:%S'}<!--{else}-->{$user.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+					<td>{$plugin_catalog_order_users[$user.id].name}</td>
+					<td><!--{if $user.authority == 'root'}-->管理者<!--{elseif $user.authority == 'author'}-->投稿者<!--{elseif $user.authority == 'guest'}-->ゲスト<!--{/if}--></td>
+					<td>
+						<a href="{$freo.core.https_file}/catalog_order/admin_user_form?id={$user.id}">編集</a>
+						<!--{if $plugin_catalog_order_users[$user.id].user_id}}-->
+						<a href="{$freo.core.https_file}/catalog_order/admin_user_form?id={$user.id}#user_delete">削除</a>
+						<!--{/if}-->
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

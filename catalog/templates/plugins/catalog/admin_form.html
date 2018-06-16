@@ -1,0 +1,599 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->ID.{$freo.query.id}の商品を編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>商品を入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<legend>商品登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<!--{if $freo.query.id}-->
+				<input type="hidden" name="plugin_catalog[id]" value="{$input.plugin_catalog.id}" />
+				<!--{/if}-->
+				<dl>
+					<!--{if !$freo.query.id}-->
+					<dt>商品ID <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[id]" size="30" value="{$input.plugin_catalog.id}" /></dd>
+					<!--{/if}-->
+					<dt>商品名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[name]" size="50" value="{$input.plugin_catalog.name}" /></dd>
+					<dt>価格（税込） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[price]" size="5" value="{$input.plugin_catalog.price}" /> 円</dd>
+					<!--{if $freo.config.plugin.catalog.target}-->
+					<dt>対象 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[target]">
+								<option value="">すべて</option>
+								<!--{foreach from=$plugin_catalog_targets|smarty:nodefaults item='plugin_catalog_target'}-->
+								<option value="{$plugin_catalog_target.id}"{if $input.plugin_catalog.target == $plugin_catalog_target.id} selected="selected"{/if}>{$plugin_catalog_target.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[target]" value="{$input.plugin_catalog.target}" />
+					<!--{/if}-->
+					<dt>発行日 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<input type="text" name="plugin_catalog[datetime][year]" size="4" value="{$input.plugin_catalog.datetime|date_format:'%Y'}" />
+							年
+							<input type="text" name="plugin_catalog[datetime][month]" size="2" value="{$input.plugin_catalog.datetime|date_format:'%m'}" />
+							月
+							<input type="text" name="plugin_catalog[datetime][day]" size="2" value="{$input.plugin_catalog.datetime|date_format:'%d'}" />
+							日
+							<input type="hidden" name="plugin_catalog[datetime][hour]" value="{$input.plugin_catalog.datetime|date_format:'%H'}" />
+							<input type="hidden" name="plugin_catalog[datetime][minute]" value="{$input.plugin_catalog.datetime|date_format:'%M'}" />
+							<input type="hidden" name="plugin_catalog[datetime][second]" value="{$input.plugin_catalog.datetime|date_format:'%S'}" />
+						</dd>
+					<dt>在庫数（空欄にすると無制限）</dt>
+						<dd><input type="text" name="plugin_catalog[stock]" size="5" value="{$input.plugin_catalog.stock}" /></dd>
+					<dt>一度に購入できる最大数（空欄にすると無制限）</dt>
+						<dd><input type="text" name="plugin_catalog[maximum]" size="5" value="{$input.plugin_catalog.maximum}" /></dd>
+					<dt>単位（「冊」「枚」など）</dt>
+						<dd><input type="text" name="plugin_catalog[unit]" size="5" value="{$input.plugin_catalog.unit}" /></dd>
+					<dt>商品画像（大）</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file]" size="30" />
+							<!--{if $input.plugin_catalog.file}-->
+								<input type="checkbox" name="plugin_catalog[file_remove]" id="label_file" value="{$input.plugin_catalog.file}"{if $input.plugin_catalog.file_remove} checked="checked"{/if} /> <label for="label_file">{$input.plugin_catalog.file}を削除</label>
+								<input type="hidden" name="plugin_catalog[file]" value="{$input.plugin_catalog.file}" />
+							<!--{/if}-->
+						</dd>
+					<dt>商品画像（小）</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file_thumbnail]" size="30" />
+							<!--{if $input.plugin_catalog.file_thumbnail}-->
+								<input type="checkbox" name="plugin_catalog[file_thumbnail_remove]" id="label_file_thumbnail" value="{$input.plugin_catalog.file_thumbnail}"{if $input.plugin_catalog.file_thumbnail_remove} checked="checked"{/if} /> <label for="label_file_thumbnail">{$input.plugin_catalog.file_thumbnail}を削除</label>
+								<input type="hidden" name="plugin_catalog[file_thumbnail]" value="{$input.plugin_catalog.file_thumbnail}" />
+							<!--{/if}-->
+						</dd>
+					<dt>紹介文</dt>
+						<dd><textarea name="plugin_catalog[text]" cols="50" rows="5">{$input.plugin_catalog.text}</textarea></dd>
+					<dt>状態 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[status]">
+								<option value="publish"{if $input.plugin_catalog.status == 'publish'} selected="selected"{/if}>公開</option>
+								<option value="private"{if $input.plugin_catalog.status == 'private'} selected="selected"{/if}>未公開</option>
+							</select>
+						</dd>
+					<dt>商品の表示 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[display]">
+								<option value="publish"{if $input.plugin_catalog.display == 'publish'} selected="selected"{/if}>一覧に表示する</option>
+								<option value="private"{if $input.plugin_catalog.display == 'private'} selected="selected"{/if}>一覧に表示しない</option>
+							</select>
+						</dd>
+					<dt>商品の販売終了 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[close_set]" id="catalog_close_set">
+								<option value="1">指定する</option>
+								<option value="0"{if !$input.plugin_catalog.close} selected="selected"{/if}>指定しない</option>
+							</select>
+						</dd>
+				</dl>
+				<dl id="catalog_close">
+					<dt>販売終了日時</dt>
+						<dd>
+							<input type="text" name="plugin_catalog[close][year]" size="4" value="{$input.plugin_catalog.close|default:$input.plugin_catalog.datetime|date_format:'%Y'}" />
+							年
+							<input type="text" name="plugin_catalog[close][month]" size="2" value="{$input.plugin_catalog.close|default:$input.plugin_catalog.datetime|date_format:'%m'}" />
+							月
+							<input type="text" name="plugin_catalog[close][day]" size="2" value="{$input.plugin_catalog.close|default:$input.plugin_catalog.datetime|date_format:'%d'}" />
+							日
+							<input type="text" name="plugin_catalog[close][hour]" size="2" value="{$input.plugin_catalog.close|default:$input.plugin_catalog.datetime|date_format:'%H'}" />
+							時
+							<input type="text" name="plugin_catalog[close][minute]" size="2" value="{$input.plugin_catalog.close|default:$input.plugin_catalog.datetime|date_format:'%M'}" />
+							分
+							<input type="hidden" name="plugin_catalog[close][second]" value="{$input.plugin_catalog.close|date_format:'%S'}" />
+						</dd>
+				</dl>
+				<dl>
+					<dt>並び順 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[sort]" size="5" value="{$input.plugin_catalog.sort}" /></dd>
+				</dl>
+				<h3>分類</h3>
+				<dl>
+					<dt>カテゴリー</dt>
+						<dd>
+							<select name="plugin_catalog[category_id]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_catalog_categories|smarty:nodefaults item='plugin_catalog_category'}-->
+								<option value="{$plugin_catalog_category.id}"{if $input.plugin_catalog.category_id == $plugin_catalog_category.id} selected="selected"{/if}>{$plugin_catalog_category.name}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+					<dt>タグ</dt>
+						<dd><input type="text" name="plugin_catalog[tag]" size="50" value="{$input.plugin_catalog.tag}" /></dd>
+				</dl>
+				<h3>送料計算用</h3>
+				<dl>
+					<dt>サイズ <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[size]" id="catalog_size">
+								<option value="">選択してください</option>
+								<!--{foreach from=$plugin_catalog_sizes|smarty:nodefaults item='plugin_catalog_size'}-->
+								<option value="{$plugin_catalog_size.id}"{if $input.plugin_catalog.size == $plugin_catalog_size.id} selected="selected"{/if}>{$plugin_catalog_size.name}</option>
+								<!--{/foreach}-->
+								<option value="direct"{if $input.plugin_catalog.size == 'direct'} selected="selected"{/if}>直接入力</option>
+								<option value="data"{if $input.plugin_catalog.size == 'data'} selected="selected"{/if}>なし（データのみ）</option>
+							</select>
+							<span id="catalog_direct">
+								短辺 <input type="text" name="plugin_catalog[size_short]" size="5" value="{$input.plugin_catalog.size_short}" /> mm
+								/
+								長辺 <input type="text" name="plugin_catalog[size_long]" size="5" value="{$input.plugin_catalog.size_long}" /> mm
+							</span>
+						</dd>
+				</dl>
+				<dl id="catalog_normal">
+					<dt>厚さ <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[thickness]" size="5" value="{$input.plugin_catalog.thickness}" /> mm</dd>
+					<dt>重さ <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[weight]" size="5" value="{$input.plugin_catalog.weight}" /> g</dd>
+					<dt>梱包によって追加される短辺 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[packing_short]" size="5" value="{$input.plugin_catalog.packing_short}" /> mm</dd>
+					<dt>梱包によって追加される長辺 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[packing_long]" size="5" value="{$input.plugin_catalog.packing_long}" /> mm</dd>
+					<dt>梱包によって追加される厚さ <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[packing_thickness]" size="5" value="{$input.plugin_catalog.packing_thickness}" /> mm</dd>
+					<dt>梱包によって追加される重さ <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog[packing_weight]" size="5" value="{$input.plugin_catalog.packing_weight}" /> g</dd>
+					<dt>並列梱包（商品を2つ並べて梱包）の許可 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog[parallel]">
+								<option value="yes"{if $input.plugin_catalog.parallel == 'yes'} selected="selected"{/if}>許可する</option>
+								<option value="no"{if $input.plugin_catalog.parallel == 'no'} selected="selected"{/if}>許可しない</option>
+							</select>
+						</dd>
+				</dl>
+				<h3>ファイル</h3>
+				<dl>
+					<!--{if $freo.config.plugin.catalog.file01_name}-->
+					<dt>{$freo.config.plugin.catalog.file01_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file01]" size="30" />
+							<!--{if $input.plugin_catalog.file01}-->
+								<input type="checkbox" name="plugin_catalog[file01_remove]" id="label_file01" value="{$input.plugin_catalog.file01}"{if $input.plugin_catalog.file01_remove} checked="checked"{/if} /> <label for="label_file01">{$input.plugin_catalog.file01}を削除</label>
+								<input type="hidden" name="plugin_catalog[file01]" value="{$input.plugin_catalog.file01}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file02_name}-->
+					<dt>{$freo.config.plugin.catalog.file02_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file02]" size="30" />
+							<!--{if $input.plugin_catalog.file02}-->
+								<input type="checkbox" name="plugin_catalog[file02_remove]" id="label_file02" value="{$input.plugin_catalog.file02}"{if $input.plugin_catalog.file02_remove} checked="checked"{/if} /> <label for="label_file02">{$input.plugin_catalog.file02}を削除</label>
+								<input type="hidden" name="plugin_catalog[file02]" value="{$input.plugin_catalog.file02}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file03_name}-->
+					<dt>{$freo.config.plugin.catalog.file03_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file03]" size="30" />
+							<!--{if $input.plugin_catalog.file03}-->
+								<input type="checkbox" name="plugin_catalog[file03_remove]" id="label_file03" value="{$input.plugin_catalog.file03}"{if $input.plugin_catalog.file03_remove} checked="checked"{/if} /> <label for="label_file03">{$input.plugin_catalog.file03}を削除</label>
+								<input type="hidden" name="plugin_catalog[file03]" value="{$input.plugin_catalog.file03}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file04_name}-->
+					<dt>{$freo.config.plugin.catalog.file04_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file04]" size="30" />
+							<!--{if $input.plugin_catalog.file04}-->
+								<input type="checkbox" name="plugin_catalog[file04_remove]" id="label_file04" value="{$input.plugin_catalog.file04}"{if $input.plugin_catalog.file04_remove} checked="checked"{/if} /> <label for="label_file04">{$input.plugin_catalog.file04}を削除</label>
+								<input type="hidden" name="plugin_catalog[file04]" value="{$input.plugin_catalog.file04}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file05_name}-->
+					<dt>{$freo.config.plugin.catalog.file05_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file05]" size="30" />
+							<!--{if $input.plugin_catalog.file05}-->
+								<input type="checkbox" name="plugin_catalog[file05_remove]" id="label_file05" value="{$input.plugin_catalog.file05}"{if $input.plugin_catalog.file05_remove} checked="checked"{/if} /> <label for="label_file05">{$input.plugin_catalog.file05}を削除</label>
+								<input type="hidden" name="plugin_catalog[file05]" value="{$input.plugin_catalog.file05}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file06_name}-->
+					<dt>{$freo.config.plugin.catalog.file06_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file06]" size="30" />
+							<!--{if $input.plugin_catalog.file06}-->
+								<input type="checkbox" name="plugin_catalog[file06_remove]" id="label_file06" value="{$input.plugin_catalog.file06}"{if $input.plugin_catalog.file06_remove} checked="checked"{/if} /> <label for="label_file06">{$input.plugin_catalog.file06}を削除</label>
+								<input type="hidden" name="plugin_catalog[file06]" value="{$input.plugin_catalog.file06}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file07_name}-->
+					<dt>{$freo.config.plugin.catalog.file07_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file07]" size="30" />
+							<!--{if $input.plugin_catalog.file07}-->
+								<input type="checkbox" name="plugin_catalog[file07_remove]" id="label_file07" value="{$input.plugin_catalog.file07}"{if $input.plugin_catalog.file07_remove} checked="checked"{/if} /> <label for="label_file07">{$input.plugin_catalog.file07}を削除</label>
+								<input type="hidden" name="plugin_catalog[file07]" value="{$input.plugin_catalog.file07}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file08_name}-->
+					<dt>{$freo.config.plugin.catalog.file08_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file08]" size="30" />
+							<!--{if $input.plugin_catalog.file08}-->
+								<input type="checkbox" name="plugin_catalog[file08_remove]" id="label_file08" value="{$input.plugin_catalog.file08}"{if $input.plugin_catalog.file08_remove} checked="checked"{/if} /> <label for="label_file08">{$input.plugin_catalog.file08}を削除</label>
+								<input type="hidden" name="plugin_catalog[file08]" value="{$input.plugin_catalog.file08}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file09_name}-->
+					<dt>{$freo.config.plugin.catalog.file09_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file09]" size="30" />
+							<!--{if $input.plugin_catalog.file09}-->
+								<input type="checkbox" name="plugin_catalog[file09_remove]" id="label_file09" value="{$input.plugin_catalog.file09}"{if $input.plugin_catalog.file09_remove} checked="checked"{/if} /> <label for="label_file09">{$input.plugin_catalog.file09}を削除</label>
+								<input type="hidden" name="plugin_catalog[file09]" value="{$input.plugin_catalog.file09}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.file10_name}-->
+					<dt>{$freo.config.plugin.catalog.file10_name}</dt>
+						<dd>
+							<input type="file" name="plugin_catalog[file10]" size="30" />
+							<!--{if $input.plugin_catalog.file10}-->
+								<input type="checkbox" name="plugin_catalog[file10_remove]" id="label_file10" value="{$input.plugin_catalog.file10}"{if $input.plugin_catalog.file10_remove} checked="checked"{/if} /> <label for="label_file10">{$input.plugin_catalog.file10}を削除</label>
+								<input type="hidden" name="plugin_catalog[file10]" value="{$input.plugin_catalog.file10}" />
+							<!--{/if}-->
+						</dd>
+					<!--{/if}-->
+				</dl>
+				<h3>オプション</h3>
+				<dl>
+					<!--{if $freo.config.plugin.catalog.option01_name}-->
+					<dt>{$freo.config.plugin.catalog.option01_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option01_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option01]" size="50" value="{$input.plugin_catalog.option01}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option01_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option01]" cols="50" rows="5">{$input.plugin_catalog.option01}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option01_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option01]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option01_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option01} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option01_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option01]" id="label_option_01" value=""{if !$input.plugin_catalog.option01} checked="checked"{/if} /> <label for="label_option_01">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option01_text|explode:"\n" item='value' name='loop'}-->
+							<input type="radio" name="plugin_catalog[option01]" id="label_option_01_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option01} checked="checked"{/if} /> <label for="label_option_01_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option01]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option02_name}-->
+					<dt>{$freo.config.plugin.catalog.option02_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option02_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option02]" size="50" value="{$input.plugin_catalog.option02}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option02_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option02]" cols="50" rows="5">{$input.plugin_catalog.option02}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option02_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option02]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option02_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option02} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option02_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option02]" id="label_option_02" value=""{if !$input.plugin_catalog.option02} checked="checked"{/if} /> <label for="label_option_02">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option02_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option02]" id="label_option_02_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option02} checked="checked"{/if} /> <label for="label_option_02_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option02]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option03_name}-->
+					<dt>{$freo.config.plugin.catalog.option03_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option03_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option03]" size="50" value="{$input.plugin_catalog.option03}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option03_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option03]" cols="50" rows="5">{$input.plugin_catalog.option03}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option03_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option03]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option03_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option03} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option03_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option03]" id="label_option_03" value=""{if !$input.plugin_catalog.option03} checked="checked"{/if} /> <label for="label_option_03">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option03_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option03]" id="label_option_03_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option03} checked="checked"{/if} /> <label for="label_option_03_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option03]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option04_name}-->
+					<dt>{$freo.config.plugin.catalog.option04_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option04_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option04]" size="50" value="{$input.plugin_catalog.option04}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option04_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option04]" cols="50" rows="5">{$input.plugin_catalog.option04}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option04_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option04]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option04_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option04} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option04_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option04]" id="label_option_04" value=""{if !$input.plugin_catalog.option04} checked="checked"{/if} /> <label for="label_option_04">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option04_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option04]" id="label_option_04_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option04} checked="checked"{/if} /> <label for="label_option_04_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option04]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option05_name}-->
+					<dt>{$freo.config.plugin.catalog.option05_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option05_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option05]" size="50" value="{$input.plugin_catalog.option05}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option05_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option05]" cols="50" rows="5">{$input.plugin_catalog.option05}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option05_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option05]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option05_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option05} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option05_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option05]" id="label_option_05" value=""{if !$input.plugin_catalog.option05} checked="checked"{/if} /> <label for="label_option_05">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option05_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option05]" id="label_option_05_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option05} checked="checked"{/if} /> <label for="label_option_05_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option05]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option06_name}-->
+					<dt>{$freo.config.plugin.catalog.option06_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option06_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option06]" size="50" value="{$input.plugin_catalog.option06}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option06_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option06]" cols="50" rows="5">{$input.plugin_catalog.option06}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option06_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option06]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option06_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option06} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option06_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option06]" id="label_option_06" value=""{if !$input.plugin_catalog.option06} checked="checked"{/if} /> <label for="label_option_06">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option06_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option06]" id="label_option_06_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option06} checked="checked"{/if} /> <label for="label_option_06_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option06]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option07_name}-->
+					<dt>{$freo.config.plugin.catalog.option07_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option07_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option07]" size="50" value="{$input.plugin_catalog.option07}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option07_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option07]" cols="50" rows="5">{$input.plugin_catalog.option07}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option07_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option07]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option07_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option07} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option07_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option07]" id="label_option_07" value=""{if !$input.plugin_catalog.option07} checked="checked"{/if} /> <label for="label_option_07">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option07_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option07]" id="label_option_07_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option07} checked="checked"{/if} /> <label for="label_option_07_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option07]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option08_name}-->
+					<dt>{$freo.config.plugin.catalog.option08_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option08_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option08]" size="50" value="{$input.plugin_catalog.option08}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option08_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option08]" cols="50" rows="5">{$input.plugin_catalog.option08}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option08_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option08]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option08_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option08} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option08_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option08]" id="label_option_08" value=""{if !$input.plugin_catalog.option08} checked="checked"{/if} /> <label for="label_option_08">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option08_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option08]" id="label_option_08_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option08} checked="checked"{/if} /> <label for="label_option_08_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option08]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option09_name}-->
+					<dt>{$freo.config.plugin.catalog.option09_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option09_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option09]" size="50" value="{$input.plugin_catalog.option09}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option09_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option09]" cols="50" rows="5">{$input.plugin_catalog.option09}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option09_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option09]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option09_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option09} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option09_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option09]" id="label_option_09" value=""{if !$input.plugin_catalog.option09} checked="checked"{/if} /> <label for="label_option_09">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option09_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option09]" id="label_option_09_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option09} checked="checked"{/if} /> <label for="label_option_09_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option09]" value="" />
+					<!--{/if}-->
+					<!--{if $freo.config.plugin.catalog.option10_name}-->
+					<dt>{$freo.config.plugin.catalog.option10_name}</dt>
+						<!--{if $freo.config.plugin.catalog.option10_type == 'text'}-->
+						<dd><input type="text" name="plugin_catalog[option10]" size="50" value="{$input.plugin_catalog.option10}" /></dd>
+						<!--{elseif $freo.config.plugin.catalog.option10_type == 'textarea'}-->
+						<dd><textarea name="plugin_catalog[option10]" cols="50" rows="5">{$input.plugin_catalog.option10}</textarea></dd>
+						<!--{elseif $freo.config.plugin.catalog.option10_type == 'select'}-->
+						<dd>
+							<select name="plugin_catalog[option10]">
+								<option value="">選択してください</option>
+								<!--{foreach from=$freo.config.plugin.catalog.option10_text|explode:"\n" item='value'}-->
+								<option value="{$value}"{if $value == $input.plugin_catalog.option10} selected="selected"{/if}>{$value}</option>
+								<!--{/foreach}-->
+							</select>
+						</dd>
+						<!--{elseif $freo.config.plugin.catalog.option10_type == 'radio'}-->
+						<dd>
+							<input type="radio" name="plugin_catalog[option10]" id="label_option_10" value=""{if !$input.plugin_catalog.option10} checked="checked"{/if} /> <label for="label_option_10">選択なし</label>
+							<!--{foreach from=$freo.config.plugin.catalog.option10_text|explode:"\n" item='value' name='loop'}--}-->
+							<input type="radio" name="plugin_catalog[option10]" id="label_option_10_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option10} checked="checked"{/if} /> <label for="label_option_10_{$smarty.foreach.loop.index}">{$value}</label>
+							<!--{/foreach}-->
+						</dd>
+						<!--{/if}-->
+					<!--{else}-->
+					<input type="hidden" name="plugin_catalog[option10]" value="" />
+					<!--{/if}-->
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>ID.{$freo.query.id}の商品を削除</h2>
+		<ul>
+			<li>この商品を削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_delete" method="get" class="delete">
+			<fieldset>
+				<legend>商品削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+	<script type="text/javascript">
+	{literal}
+	//サイズ
+	if ($('#catalog_size').val() == 'data') {
+		$('#catalog_direct').hide();
+		$('#catalog_normal').hide();
+	} else if ($('#catalog_size').val() == 'direct') {
+		$('#catalog_direct').show();
+		$('#catalog_normal').show();
+	} else {
+		$('#catalog_direct').hide();
+		$('#catalog_normal').show();
+	}
+	$('#catalog_size').change(function() {
+		if ($(this).val() == 'data') {
+			$('#catalog_direct').hide();
+			$('#catalog_normal').hide();
+		} else if ($(this).val() == 'direct') {
+			$('#catalog_direct').show();
+			$('#catalog_normal').show();
+		} else {
+			$('#catalog_direct').hide();
+			$('#catalog_normal').show();
+		}
+	});
+
+	//公開終了
+	if ($('#catalog_close_set').val() == '0') {
+		$('#catalog_close').hide();
+	}
+	$('#catalog_close_set').change(function() {
+		if ($(this).val() == '1') {
+			$('#catalog_close').show();
+		} else {
+			$('#catalog_close').hide();
+		}
+	});
+	{/literal}
+	</script>
+{include file='internals/admin/footer.html'}

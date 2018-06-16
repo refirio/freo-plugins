@@ -1,0 +1,62 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>タスク管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>タスクを新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>No.{$freo.query.id}のタスクを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>No.{$freo.query.id}のタスクを削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたタスクは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/task/admin_form">タスクを登録する</a>。</li>
+			<li><a href="{$freo.core.http_file}/task/admin_archive">完了済みタスクを表示する</a>。</li>
+			<li><a href="{$freo.core.http_file}/task/admin_category">カテゴリーを管理する</a>。</li>
+		</ul>
+		<!--{foreach from=$plugin_task_categories|smarty:nodefaults item='plugin_task_category'}-->
+		<!--{if $plugin_tasks[$plugin_task_category.id]|smarty:nodefaults}-->
+		<h3>{$plugin_task_category.name}</h3>
+		<table summary="タスク">
+			<thead>
+				<tr>
+					<th>登録日時</th>
+					<th>更新日時</th>
+					<th>タイトル</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>登録日時</th>
+					<th>更新日時</th>
+					<th>タイトル</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_tasks[$plugin_task_category.id]|smarty:nodefaults item='plugin_task'}-->
+				<tr>
+					<td>{$plugin_task.created|date_format:'%Y/%m/%d'}</td>
+					<td>{$plugin_task.modified|date_format:'%Y/%m/%d'}</td>
+					<td><!--{if $plugin_task.text}--><a href="{$freo.core.http_file}/task/admin_view?id={$plugin_task.id}"><!--{/if}-->{$plugin_task.title}<!--{if $plugin_task.text}--></a><!--{/if}--></td>
+					<td>
+						<a href="{$freo.core.http_file}/task/admin_form?id={$plugin_task.id}">編集</a>
+						<a href="{$freo.core.http_file}/task/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_task.id}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+		<!--{/if}-->
+		<!--{/foreach}-->
+	</div>
+{include file='internals/admin/footer.html'}

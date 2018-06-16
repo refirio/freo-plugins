@@ -1,0 +1,27 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}">戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">ギャラリー</span></div>
+
+<!--{if $smarty.get.word}-->ｷｰﾜｰﾄﾞ「{$smarty.get.word}」の検索結果は以下のとおりです。<!--{/if}-->
+<!--{if $smarty.get.user}-->ﾕｰｻﾞｰ「{$smarty.get.user}」の検索結果は以下のとおりです。<!--{/if}-->
+<!--{if $smarty.get.tag}-->ﾀｸﾞ「{$smarty.get.tag}」の検索結果は以下のとおりです。<!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 4}-->{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}の記事は以下のとおりです。<!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 6}-->{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}の記事は以下のとおりです。<!--{/if}-->
+<!--{if $smarty.get.date|count_characters == 8}-->{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の記事は以下のとおりです。<!--{/if}-->
+
+<br />
+<!--{foreach from=$pages|smarty:nodefaults item='page'}-->
+<a href="{$freo.core.http_file}/page/{$page.id}"><!--{if $page.image}--><img src="{$freo.core.http_file}/file/page/{$page.id}?type=image" alt="{$page.memo|default:$page.title}" title="{$page.memo|default:$page.title}" width="{$page_images[$page.id].width}" height="{$page_images[$page.id].height}" /><!--{else}-->{$page.memo|default:$page.title}<!--{/if}--></a>
+<!--{/foreach}-->
+<br />
+
+<!--{if $freo.config.plugin.page_image.limit}-->
+<br />
+<!--{if $freo.query.page > 1}--><a href="{$freo.core.http_file}/page_image?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}"><!--{else}-->前のﾍﾟｰｼﾞ<!--{/if}--> |
+<!--{if $entry_page > $freo.query.page}--><a href="{$freo.core.http_file}/page_image?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">次のﾍﾟｰｼﾞ</a><!--{else}-->次のﾍﾟｰｼﾞ<!--{/if}-->
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

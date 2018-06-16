@@ -1,0 +1,45 @@
+{include file='header.html'}
+	<h2>サークル一覧</h2>
+	<ul>
+		<!--{if $smarty.get.category}--><li>カテゴリー「{$plugin_circle_categories[$smarty.get.category].name}」の検索結果は以下のとおりです。</li>
+		<!--{elseif $smarty.get.tag}--><li>タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</li>
+		<!--{else}-->
+			<li>登録されたサークルは以下のとおりです。</li>
+			<li>サークル名をクリックすると、詳細が表示されます。</li>
+		<!--{/if}-->
+	</ul>
+	<table summary="サークル">
+		<thead>
+			<tr>
+				<th>サークル名</th>
+				<th>サークル代表者名</th>
+				<th>カテゴリー</th>
+				<th>タグ</th>
+				<th>登録日時</th>
+				<th>更新日時</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>サークル名</th>
+				<th>サークル代表者名</th>
+				<th>カテゴリー</th>
+				<th>タグ</th>
+				<th>登録日時</th>
+				<th>更新日時</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!--{foreach from=$plugin_circles|smarty:nodefaults item='plugin_circle'}-->
+			<tr>
+				<td><a href="{$freo.core.http_file}/circle/view/{$plugin_circle.user_id}">{$plugin_circle.name}</a></td>
+				<td>{$plugin_circle.owner_name}</td>
+				<td><!--{if $plugin_circle.category_id}--><a href="{$freo.core.http_file}/circle?category={$plugin_circle.category_id}">{$plugin_circle_categories[$plugin_circle.category_id].name}</a><!--{/if}--></td>
+				<td><!--{foreach from=$plugin_circle_tags[$plugin_circle.user_id]|smarty:nodefaults item='plugin_circle_tag' name='loop'}--><a href="{$freo.core.http_file}/circle?tag={$plugin_circle_tag|smarty:nodefaults|escape:'url'}">{$plugin_circle_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></td>
+				<td><!--{if $plugin_circle.created|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_circle.created|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_circle.created|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+				<td><!--{if $plugin_circle.modified|date_format:'%Y%m%d' == $smarty.now|date_format:'%Y%m%d'}-->{$plugin_circle.modified|date_format:'%H:%M:%S'}<!--{else}-->{$plugin_circle.modified|date_format:'%Y/%m/%d'}<!--{/if}--></td>
+			</tr>
+			<!--{/foreach}-->
+		</tbody>
+	</table>
+{include file='footer.html'}

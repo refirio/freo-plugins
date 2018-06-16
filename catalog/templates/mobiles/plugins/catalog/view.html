@@ -1,0 +1,128 @@
+{include file='mobiles/header.html'}
+
+▲<a href="{$freo.core.http_file}/catalog">商品一覧へ戻る</a>
+
+<br />
+<div style="text-align:center;background-color:#666666;"><span style="color:#FFFFFF;">商品表示</span></div>
+
+<!--{if $freo.config.plugin.catalog.closed}-->
+<div style="color:#FF0000;">現在、すべての商品の販売を休止しています。</div>
+<!--{/if}-->
+
+<br />
+<div style="text-align:center;"><a href="{$freo.core.http_file}/catalog/cart">ｶｰﾄの内容を表示</a></div>
+
+<br />
+■{$plugin_catalog.name}<br />
+
+<!--{if $plugin_catalog_files.file or $plugin_catalog_files.file_thumbnail}-->
+<br />
+<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file_thumbnail|default:$plugin_catalog_files.file}" alt="商品画像" /><br />
+<!--{/if}-->
+
+<!--{if $plugin_catalog_files.file01}-->
+<br />
+<!--{if $plugin_catalog_files.file01}-->
+<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file01}">{$freo.config.plugin.catalog.file01_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file02}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file02}">{$freo.config.plugin.catalog.file02_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file03}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file03}">{$freo.config.plugin.catalog.file03_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file04}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file04}">{$freo.config.plugin.catalog.file04_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file05}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file05}">{$freo.config.plugin.catalog.file05_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file06}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file06}">{$freo.config.plugin.catalog.file06_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file07}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file07}">{$freo.config.plugin.catalog.file07_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file08}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file08}">{$freo.config.plugin.catalog.file08_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file09}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file09}">{$freo.config.plugin.catalog.file09_name}</a>
+<!--{/if}-->
+<!--{if $plugin_catalog_files.file10}-->
+| <a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}plugins/catalog_files/{$plugin_catalog.id}/{$plugin_catalog_files.file10}">{$freo.config.plugin.catalog.file10_name}</a>
+<!--{/if}-->
+<br />
+<!--{/if}-->
+
+<!--{if $plugin_catalog.text}-->
+<br />
+{$plugin_catalog.text|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+
+<!--{if !$freo.config.plugin.catalog.closed and ($plugin_catalog.close == null or $plugin_catalog.close|date_format:'%Y%m%d%H%M%S' > $smarty.now|date_format:'%Y%m%d%H%M%S') and ($plugin_catalog.stock == null or $plugin_catalog.stock != 0)}-->
+<br />
+<form action="{$freo.core.http_file}/catalog/cart_putin" method="{$freo.agent.method}">
+<input type="hidden" name="freo[method]" value="post" />
+<input type="hidden" name="plugin_catalog[id]" value="{$plugin_catalog.id}" />
+<input type="hidden" name="plugin_catalog[count]" value="1" />
+<div style="text-align:center;">
+<input type="submit" value="ｶｰﾄに入れる" />
+</div>
+</form>
+<!--{/if}-->
+
+<br />
+商品ID:{$plugin_catalog.id}<br />
+価格(税込):{$plugin_catalog.price}円<br />
+<!--{if !$freo.config.plugin.catalog.closed}-->
+販売状況:<!--{if $plugin_catalog.datetime|date_format:'%Y%m%d' > $smarty.now|date_format:'%Y%m%d'}-->予約<!--{elseif $plugin_catalog.close != null and $plugin_catalog.close|date_format:'%Y%m%d%H%M%S' <= $smarty.now|date_format:'%Y%m%d%H%M%S'}-->販売終了<!--{elseif $plugin_catalog.stock != null and $plugin_catalog.stock == 0}-->売り切れ<!--{elseif $plugin_catalog.stock != null and $plugin_catalog.stock <= $freo.config.plugin.catalog.small_stock}-->残り{$plugin_catalog.stock}{$plugin_catalog.unit}<!--{else}-->販売中<!--{/if}--><!--{if $plugin_catalog.size == 'data'}-->(ﾃﾞｰﾀのみ)<!--{/if}--><!--{if $plugin_catalog.maximum != ''}-->(1人{$plugin_catalog.maximum}{$plugin_catalog.unit}まで)<!--{/if}--><br />
+<!--{/if}-->
+<!--{if $plugin_catalog.target}-->
+対象:{$plugin_catalog_targets[$plugin_catalog.target].name}<br />
+<!--{/if}-->
+発行日:{$plugin_catalog.datetime|date_format:'%Y/%m/%d'}<br />
+<!--{if $plugin_catalog.close}-->
+販売終了日時:{$plugin_catalog.close|date_format:'%Y/%m/%d'}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.category_id}-->
+ｶﾃｺﾞﾘｰ:<a href="{$freo.core.http_file}/catalog?category_id={$plugin_catalog.category_id}">{$plugin_catalog_categories[$plugin_catalog.category_id].name}</a><br />
+<!--{/if}-->
+<!--{if $plugin_catalog_tags|smarty:nodefaults}-->
+ﾀｸﾞ:<!--{foreach from=$plugin_catalog_tags|smarty:nodefaults item='plugin_catalog_tag' name='loop'}--><a href="{$freo.core.http_file}/catalog?tag={$plugin_catalog_tag|smarty:nodefaults|escape:'url'}">{$plugin_catalog_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--><br />
+<!--{/if}-->
+<!--{if $plugin_catalog.size != 'data'}-->
+ｻｲｽﾞ:<!--{if $plugin_catalog.size == 'direct'}-->{$plugin_catalog.size_short}mm×{$plugin_catalog.size_long}mm<!--{else}-->{$plugin_catalog_sizes[$plugin_catalog.size].name}<!--{/if}--><br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option01 != ''}-->
+{$freo.config.plugin.catalog.option01_name}:{$plugin_catalog.option01|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option02 != ''}-->
+{$freo.config.plugin.catalog.option02_name}:{$plugin_catalog.option02|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option03 != ''}-->
+{$freo.config.plugin.catalog.option03_name}:{$plugin_catalog.option03|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option04 != ''}-->
+{$freo.config.plugin.catalog.option04_name}:{$plugin_catalog.option04|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option05 != ''}-->
+{$freo.config.plugin.catalog.option05_name}:{$plugin_catalog.option05|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option06 != ''}-->
+{$freo.config.plugin.catalog.option06_name}:{$plugin_catalog.option06|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option07 != ''}-->
+{$freo.config.plugin.catalog.option07_name}:{$plugin_catalog.option07|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option08 != ''}-->
+{$freo.config.plugin.catalog.option08_name}:{$plugin_catalog.option08|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option09 != ''}-->
+{$freo.config.plugin.catalog.option09_name}:{$plugin_catalog.option09|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+<!--{if $plugin_catalog.option10 != ''}-->
+{$freo.config.plugin.catalog.option10_name}:{$plugin_catalog.option10|smarty:nodefaults|nl2br}<br />
+<!--{/if}-->
+
+{include file='mobiles/footer.html'}

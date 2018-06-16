@@ -1,0 +1,67 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->ID.{$freo.query.id}のお礼を編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>お礼を入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/clap/admin_thank_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>お礼登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<!--{if $freo.query.id}-->
+				<input type="hidden" name="plugin_clap_thank[id]" value="{$input.plugin_clap_thank.id}" />
+				<!--{/if}-->
+				<dl>
+					<!--{if !$freo.query.id}-->
+					<dt>お礼ID <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_clap_thank[id]" size="30" value="{$input.plugin_clap_thank.id}" /></dd>
+					<!--{/if}-->
+					<dt>本文 <abbr class="attention" title="入力必須">*</abbr> <a href="{$freo.core.http_file}/admin/media?type=iframe" class="colorbox" title="メディア"><img src="{$freo.core.http_url}images/icons/media.png" alt="メディア管理" title="メディア管理" width="16" height="16" /></a> <a href="{$freo.core.http_file}/admin/media_form?type=iframe" class="colorbox" title="メディア"><img src="{$freo.core.http_url}images/icons/media_add.png" alt="メディア登録" title="メディア登録" width="16" height="16" /></a></dt>
+						<dd><textarea name="plugin_clap_thank[text]" cols="50" rows="5" id="tiny_mce">{$input.plugin_clap_thank.text}</textarea></dd>
+					<dt>説明</dt>
+						<dd><textarea name="plugin_clap_thank[memo]" cols="50" rows="5">{$input.plugin_clap_thank.memo}</textarea></dd>
+					<dt>利用対象 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_clap_thank[target]">
+								<option value="">PCと携帯</option>
+								<option value="pc"{if $input.plugin_clap_thank.target == 'pc'} selected="selected"{/if}>PC</option>
+								<option value="mobile"{if $input.plugin_clap_thank.target == 'mobile'} selected="selected"{/if}>携帯</option>
+							</select>
+						</dd>
+					<dt>状態 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_clap_thank[status]">
+								<option value="publish"{if $input.plugin_clap_thank.status == 'publish'} selected="selected"{/if}>公開</option>
+								<option value="private"{if $input.plugin_clap_thank.status == 'private'} selected="selected"{/if}>未公開</option>
+							</select>
+						</dd>
+					<dt>並び順 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_clap_thank[sort]" size="5" value="{$input.plugin_clap_thank.sort}" /></dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>ID.{$freo.query.id}のお礼を削除</h2>
+		<ul>
+			<li>このお礼を削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/clap/admin_thank_delete" method="get" class="delete">
+			<fieldset>
+				<legend>お礼削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+{include file='internals/admin/footer.html'}

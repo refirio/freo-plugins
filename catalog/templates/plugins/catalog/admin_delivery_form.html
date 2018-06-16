@@ -1,0 +1,127 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2><!--{if $freo.query.id}-->ID.{$freo.query.id}の配送方法を編集<!--{else}-->新規登録<!--{/if}--></h2>
+		<!--{if $errors}-->
+		<ul class="attention">
+			<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+			<li>{$error}</li>
+			<!--{/foreach}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>配送方法を入力してください。</li>
+			<li><abbr class="attention" title="入力必須">*</abbr> の付いた項目は入力必須項目です。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_delivery_form{if $freo.query.id}?id={$freo.query.id}{/if}" method="post">
+			<fieldset>
+				<legend>配送方法登録フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<!--{if $freo.query.id}-->
+				<input type="hidden" name="plugin_catalog_delivery[id]" value="{$input.plugin_catalog_delivery.id}" />
+				<!--{/if}-->
+				<dl>
+					<!--{if !$freo.query.id}-->
+					<dt>配送方法ID <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[id]" size="30" value="{$input.plugin_catalog_delivery.id}" /></dd>
+					<!--{/if}-->
+					<dt>配送方法名 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[name]" size="50" value="{$input.plugin_catalog_delivery.name}" /></dd>
+					<dt>利用できる短辺の範囲 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							最小 <input type="text" name="plugin_catalog_delivery[short_min]" size="5" value="{$input.plugin_catalog_delivery.short_min}" /> mm
+							～
+							最大 <input type="text" name="plugin_catalog_delivery[short_max]" size="5" value="{$input.plugin_catalog_delivery.short_max}" /> mm
+						</dd>
+					<dt>利用できる長辺の範囲 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							最小 <input type="text" name="plugin_catalog_delivery[long_min]" size="5" value="{$input.plugin_catalog_delivery.long_min}" /> mm
+							～
+							最大 <input type="text" name="plugin_catalog_delivery[long_max]" size="5" value="{$input.plugin_catalog_delivery.long_max}" /> mm
+						</dd>
+					<dt>利用できる厚さの範囲 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							最小 <input type="text" name="plugin_catalog_delivery[thickness_min]" size="5" value="{$input.plugin_catalog_delivery.thickness_min}" /> mm
+							～
+							最大 <input type="text" name="plugin_catalog_delivery[thickness_max]" size="5" value="{$input.plugin_catalog_delivery.thickness_max}" /> mm
+						</dd>
+					<dt>利用できる3辺合計の範囲 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							最小 <input type="text" name="plugin_catalog_delivery[total_min]" size="5" value="{$input.plugin_catalog_delivery.total_min}" /> mm
+							～
+							最大 <input type="text" name="plugin_catalog_delivery[total_max]" size="5" value="{$input.plugin_catalog_delivery.total_max}" /> mm
+						</dd>
+					<dt>利用できる重さの範囲 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							最小 <input type="text" name="plugin_catalog_delivery[weight_min]" size="5" value="{$input.plugin_catalog_delivery.weight_min}" /> g
+							～
+							最大 <input type="text" name="plugin_catalog_delivery[weight_max]" size="5" value="{$input.plugin_catalog_delivery.weight_max}" /> g
+						</dd>
+					<dt>梱包材による短辺の増加分（利用できる短辺の最大値から減算されます） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[packing_short]" size="5" value="{$input.plugin_catalog_delivery.packing_short}" /> mm</dd>
+					<dt>梱包材による長辺の増加分（利用できる長辺の最大値から減算されます） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[packing_long]" size="5" value="{$input.plugin_catalog_delivery.packing_long}" /> mm</dd>
+					<dt>梱包材による厚さの増加分（利用できる厚さの最大値から減算されます） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[packing_thickness]" size="5" value="{$input.plugin_catalog_delivery.packing_thickness}" /> mm</dd>
+					<dt>梱包材による3辺合計の増加分（利用できる3辺合計の最大値から減算されます） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[packing_total]" size="5" value="{$input.plugin_catalog_delivery.packing_total}" /> mm</dd>
+					<dt>梱包材による重さの増加分（利用できる重さの最大値から減算されます） <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[packing_weight]" size="5" value="{$input.plugin_catalog_delivery.packing_weight}" /> g</dd>
+					<dt>送料（<!--{if $freo.query.id}--><a href="{$freo.core.http_file}/catalog/admin_delivery_prefecture_form?id={$freo.query.id}">地域別送料</a>が加算されます<!--{else}-->地域別送料が加算されます<!--{/if}-->）</dt>
+						<dd><input type="text" name="plugin_catalog_delivery[carriage]" size="5" value="{$input.plugin_catalog_delivery.carriage}" /> 円</dd>
+					<dt>配送希望曜日の指定 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_delivery[preferred_week]">
+								<option value="yes"{if $input.plugin_catalog_delivery.preferred_week == 'yes'} selected="selected"{/if}>指定可</option>
+								<option value="no"{if $input.plugin_catalog_delivery.preferred_week == 'no'} selected="selected"{/if}>指定不可</option>
+							</select>
+						</dd>
+					<dt>配送希望時間の指定 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_delivery[preferred_time]">
+								<option value="yes"{if $input.plugin_catalog_delivery.preferred_time == 'yes'} selected="selected"{/if}>指定可</option>
+								<option value="no"{if $input.plugin_catalog_delivery.preferred_time == 'no'} selected="selected"{/if}>指定不可</option>
+							</select>
+						</dd>
+					<dt>利用できる支払い方法 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<ul>
+								<!--{foreach from=$plugin_catalog_payments|smarty:nodefaults item='plugin_catalog_payment'}-->
+								<li><input type="checkbox" name="plugin_catalog_delivery[payments][{$plugin_catalog_payment.id}]" id="label_plugin_catalog_delivery_payment_{$plugin_catalog_payment.id}" value="1"{if $input.plugin_catalog_delivery_sets[$plugin_catalog_payment.id]} checked="checked"{/if} /> <label for="label_plugin_catalog_delivery_payment_{$plugin_catalog_payment.id}">{$plugin_catalog_payment.name}</label></li>
+								<!--{/foreach}-->
+							</ul>
+						</dd>
+					<dt>説明</dt>
+						<dd><textarea name="plugin_catalog_delivery[text]" cols="50" rows="5">{$input.plugin_catalog_delivery.text}</textarea></dd>
+					<dt>並び順 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd><input type="text" name="plugin_catalog_delivery[sort]" size="5" value="{$input.plugin_catalog_delivery.sort}" /></dd>
+					<dt>状態 <abbr class="attention" title="入力必須">*</abbr></dt>
+						<dd>
+							<select name="plugin_catalog_delivery[status]">
+								<option value="publish"{if $input.plugin_catalog_delivery.status == 'publish'} selected="selected"{/if}>使用</option>
+								<option value="private"{if $input.plugin_catalog_delivery.status == 'private'} selected="selected"{/if}>未使用</option>
+							</select>
+						</dd>
+				</dl>
+				<p><input type="submit" value="登録する" /></p>
+			</fieldset>
+		</form>
+		<!--{if $freo.query.id}-->
+		<h2>ID.{$freo.query.id}の地域別送料を設定</h2>
+		<ul>
+			<li><a href="{$freo.core.http_file}/catalog/admin_delivery_prefecture_form?id={$freo.query.id}">地域別送料を設定する。</a></li>
+		</ul>
+		<h2>ID.{$freo.query.id}の配送方法を削除</h2>
+		<ul>
+			<li>この配送方法を削除するには、<em>削除ボタン</em>を押してください。</li>
+		</ul>
+		<form action="{$freo.core.http_file}/catalog/admin_delivery_delete" method="get" class="delete">
+			<fieldset>
+				<legend>配送方法削除フォーム</legend>
+				<input type="hidden" name="freo[token]" value="{$token}" />
+				<input type="hidden" name="id" value="{$freo.query.id}" />
+				<p><input type="submit" value="削除する" /></p>
+			</fieldset>
+		</form>
+		<!--{/if}-->
+	</div>
+{include file='internals/admin/footer.html'}

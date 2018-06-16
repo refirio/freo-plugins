@@ -1,0 +1,55 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>なぞなぞ管理</h2>
+		<!--{if $freo.query.error}-->
+		<ul class="attention">
+			<li>不正なアクセスです。</li>
+		</ul>
+		<!--{elseif $freo.query.exec}-->
+		<ul class="complete">
+			<!--{if $freo.query.exec == 'insert'}-->
+			<li>なぞなぞを新規に登録しました。</li>
+			<!--{elseif $freo.query.exec == 'update'}-->
+			<li>No.{$freo.query.id}のなぞなぞを編集しました。</li>
+			<!--{elseif $freo.query.exec == 'delete'}-->
+			<li>No.{$freo.query.id}のなぞなぞを削除しました。</li>
+			<!--{/if}-->
+		</ul>
+		<!--{/if}-->
+		<ul>
+			<li>登録されたなぞなぞは以下のとおりです。</li>
+			<li><a href="{$freo.core.http_file}/riddle/admin_form">なぞなぞを登録する</a>。</li>
+		</ul>
+		<table summary="なぞなぞ">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>問題</th>
+					<th>解答</th>
+					<th>作業</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>No</th>
+					<th>問題</th>
+					<th>解答</th>
+					<th>作業</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_riddles|smarty:nodefaults item='plugin_riddle'}-->
+				<tr>
+					<td>{$plugin_riddle.id}</td>
+					<td>{$plugin_riddle.question|mb_truncate:20:'...'}</td>
+					<td>{$plugin_riddle.answer|mb_truncate:20:'...'}</td>
+					<td>
+						<a href="{$freo.core.http_file}/riddle/admin_form?id={$plugin_riddle.id}">編集</a>
+						<a href="{$freo.core.http_file}/riddle/admin_delete?freo%5Btoken%5D={$token}&amp;id={$plugin_riddle.id}" class="delete">削除</a>
+					</td>
+				</tr>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

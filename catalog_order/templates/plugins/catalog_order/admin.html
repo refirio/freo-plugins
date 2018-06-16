@@ -1,0 +1,37 @@
+{include file='internals/admin/header.html'}
+	<div id="content">
+		<h2>注文管理</h2>
+		<ul>
+			<li><a href="{$freo.core.http_file}/catalog_order/admin_order">すべての注文履歴を表示する</a>。</li>
+			<li><a href="{$freo.core.https_file}/catalog_order/admin_order_form">注文を新規に追加する</a>。</li>
+			<li><a href="{$freo.core.http_file}/catalog_order/admin_total">発送済み商品の集計を表示する</a>。</li>
+			<!--{if $freo.config.user.regist and $freo.config.plugin.catalog_order.user}-->
+			<li><a href="{$freo.core.http_file}/catalog_order/admin_user">登録された注文者を表示する</a>。</li>
+			<!--{/if}-->
+		</ul>
+		<h3>対応状況</h3>
+		<table summary="対応状況">
+			<thead>
+				<tr>
+					<th>項目</th>
+					<th>件数</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>項目</th>
+					<th>件数</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!--{foreach from=$plugin_catalog_order_status|smarty:nodefaults item='plugin_catalog_order_stat'}-->
+				<tr>
+					<td>{$plugin_catalog_order_stat.name}</td>
+					<td class="number"><!--{if $plugin_catalog_order_counts[$plugin_catalog_order_stat.id]}--><a href="{$freo.core.http_file}/catalog_order/admin_order?status={$plugin_catalog_order_stat.id}">{$plugin_catalog_order_counts[$plugin_catalog_order_stat.id]}件</a><!--{else}-->0件<!--{/if}--></td>
+				</tr>
+				<option value="{$plugin_catalog_order_stat.id}"{if $plugin_catalog_order_stat.id == $smarty.get.status} selected="selected"{/if}>{$plugin_catalog_order_stat.name}</option>
+				<!--{/foreach}-->
+			</tbody>
+		</table>
+	</div>
+{include file='internals/admin/footer.html'}

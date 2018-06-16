@@ -1,0 +1,7 @@
+{include file='header.html'}
+	<h2>メール投稿</h2>
+	<ul>
+		<li>{$plugin_entry_receive_mail}件のメールを受信しました。</li>
+		<!--{if $plugin_entry_receive_trash}--><li>そのうち、{$plugin_entry_receive_trash}件のメールを無効なメールとして処理しました。</li><!--{/if}-->
+	</ul>
+{include file='footer.html'}
