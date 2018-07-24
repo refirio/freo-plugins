@@ -478,7 +478,7 @@
 						<!--{elseif $freo.config.plugin.catalog.option08_type == 'radio'}-->
 						<dd>
 							<input type="radio" name="plugin_catalog[option08]" id="label_option_08" value=""{if !$input.plugin_catalog.option08} checked="checked"{/if} /> <label for="label_option_08">選択なし</label>
-							<!--{foreach from=$freo.config.plugin.catalog.option08_text|explode:"\n" item='value' name='loop'}--}-->
+							<!--{foreach from=$freo.config.plugin.catalog.option08_text|explode:"\n" item='value' name='loop'}-->
 							<input type="radio" name="plugin_catalog[option08]" id="label_option_08_{$smarty.foreach.loop.index}" value="{$value}"{if $value == $input.plugin_catalog.option08} checked="checked"{/if} /> <label for="label_option_08_{$smarty.foreach.loop.index}">{$value}</label>
 							<!--{/foreach}-->
 						</dd>
