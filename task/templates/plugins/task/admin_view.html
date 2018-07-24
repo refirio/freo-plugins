@@ -9,7 +9,7 @@
 			<dt>カテゴリー</dt>
 				<dd>{$plugin_task_categories[$plugin_task.category_id].name}</dd>
 			<dt>状態</dt>
-				<dd><!--{if $plugin_task.status == 'publish'}-->未完了<!--{elseif $input.plugin_task.status == 'complete'}-->完了<!--{/if}--></dd>
+				<dd><!--{if $plugin_task.status == 'publish'}-->未完了<!--{elseif $plugin_task.status == 'complete'}-->完了<!--{/if}--></dd>
 		</dl>
 	</div>
 {include file='internals/admin/footer.html'}
