@@ -29,7 +29,6 @@
 					<td>{$plugin_catalog_order_stat.name}</td>
 					<td class="number"><!--{if $plugin_catalog_order_counts[$plugin_catalog_order_stat.id]}--><a href="{$freo.core.http_file}/catalog_order/admin_order?status={$plugin_catalog_order_stat.id}">{$plugin_catalog_order_counts[$plugin_catalog_order_stat.id]}件</a><!--{else}-->0件<!--{/if}--></td>
 				</tr>
-				<option value="{$plugin_catalog_order_stat.id}"{if $plugin_catalog_order_stat.id == $smarty.get.status} selected="selected"{/if}>{$plugin_catalog_order_stat.name}</option>
 				<!--{/foreach}-->
 			</tbody>
 		</table>
