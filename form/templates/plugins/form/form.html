@@ -35,5 +35,5 @@
 			<p><input type="submit" value="確認する" /></p>
 		</fieldset>
 	</form>
-	<script src="{if $plugin_form.secure == 'yes'}{$freo.core.https_url}{else}{$freo.core.http_url}{/if}{$smarty.const.FREO_JS_DIR}plugins/form.js"></script>
+	<script type="text/javascript" src="{if $plugin_form.secure == 'yes'}{$freo.core.https_url}{else}{$freo.core.http_url}{/if}{$smarty.const.FREO_JS_DIR}plugins/form.js"></script>
 {include file='footer.html'}
