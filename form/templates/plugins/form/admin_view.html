@@ -6,7 +6,7 @@
 			<li>もしくは、以下のコードを任意のページに貼り付けてください。</li>
 		</ul>
 		<h3>headタグ内に追加</h3>
-		<pre><code>&lt;link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}jquery.subwindow.css" /&gt;
+		<pre><code>&lt;link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}jquery.subwindow.css" type="text/css" media="all" /&gt;
 &lt;script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.subwindow.js"&gt;&lt;/script&gt;</code></pre>
 		<h3>bodyタグ内に追加</h3>
 		<pre><code>&lt;form action="{if $plugin_form.secure == 'yes'}{$freo.core.https_file}{else}{$freo.core.http_file}{/if}/form/send?id={$plugin_form.id}" method="post"{if $plugin_form.attachment == 'yes'} enctype="multipart/form-data"{/if} id="plugin_form"&gt;
