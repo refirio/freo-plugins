@@ -2,9 +2,9 @@
 
 /*********************************************************************
 
- エントリータグ管理プラグイン | 設定ファイル (2013/04/14)
+ エントリータグ管理プラグイン | 設定ファイル (2019//)
 
- Copyright(C) 2009-2013 freo.jp
+ Copyright(C) 2009-2019 freo.jp
 
 *********************************************************************/
 
@@ -19,5 +19,10 @@ define('FREO_PLUGIN_ENTRY_TAGMANAGER_ADMIN', 'entry_tagmanager/admin');
 
 //pageファイルの読み込み設定
 define('FREO_PLUGIN_ENTRY_TAGMANAGER_LOAD_PAGE', 'entry_tagmanager');
+
+//holydragoonjp 追加ここから
+//endファイルの読み込み設定
+define('FREO_PLUGIN_ENTRY_TAGMANAGER_LOAD_END', 'entry_tagmanager/admin_post,entry_tagmanager/admin_delete');
+//追加ここまで
 
 ?>
